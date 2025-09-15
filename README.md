@@ -1,3 +1,3 @@
-feat: added this
-fix: fixed this
-refact: refactorized this
+- feat: added this
+- fix: fixed this
+- refact: refactorized this
