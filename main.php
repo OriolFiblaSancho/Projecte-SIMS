@@ -12,11 +12,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="/styles/theme.css">
-    <link rel="stylesheet" href="/styles/base.css">
-    <link rel="stylesheet" href="/styles/map.css">
-    <link rel="stylesheet" href="/styles/bottom.css">
-    <link rel="stylesheet" href="/styles/side.css">
+    <link rel="stylesheet" href="/views/styles/theme.css">
+    <link rel="stylesheet" href="/views/styles/base.css">
+    <link rel="stylesheet" href="/views/styles/map.css">
+    <link rel="stylesheet" href="/views/styles/bottom.css">
+    <link rel="stylesheet" href="/views/styles/side.css">
 
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
@@ -163,9 +163,9 @@
     
 
     <!-- API key is injected via PHP env (GOOGLE_MAPS_API_KEY); Apikey.js not needed here -->
-    <script src="../scripts/reserve.js"></script>
-    <script src="../scripts/sideBar.js"></script>
-    <script type="module" src="../scripts/init.js"></script>
+    <script type="module" src="/views/scripts/init.js"></script>
+    <script src="/views/scripts/reserve.js"></script>
+    <script src="/views/scripts/sideBar.js"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=<?=$googleApiKey?>&callback=initMap&v=weekly" async defer></script>
         
 </body>

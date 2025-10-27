@@ -1,13 +1,13 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
-  const FORM = document.getElementById('loginForm') || document.querySelector('FORM');
+  const FORM = document.getElementById('registerForm') || document.querySelector('FORM');
+  const NAME = document.getElementById('name');
   const EMAIL = document.getElementById('email');
   const PASSWORD = document.getElementById('password');
   const SUBMIT_BTN = FORM.querySelector('button[type="submit"]');
 
-  // --- Helpers ---
+
   function ensureErrorEl(input) {
     const wrapper = input.closest('.relative') || input.parentElement;
     const id = `${input.id}-error`;
@@ -20,16 +20,23 @@ document.addEventListener('DOMContentLoaded', () => {
       el.setAttribute('aria-live', 'assertive');
       wrapper.insertAdjacentElement('afterend', el);
     }
+
     input.setAttribute('aria-describedby', id);
     return el;
   }
 
+
   // Error message containers
+  ensureErrorEl(NAME);
   ensureErrorEl(EMAIL);
   ensureErrorEl(PASSWORD);
 
 
-  // Email regex
+  // Functions
+  function isValidName(value) {
+    return /^[A-Za-zÁÉÍÓÚáéíóúÑñ\s]+$/.test(value.trim());
+  }
+
   function isValidEmail(value) {
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
   }
@@ -37,7 +44,25 @@ document.addEventListener('DOMContentLoaded', () => {
     return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}/.test(value.trim());
   }
 
-  // Validations
+
+  function validateName() {
+    const value = NAME.value.trim()
+    const err = document.getElementById(`${NAME.id}-error`);
+    if (!value) {
+      NAME.setAttribute('aria-invalid', 'true');
+      return false;
+    }
+    if (!isValidName(value)) {
+      err.textContent = 'Invalid name format. Use letters and spaces only.';
+      NAME.setAttribute('aria-invalid', 'true');
+      return false;
+    }
+    err.textContent = '';
+    NAME.removeAttribute('aria-invalid');
+    return true;
+  }
+
+
   function validateEmail() {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
@@ -55,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return true;
   }
 
+
   function validatePassword() {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
@@ -62,18 +88,35 @@ document.addEventListener('DOMContentLoaded', () => {
       PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
+    if (value.length < 8) {
+      err.textContent = 'Your password must contain a minimum of 8 characters.';
+      PASSWORD.setAttribute('aria-invalid', 'true');
+      return false;
+    }
+
+    if (!isValidPassword(value)) {
+      err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
+      PASSWORD.setAttribute('aria-invalid', 'true');
+      return false;
+    };
     err.textContent = '';
     PASSWORD.removeAttribute('aria-invalid');
     return true;
   }
 
+
   // Enable & disable submit button
   function updateSubmitState() {
-    const ok = validateEmail() && validatePassword();
+    const ok = validateName() && validateEmail() && validatePassword();
     SUBMIT_BTN.disabled = !ok;
     SUBMIT_BTN.classList.toggle('opacity-50', !ok);
     SUBMIT_BTN.classList.toggle('cursor-not-allowed', !ok);
   }
+
+  NAME.addEventListener('input', () => {
+    validateName();
+    updateSubmitState();
+  });
 
   EMAIL.addEventListener('input', () => {
     validateEmail();
@@ -84,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
     validatePassword();
     updateSubmitState();
   });
+
 
   // Show & hide password
   (function addPasswordToggle() {
@@ -105,52 +149,45 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
   // --- Submit handler ---
-  FORM.addEventListener('submit', async (e) => {
+  FORM.addEventListener('submit', (e) => {
     e.preventDefault();
 
+    const nameOK = validateName();
     const emailOk = validateEmail();
     const passOk = validatePassword();
 
-    if (!emailOk || !passOk) {
+    if (!nameOK || !emailOk || !passOk) {
       const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
       if (firstInvalid) firstInvalid.focus();
       return;
     }
 
-    const originalHTML = SUBMIT_BTN.innerHTML;
-    SUBMIT_BTN.disabled = true;
-    SUBMIT_BTN.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Entering...';
+    // Send data to processRegister.php
+    const userData = {
+      name: NAME.value.trim(),
+      email: EMAIL.value.trim(),
+      password: PASSWORD.value,
+    };
 
-    try {
-  const res = await fetch('../scripts/processLogin.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: EMAIL.value.trim(), password: PASSWORD.value })
+  fetch('../views/scripts/processRegister.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(userData)
+    })
+
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          FORM.reset();
+          window.location.href = 'views/pages/login.html';
+        } else {
+          alert(data.message || 'Error to connect with Database');
+        }
+      })
+      .catch(() => {
+        alert('Network error. Try again.');
       });
 
-      const data = await res.json();
-      if (data.success) {
-        window.location.href = '/pages/main.php';
-      } else {
-        let general = document.getElementById('login-general-error');
-        if (!general) {
-          general = document.createElement('p');
-          general.id = 'login-general-error';
-          general.className = 'text-red-600 text-sm mt-4';
-          general.setAttribute('role', 'alert');
-          FORM.appendChild(general);
-        }
-        general.textContent = data.message || 'Incorrect credentials.';
-        SUBMIT_BTN.disabled = false;
-        SUBMIT_BTN.innerHTML = originalHTML;
-      }
-    } catch (err) {
-      console.error(err);
-      alert('Network error. Please try again later.');
-      SUBMIT_BTN.disabled = false;
-      SUBMIT_BTN.innerHTML = originalHTML;
-    }
+    updateSubmitState();
   });
-
-  updateSubmitState();
-});
+})
