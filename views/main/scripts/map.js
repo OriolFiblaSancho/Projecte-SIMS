@@ -28,4 +28,3 @@ export function createMap(elementId, center, zoom) {
 
   return map;
 }
-

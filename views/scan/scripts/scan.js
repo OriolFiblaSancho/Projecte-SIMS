@@ -123,4 +123,3 @@ TYPE_ID_BTN.addEventListener('click', () => {
 		}
 	});
 })();
-
