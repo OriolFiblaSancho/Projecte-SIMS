@@ -34,6 +34,27 @@ This will:
 
 ## For developers
 
+### Views folder modular structure
+
+Each UI module lives under `views/<module>/` and contains:
+
+- `components/` – small reusable HTML snippets
+- `pages/` – routeable pages (html/php)
+- `scripts/` – JS for this module only
+- `styles/` – CSS for this module only
+
+Shared styles live in `views/common/styles/`:
+- `theme.css`, `base.css`, `tailwindStyle.js`
+
+Current modules and entry pages:
+- Main map: `views/main/pages/main.php`
+- Login: `views/login/pages/login.html`
+- Register: `views/register/pages/register.html`
+- Scan: `views/scan/pages/scan.html`
+- Add balance: `views/addBalance/pages/addBalance.html`
+
+When adding a new feature/page, place its assets inside that module. Avoid using `views/styles` or `views/scripts` (kept as placeholders during migration) and instead import from the module path.
+
 ### Branch conventions
 Use pascal case and short names please
 
