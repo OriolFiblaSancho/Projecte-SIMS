@@ -19,7 +19,7 @@
     <link rel="stylesheet" href="/views/main/styles/side.css">
 
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+
 
 <body class="min-w-[390px]">
     <div id="map"></div>
