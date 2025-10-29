@@ -1,8 +1,9 @@
 <?php
-    $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
+$googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
 ?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -25,17 +26,15 @@
 
 <body class="min-w-[390px]">
 
-      <button id="sideBarButton" aria-label="Open menu" class="block md:hidden">
-        <svg id="openSideBar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
-          <path fill-rule="evenodd"
-            d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
-            clip-rule="evenodd" />
-        </svg>
-      </button>
+  <button id="sideBarButton" aria-label="Open menu" class="block md:hidden">
+    <svg id="openSideBar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
+      <path fill-rule="evenodd"
+        d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+        clip-rule="evenodd" />
+    </svg>
+  </button>
 
-  
-
-    </div>
+  </div>
   </header>
 
   <!-- HEADER DESKTOP -->
@@ -46,92 +45,69 @@
       </nav>
     </div>
 
-   <div class="flex items-center justify-end gap-3">
-  <!-- Icono de usuario -->
-<div class="relative">
-  <!-- Botón del icono de usuario -->
-  <button id="userMenuButton" aria-label="User" class="rounded-full border p-2">
-    <svg viewBox="0 0 24 24" class="h-6 w-6">
-      <circle cx="12" cy="8" r="4" />
-      <path d="M4 20c2-4 14-4 16 0" />
-    </svg>
-  </button>
+    <div class="flex items-center justify-end gap-3">
+      <!-- Menú desplegable -->
+      <div id="userMenu" class="hidden fixed top-14 left-200 w-64 bg-gray-100 border border-gray-300 rounded-lg shadow-lg p-4 z-10">
+        <p class="text-sm font-semibold text-gray-700">Current Balance: 43,56€</p>
+        <p class="text-sm text-gray-600 mt-1">254 KiloMeters</p>
+        <p class="text-sm text-gray-600">3,21 KiloGrams</p>
 
-  <!-- Menú desplegable -->
-  <div id="userMenu"
-    class="hidden absolute right-0 top-full mt-2 w-64 bg-gray-100 border border-gray-300 rounded-lg shadow-lg p-4 z-50">
-    <p class="text-sm font-semibold text-gray-700">Current Balance: 43,56€</p>
-    <p class="text-sm text-gray-600 mt-1">254 KiloMeters</p>
-    <p class="text-sm text-gray-600">3,21 KiloGrams</p>
+        <div class="mt-4 flex flex-col gap-2">
+          <button
+            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            <span>Add balance</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4v16m8-8H4" />
+            </svg>
+          </button>
 
-    <div class="mt-4 flex flex-col gap-2">
-      <button
-        class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
-        <span>Add balance</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M12 4v16m8-8H4" />
-        </svg>
+          <button
+            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            <span>Buy single ticket</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 10h18M3 14h18M5 6h14M5 18h14" />
+            </svg>
+          </button>
+        </div>
+
+        <div class="flex justify-end mt-3">
+          <a href="/index.html" aria-label="Logout" class="p-2 border rounded-full hover:bg-gray-200">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+              <path fill-rule="evenodd"
+                d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
+                clip-rule="evenodd" />
+            </svg>
+          </a>
+        </div>
+      </div>
+      <button id="userMenuButton" aria-label="User">
+        <span class="text-sm text-gray-700">Joel Rubio Raco</span>
       </button>
 
-      <button
-        class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
-        <span>Buy single ticket</span>
-        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-          stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M3 10h18M3 14h18M5 6h14M5 18h14" />
-        </svg>
-      </button>
-    </div>
+      <script>
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
 
-    <div class="flex justify-end mt-3">
-      <a href="/index.html" aria-label="Logout" class="p-2 border rounded-full hover:bg-gray-200">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-          <path fill-rule="evenodd"
-            d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
-            clip-rule="evenodd" />
-        </svg>
-      </a>
-    </div>
-  </div>
-</div>
+        // Mostrar / ocultar el menú al hacer click
+        userMenuButton.addEventListener('click', () => {
+          userMenu.classList.toggle('hidden');
+        });
 
-<script>
-  const userMenuButton = document.getElementById('userMenuButton');
-  const userMenu = document.getElementById('userMenu');
-
-  // Mostrar / ocultar el menú al hacer click
-  userMenuButton.addEventListener('click', () => {
-    userMenu.classList.toggle('hidden');
-  });
-
-  // Cerrar el menú si se hace click fuera
-  document.addEventListener('click', (e) => {
-    if (!userMenu.contains(e.target) && !userMenuButton.contains(e.target)) {
-      userMenu.classList.add('hidden');
-    }
-  });
-</script>
-
-  <!-- Nombre del usuario -->
-  <span class="text-sm text-gray-700">Joel Rubio Raco</span>
-
-  <!-- Botón de logout -->
-  <a href="/index.html" class="p-2 rounded-full border" aria-label="Log out">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-      <path fill-rule="evenodd"
-        d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
-        clip-rule="evenodd" />
-    </svg>
-  </a>
-</div>
+        // Cerrar el menú si se hace click fuera
+        document.addEventListener('click', (e) => {
+          if (!userMenu.contains(e.target) && !userMenuButton.contains(e.target)) {
+            userMenu.classList.add('hidden');
+          }
+        });
+      </script>
 
   </header>
-
   <!-- MAPA: ocupa todo debajo del header -->
-<div id="map" class="fixed inset-0"></div>
+  <div id="map" class="fixed inset-0"></div>
 
   <!-- SIDEBAR -->
   <div id="sideBar" class="md:hidden">
@@ -152,13 +128,13 @@
       <div id="userTotalKm">
         <p><b>254</b> KiloMeters</p>
         <h6 class="userStatsSub">Total distance travelled</h6>
-        <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;'/>
+        <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;' />
       </div>
 
       <div id="userTotalCo2">
         <p><b>3.32</b> KiloGrams</p>
         <h6 class="userStatsSub">Total C02 saved</h6>
-        <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;'/>
+        <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;' />
       </div>
     </div>
 
@@ -249,4 +225,5 @@
   <script src="/views/main/scripts/sideBar.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=<?= $googleApiKey ?>&callback=initMap&v=weekly" async defer></script>
 </body>
+
 </html>
