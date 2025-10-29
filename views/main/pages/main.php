@@ -130,7 +130,6 @@
 
   </header>
 
-
   <!-- MAPA: ocupa todo debajo del header -->
 <div id="map" class="fixed inset-0"></div>
 
