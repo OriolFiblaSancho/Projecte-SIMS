@@ -47,10 +47,13 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
 
     <div class="flex items-center justify-end gap-3">
       <!-- Menú desplegable -->
-      <div id="userMenu" class="hidden fixed top-14 left-200 w-64 bg-gray-100 border border-gray-300 rounded-lg shadow-lg p-4 z-10">
-        <p class="text-sm font-semibold text-gray-700">Current Balance: 43,56€</p>
-        <p class="text-sm text-gray-600 mt-1">254 KiloMeters</p>
-        <p class="text-sm text-gray-600">3,21 KiloGrams</p>
+      <div id="userMenu" class="flex flex-col hidden fixed top-14 left-200 w-64 bg-gray-100 border border-gray-300 rounded-lg shadow-lg p-4 z-10">
+        <div class="flex flex-col">
+          <p class="text-sm font-semibold text-gray-700">Current Balance: 43,56€</p>
+          <p class="text-sm text-gray-600 mt-1">254 KiloMeters</p>
+          <p class="text-sm text-gray-600">3,21 KiloGrams</p>
+        </div>
+
 
         <div class="mt-4 flex flex-col gap-2">
           <button
@@ -74,16 +77,24 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
           </button>
         </div>
 
-        <div class="flex justify-end mt-3">
-          <a href="/index.html" aria-label="Logout" class="p-2 border rounded-full hover:bg-gray-200">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-              <path fill-rule="evenodd"
-                d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
-                clip-rule="evenodd" />
-            </svg>
-          </a>
-        </div>
+        <div class="flex mt-4 justify-between">
+          
+        <button id="sideBarConfigButton">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+            <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.59-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+          </svg>
+        </button>
+
+        <button id="Logout">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+            <path fill-rule="evenodd"
+              d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
+              clip-rule="evenodd" />
+          </svg>
+        </button>
       </div>
+      </div>
+
       <button id="userMenuButton" aria-label="User">
         <span class="text-sm text-gray-700">Joel Rubio Raco</span>
       </button>
@@ -175,7 +186,7 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
 
   <!-- BOTTOM BAR (si lo quieres solo en móvil, añade md:hidden a este contenedor) -->
   <div id="bottomBar">
-    <div id="selectedCarInfo" class="md:hidden">
+    <div id="selectedCarInfo" class="hidden">
       <p id="car_street" class="text-neutral-700">c/Street X,39</p>
       <p id="car_plate" class="text-neutral-700">0340 GDH</p>
 
