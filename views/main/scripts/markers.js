@@ -45,6 +45,8 @@ window.addEventListener('resize', handleBarVisibility);
 
 
 function toggleActiveMarker(marker) {
+  if (!marker) return;
+
   if (lastMarker && lastMarker !== marker) {
     lastMarker.setIcon({ url: svg, scaledSize: new google.maps.Size(32, 32), anchor: new google.maps.Point(14, 28) });
   }

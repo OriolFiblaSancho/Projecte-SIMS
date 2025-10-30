@@ -22,8 +22,8 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
-<body class="min-w-[390px]">
-
+<body class="min-w-[390px] relative">
+  <?php require_once __DIR__ . '/../components/AdminMenu.php'; ?>
   <button id="sideBarButton" aria-label="Open menu" class="block md:hidden">
     <svg id="openSideBar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
       <path fill-rule="evenodd"
