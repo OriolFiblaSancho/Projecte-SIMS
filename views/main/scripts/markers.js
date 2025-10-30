@@ -11,21 +11,52 @@ const svg2 = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
 
 const SELECTED = document.getElementById('selectedCarInfo');
 const BOTTOM = document.getElementById('bottomBar');
-let lastMarker
+let lastMarker;
 
-function toggleActiveMarker(marker){
+
+// ===== NOU CODI =====
+// Aquesta funció controla la visibilitat de la barra
+function handleBarVisibility() {
+  const isDesktop = window.matchMedia('(min-width: 768px)').matches;
+  const isBarExpanded = BOTTOM.classList.contains('expanded');
+
+  if (isDesktop) {
+    // Si som a ESCRIPTORI
+    if (isBarExpanded) {
+      // i la barra està oberta (mostrant info), la deixem 'flex'
+      BOTTOM.style.display = 'flex';
+    } else {
+      // i la barra està tancada, l'amaguem
+      BOTTOM.style.display = 'none';
+    }
+  } else {
+    // Si som a MÒBIL
+    // Sempre la mostrem (per al botó QR)
+    BOTTOM.style.display = 'flex';
+  }
+}
+
+// S'executa al carregar la pàgina
+handleBarVisibility();
+
+// I s'executa CADA COP que es canvia la mida de la finestra
+window.addEventListener('resize', handleBarVisibility);
+// ===== FI NOU CODI =====
+
+
+function toggleActiveMarker(marker) {
   if (lastMarker && lastMarker !== marker) {
-    lastMarker.setIcon({ url: svg, scaledSize: new google.maps.Size(32,32), anchor: new google.maps.Point(14,28) });
+    lastMarker.setIcon({ url: svg, scaledSize: new google.maps.Size(32, 32), anchor: new google.maps.Point(14, 28) });
   }
 
   const isActive = marker.icon && marker.icon.url === svg2;
 
   if (isActive) {
-    marker.setIcon({ url: svg, scaledSize: new google.maps.Size(32,32), anchor: new google.maps.Point(14,28) });
+    marker.setIcon({ url: svg, scaledSize: new google.maps.Size(32, 32), anchor: new google.maps.Point(14, 28) });
     lastMarker = null;
   } else {
     const size = 42;
-    marker.setIcon({ url: svg2, scaledSize: new google.maps.Size(42,42),anchor: new google.maps.Point(Math.round(size / 2)-1, size) });
+    marker.setIcon({ url: svg2, scaledSize: new google.maps.Size(42, 42), anchor: new google.maps.Point(Math.round(size / 2) - 1, size) });
     lastMarker = marker;
   }
 }
@@ -46,44 +77,46 @@ function randomPointAround(centerLatLng, radiusMeters) {
 
 export function createCenterMarker(map, center) {
   return new google.maps.Marker(
-    { 
-      position: center, 
-      map, 
-      icon: { 
-        url: svg, scaledSize: new google.maps.Size(50,50), 
-        anchor: new google.maps.Point(25,50) 
-      } });
+    {
+      position: center,
+      map,
+      icon: {
+        url: svg, scaledSize: new google.maps.Size(50, 50),
+        anchor: new google.maps.Point(25, 50)
+      }
+    });
 }
 
-export function createRandomMarkers(map, center, count, radiusMeters ) {
+export function createRandomMarkers(map, center, count, radiusMeters) {
   const markers = [];;
-  for (let i=0;i<count;i++) {
+  for (let i = 0; i < count; i++) {
     const p = randomPointAround(center, radiusMeters);
-    const m = new google.maps.Marker({ 
-      position: p, 
-      map, 
-      icon: { url: svg, scaledSize: new google.maps.Size(32,32), 
-      anchor: new google.maps.Point(14,28) }, 
-      title: `Point ${i+1}` 
+    const m = new google.maps.Marker({
+      position: p,
+      map,
+      icon: {
+        url: svg, scaledSize: new google.maps.Size(32, 32),
+        anchor: new google.maps.Point(14, 28)
+      },
+      title: `Point ${i + 1}`
     });
 
     //Expand
     m.addListener('click', () => {
-      if( m == lastMarker ) return;
-      BOTTOM.classList.add('sliding-down')
+      if (m == lastMarker) return;
+      BOTTOM.classList.add('sliding-down');
+
+      // Forcem la barra a 'flex' (per mostrar-la a escriptori)
+      BOTTOM.style.display = 'flex';
 
       setTimeout(() => {
-        BOTTOM.classList.add('expanded');
+        BOTTOM.classList.add('expanded'); // <-- Li diem que està oberta
         SELECTED.classList.add('grid');
         SELECTED.classList.remove('hidden'); 
-        BOTTOM.classList.remove('sliding-down')
-        BOTTOM.classList.remove('get-up')
-        toggleActiveMarker(m)
-      },200)
-       
-      
-    
-      
+        BOTTOM.classList.remove('sliding-down');
+        BOTTOM.classList.remove('get-up');
+        toggleActiveMarker(m);
+      }, 200);
     });
 
     markers.push(m);
@@ -94,38 +127,42 @@ export function createRandomMarkers(map, center, count, radiusMeters ) {
 export function bottomBarToggle(map) {
   // Collapse on map click
   map.addListener('click', () => {
-    
-    if(BOTTOM.classList.contains('expanded')){
-      BOTTOM.classList.add('sliding-down')
+
+    if (BOTTOM.classList.contains('expanded')) {
+      BOTTOM.classList.add('sliding-down');
       setTimeout(() => {
         SELECTED.classList.remove('grid');
         SELECTED.classList.add('hidden'); 
-        BOTTOM.classList.remove('sliding-down')
-        BOTTOM.classList.remove('expanded');
-        BOTTOM.classList.remove('get-up')
-        toggleActiveMarker(lastMarker)
-      },200)
-    }
-      
+        BOTTOM.classList.remove('sliding-down');
+        BOTTOM.classList.remove('expanded'); // <-- Li diem que s'ha tancat
+        BOTTOM.classList.remove('get-up');
 
+        // MODIFICAT: Cridem a la funció principal
+        // Aquesta funció decidirà si s'ha d'amagar (escriptori) o no (mòbil)
+        handleBarVisibility(); 
+        
+        toggleActiveMarker(lastMarker);
+      }, 200);
+    }
   });
 
   // Collapse when clicking outside the BOTTOM bar
   document.addEventListener('click', (e) => {
     const target = e.target;
-      // If the clicked element or any of its ancestors has the marker class, don't collapse
-      if (!target.closest('.not-collapse-bottom') && !BOTTOM.contains(target) && !target.closest('.gm-style')) {
-      BOTTOM.classList.add('sliding-down')
+    if (!target.closest('.not-collapse-bottom') && !BOTTOM.contains(target) && !target.closest('.gm-style')) {
+      BOTTOM.classList.add('sliding-down');
 
       setTimeout(() => {
-
         SELECTED.classList.remove('grid');
         SELECTED.classList.add('hidden'); 
-        BOTTOM.classList.remove('sliding-down')
-        BOTTOM.classList.remove('expanded');
+        BOTTOM.classList.remove('sliding-down');
+        BOTTOM.classList.remove('expanded'); // <-- Li diem que s'ha tancat
 
-      },200)
-      toggleActiveMarker(lastMarker)
+        // MODIFICAT: Cridem a la funció principal
+        handleBarVisibility();
+
+      }, 200);
+      toggleActiveMarker(lastMarker);
     }
   });
 }
