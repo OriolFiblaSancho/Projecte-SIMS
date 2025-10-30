@@ -216,10 +216,10 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </div>
   </div>
 
-  <script type="module" src="/views/main/scripts/init.js"></script>
-  <script src="/views/main/scripts/reserve.js"></script>
-  <script src="/views/main/scripts/sideBar.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=<?= $googleApiKey ?>&callback=initMap&v=weekly" async defer></script>
-</body>
+<script type="module" src="/views/main/scripts/init.js"></script>
+  <script src="/views/main/scripts/reserve.js" defer></script>
+  <script src="/views/main/scripts/sideBar.js" defer></script>
 
+  <script src="https://maps.googleapis.com/maps/api/js?key=<?= $googleApiKey ?>&callback=initMap&v=weekly" defer></script>
+</body>
 </html>
