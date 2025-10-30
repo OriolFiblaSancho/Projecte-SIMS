@@ -13,14 +13,12 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-  <!-- Tus estilos existentes -->
   <link rel="stylesheet" href="/views/common/styles/theme.css">
   <link rel="stylesheet" href="/views/common/styles/base.css">
   <link rel="stylesheet" href="/views/main/styles/map.css">
   <link rel="stylesheet" href="/views/main/styles/bottom.css">
   <link rel="stylesheet" href="/views/main/styles/side.css">
 
-  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -34,16 +32,12 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </svg>
   </button>
 
-  <!-- HEADER DESKTOP -->
   <header class="fixed inset-x-0 top-0 z-40 hidden md:flex h-16 items-center justify-between bg-gray-100 border-b px-6">
     <div class="flex items-center gap-3">
       <img src="/assets/logos/logoNoBg.png" alt="App logo" class="h-8 w-auto" />
-      <nav class="flex gap-5 text-sm">
-      </nav>
-    </div>
+      </div>
 
     <div class="flex items-center justify-end gap-3">
-      <!-- Menú desplegable -->
       <div id="userMenu" class="flex flex-col hidden fixed top-14 left-200 w-64 bg-gray-100 border border-gray-300 rounded-lg shadow-lg p-4 z-10">
         <div class="flex flex-col">
           <p class="text-sm font-semibold text-gray-700">Current Balance: 43,56€</p>
@@ -77,7 +71,7 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
 
         <div class="flex mt-4 justify-between">
 
-          <button id="sideBarConfigButton">
+          <button id="userMenuConfigButton">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
               <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.59-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
             </svg>
@@ -115,10 +109,8 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
       </script>
 
   </header>
-  <!-- MAPA: ocupa todo debajo del header -->
   <div id="map" class="fixed inset-0"></div>
 
-  <!-- SIDEBAR -->
   <div id="sideBar" class="md:hidden">
     <button id="goBackBtn">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
@@ -149,12 +141,10 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
 
     <div id="sideBarPurchases">
       <a href="/views/addBalance/pages/addBalance.html" id="addBalanceButton" class="sideBarPurchasesButton rounded">
-        <button id="addBalanceButton" class="sideBarPurchasesButton rounded">
-          <b>Add Balance</b>
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-            <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
-          </svg>
-        </button>
+        <b>Add Balance</b>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+          <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
+        </svg>
       </a>
 
       <button id="singleTicketButton" class="sideBarPurchasesButton rounded">
@@ -182,7 +172,6 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </div>
   </div>
 
-  <!-- BOTTOM BAR (si lo quieres solo en móvil, añade md:hidden a este contenedor) -->
   <div id="bottomBar" class="fixed inset-x-0 bottom-0 z-50 flex flex-col">
     <div id="selectedCarInfo" class="hidden">
       <p id="car_street" class="text-neutral-700">c/Street X,39</p>
@@ -214,7 +203,6 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </a>
   </div>
 
-  <!-- OVERLAY RESERVA -->
   <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
     <div id="reserve_modal" class="not-collapse-bottom bg-white rounded-lg shadow-lg h-auto w-2/3 justify-center items-center">
       <div id="reserve_modal_content" class="w-full h-full py-6 px-4">
@@ -228,7 +216,6 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </div>
   </div>
 
-  <!-- Scripts -->
   <script type="module" src="/views/main/scripts/init.js"></script>
   <script src="/views/main/scripts/reserve.js"></script>
   <script src="/views/main/scripts/sideBar.js"></script>
