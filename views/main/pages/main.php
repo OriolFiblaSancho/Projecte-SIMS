@@ -1,173 +1,225 @@
 <?php
-    $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
+$googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
 ?>
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Blink</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blink</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="/views/common/styles/theme.css">
-    <link rel="stylesheet" href="/views/common/styles/base.css">
-    <link rel="stylesheet" href="/views/main/styles/map.css">
-    <link rel="stylesheet" href="/views/main/styles/bottom.css">
-    <link rel="stylesheet" href="/views/main/styles/side.css">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/views/common/styles/theme.css">
+  <link rel="stylesheet" href="/views/common/styles/base.css">
+  <link rel="stylesheet" href="/views/main/styles/map.css">
+  <link rel="stylesheet" href="/views/main/styles/bottom.css">
+  <link rel="stylesheet" href="/views/main/styles/side.css">
 
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
 <body class="min-w-[390px]">
-    <div id="map"></div>
 
-    <div id="sideBar" class="hidden">
-        <button id="goBackBtn">
-            <svg  xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+  <button id="sideBarButton" aria-label="Open menu" class="block md:hidden">
+    <svg id="openSideBar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
+      <path fill-rule="evenodd"
+        d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+        clip-rule="evenodd" />
+    </svg>
+  </button>
+
+  <header class="fixed inset-x-0 top-0 z-40 hidden md:flex h-16 items-center justify-between bg-gray-100 border-b px-6">
+    <div class="flex items-center gap-3">
+      <img src="/assets/logos/logoNoBg.png" alt="App logo" class="h-8 w-auto" />
+      </div>
+
+    <div class="flex items-center justify-end gap-3">
+      <div id="userMenu" class="flex flex-col hidden fixed top-14 left-200 w-64 bg-gray-100 border border-gray-300 rounded-lg shadow-lg p-4 z-10">
+        <div class="flex flex-col">
+          <p class="text-sm font-semibold text-gray-700">Current Balance: 43,56€</p>
+          <p class="text-sm text-gray-600 mt-1">254 KiloMeters</p>
+          <p class="text-sm text-gray-600">3,21 KiloGrams</p>
+        </div>
+
+
+        <div class="mt-4 flex flex-col gap-2">
+          <button
+            onclick="window.location.href='/views/addBalance/pages/addBalance.html'"
+            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            <span>Add balance</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M12 4v16m8-8H4" />
             </svg>
-        </button> 
+          </button>
 
-        <div id="sideBarIcon" >
-            <img src="/assets/logos/logo.jpeg" alt="App logo" class="w-16 h-16 rounded-full border-2 border-[#7E3FBC] object-cover shadow-md">
-        </div>
-        <div id="userNameSurname">
-            Oriol Fibla Sancho
-        </div>
-
-        <div id="userBalance">
-            Current balance: <b>43.65 €</b>
-        </div>
-
-        <div id="userStats">
-            <div id="userTotalKm">
-                <p>
-                    <b> 254 </b> KiloMeters
-                </p>
-                
-                <h6 class="userStatsSub">Total distance travelled</h6>
-                <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;'/>
-            </div>
-
-            <div id="userTotalCo2">
-                <p>
-                    <b> 3.32 </b> KiloGrams
-                </p>
-                <h6 class="userStatsSub"> Total C02 saved</h6>
-                <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;'/>
-            </div> 
+          <button
+            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            <span>Buy single ticket</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M3 10h18M3 14h18M5 6h14M5 18h14" />
+            </svg>
+          </button>
         </div>
 
-        <div id="sideBarPurchases">
-                <a href="/views/addBalance/pages/addBalance.html" id="addBalanceButton" class="sideBarPurchasesButton rounded">
-                    <button id="addBalanceButton" class="sideBarPurchasesButton rounded">
-                        
-                            <b>Add Balance</b> 
-                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
-                                <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
-                            </svg>
-                        
-                    </button>
-                </a>
+        <div class="flex mt-4 justify-between">
 
-            <button id="singleTicketButton" class="sideBarPurchasesButton rounded">
-                <b>Buy Single Ticket</b>
-                
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-12">
-                    <path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Zm15-1.125a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0v.75a.75.75 0 0 0 1.5 0v-.75Zm-.75 3a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0v-.75a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0V18a.75.75 0 0 0 1.5 0v-.75ZM6 12a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 12Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
-                </svg>
-            </button>
-        </div>
+          <button id="userMenuConfigButton">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+              <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.59-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+            </svg>
+          </button>
 
-        <div id="sideBarUtilityButtons">
-            <button id="sideBarConfigButton" class="sideBarUtilityButton">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
-                    <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.059-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
-                </svg>
-            </button>
-
-            <a href="/index.html">
-                <button id="sideBarLogOffButton" class="sideBarUtilityButton">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
-                        <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
-                    </svg>
-                </button>
-            </a>
-            
-        </div>
-
-    </div>
-
-    
-    <button id="sideBarButton" class="w-xl">
-        <svg id="openSideBar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-11">
-            <path fill-rule="evenodd"
-                d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
+          <button id="Logout"onclick="window.location.href='/index.html'">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
+              <path fill-rule="evenodd"
+                d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
                 clip-rule="evenodd" />
-        </svg>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <button id="userMenuButton" aria-label="User">
+        <span class="text-sm text-gray-700">Joel Rubio Raco</span>
+      </button>
+
+      <script>
+        const userMenuButton = document.getElementById('userMenuButton');
+        const userMenu = document.getElementById('userMenu');
+
+        // Mostrar / ocultar el menú al hacer click
+        userMenuButton.addEventListener('click', () => {
+          userMenu.classList.toggle('hidden');
+        });
+
+        // Cerrar el menú si se hace click fuera
+        document.addEventListener('click', (e) => {
+          if (!userMenu.contains(e.target) && !userMenuButton.contains(e.target)) {
+            userMenu.classList.add('hidden');
+          }
+        });
+      </script>
+
+  </header>
+  <div id="map" class="fixed inset-0"></div>
+
+  <div id="sideBar" class="md:hidden">
+    <button id="goBackBtn">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-8">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+      </svg>
     </button>
 
-    
-    <div id="bottomBar">
-    <div id="selectedCarInfo" class="hidden">
-            <p id="car_street" class="text-neutral-700">
-                c/Street X,39
-            </p>
+    <div id="sideBarIcon">
+      <img src="/assets/logos/logoNoBg.png" alt="App logo">
+    </div>
+    <div id="userNameSurname">Oriol Fibla Sancho</div>
 
-            <p id="car_plate" class="text-neutral-700">
-                0340 GDH
-            </p>
+    <div id="userBalance">Current balance: <b>43.65 €</b></div>
 
-            <div id="car_battery">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" class="size-8">
-                    <path d="M4.5 9.75a.75.75 0 0 0-.75.75V15c0 .414.336.75.75.75h6.75A.75.75 0 0 0 12 15v-4.5a.75.75 0 0 0-.75-.75H4.5Z" />
-                    <path fill-rule="evenodd" d="M3.75 6.75a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-.037c.856-.174 1.5-.93 1.5-1.838v-2.25c0-.907-.644-1.664-1.5-1.837V9.75a3 3 0 0 0-3-3h-15Zm15 1.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-6a1.5 1.5 0 0 1 1.5-1.5h15Z" clip-rule="evenodd" />
-                </svg>
-                <p>145 Km</p>
-            </div>
+    <div id="userStats">
+      <div id="userTotalKm">
+        <p><b>254</b> KiloMeters</p>
+        <h6 class="userStatsSub">Total distance travelled</h6>
+        <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;' />
+      </div>
 
-            <button id="reserve_button" class="bg-[#7E3FBC] text-white rounded flex px-8 py-4 font-bold">
-                Reserve
-            </button>
-        </div>
-    <a href="/views/scan/pages/scan.html">
-        <button id="scanBtn" class="scan-btn" aria-label="Scan QR">
-            <span class="scan-icon">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="size-10">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                        d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
-                </svg>
-            </span>
-            <span class="scan-text">Scan QR</span>
+      <div id="userTotalCo2">
+        <p><b>3.32</b> KiloGrams</p>
+        <h6 class="userStatsSub">Total C02 saved</h6>
+        <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;' />
+      </div>
+    </div>
+
+    <div id="sideBarPurchases">
+      <a href="/views/addBalance/pages/addBalance.html" id="addBalanceButton" class="sideBarPurchasesButton rounded">
+        <b>Add Balance</b>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+          <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
+        </svg>
+      </a>
+
+      <button id="singleTicketButton" class="sideBarPurchasesButton rounded">
+        <b>Buy Single Ticket</b>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-12">
+          <path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Zm15-1.125a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0v.75a.75.75 0 0 0 1.5 0v-.75Zm-.75 3a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0v-.75a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0V18a.75.75 0 0 0 1.5 0v-.75ZM6 12a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 12Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+    </div>
+
+    <div id="sideBarUtilityButtons">
+      <button id="sideBarConfigButton" class="sideBarUtilityButton">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+          <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.59-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
+        </svg>
+      </button>
+
+      <a href="/index.html">
+        <button id="sideBarLogOffButton" class="sideBarUtilityButton">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
+            <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
+          </svg>
         </button>
-        </a>
+      </a>
     </div>
-    <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
-        <div id="reserve_modal" class=" not-collapse-bottom bg-white rounded-lg shadow-lg h-auto w-2/3 justify-center items-center">
-            <div id="reserve_modal_content" class=" w-full h-full py-6 px-4">
-                <h2 class="text-2xl font-bold mb-1 text-center">Are you sure?</h2>
-                <p class="text-base text-gray-600 mb-4 text-center">Reserve this vehicle</p>
-                <div class="flex flex-col gap-3">
-                    <button class="w-full bg-white border-2 border-gray-200 text-gray-800 rounded-full px-4 py-3 text-base font-medium text-xl" id="close_reserve_modal">Cancel</button>
-                    <button class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-full px-4 py-3 text-base font-semibold text-xl" id="confirm_reserve_modal">Reserve</button>
-                </div>
-            </div>
+  </div>
+
+  <div id="bottomBar" class="fixed inset-x-0 bottom-0 z-50 flex flex-col">
+    <div id="selectedCarInfo" class="hidden">
+      <p id="car_street" class="text-neutral-700">c/Street X,39</p>
+      <p id="car_plate" class="text-neutral-700">0340 GDH</p>
+
+      <div id="car_battery">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" class="size-8">
+          <path d="M4.5 9.75a.75.75 0 0 0-.75.75V15c0 .414.336.75.75.75h6.75A.75.75 0 0 0 12 15v-4.5a.75.75 0 0 0-.75-.75H4.5Z" />
+          <path fill-rule="evenodd" d="M3.75 6.75a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3v-.037c.856-.174 1.5-.93 1.5-1.838v-2.25c0-.907-.644-1.664-1.5-1.837V9.75a3 3 0 0 0-3-3h-15Zm15 1.5a1.5 1.5 0 0 1 1.5 1.5v6a1.5 1.5 0 0 1-1.5 1.5h-15a1.5 1.5 0 0 1-1.5-1.5v-6a1.5 1.5 0 0 1 1.5-1.5h15Z" clip-rule="evenodd" />
+        </svg>
+        <p>145 Km</p>
+      </div>
+
+      <button id="reserve_button" class="bg-[#7E3FBC] text-white rounded flex px-8 py-4 font-bold">Reserve</button>
+    </div>
+
+    <a href="/views/scan/pages/scan.html">
+      <button id="scanBtn" class="scan-btn md:hidden" aria-label="Scan QR">
+        <span class="scan-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 md:hidden">
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
+            <path stroke-linecap="round" stroke-linejoin="round"
+              d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
+          </svg>
+        </span>
+        <span class="scan-text">Scan QR</span>
+      </button>
+    </a>
+  </div>
+
+  <div id="overlay" class="hidden fixed inset-0 bg-black/50 z-50 flex items-center justify-center">
+    <div id="reserve_modal" class="not-collapse-bottom bg-white rounded-lg shadow-lg h-auto w-2/3 justify-center items-center">
+      <div id="reserve_modal_content" class="w-full h-full py-6 px-4">
+        <h2 class="text-2xl font-bold mb-1 text-center">Are you sure?</h2>
+        <p class="text-base text-gray-600 mb-4 text-center">Reserve this vehicle</p>
+        <div class="flex flex-col gap-3">
+          <button class="w-full bg-white border-2 border-gray-200 text-gray-800 rounded-full px-4 py-3 text-base font-medium text-xl" id="close_reserve_modal">Cancel</button>
+          <button class="w-full bg-purple-600 hover:bg-purple-700 text-white rounded-full px-4 py-3 text-base font-semibold text-xl" id="confirm_reserve_modal">Reserve</button>
         </div>
+      </div>
     </div>
-    
+  </div>
 
-    <!-- API key is injected via PHP env (GOOGLE_MAPS_API_KEY); Apikey.js not needed here -->
-    <script type="module" src="/views/main/scripts/init.js"></script>
-    <script src="/views/main/scripts/reserve.js"></script>
-    <script src="/views/main/scripts/sideBar.js"></script>
-    <script src="https://maps.googleapis.com/maps/api/js?key=<?=$googleApiKey?>&callback=initMap&v=weekly" async defer></script>
-        
+<script type="module" src="/views/main/scripts/init.js"></script>
+  <script src="/views/main/scripts/reserve.js" defer></script>
+  <script src="/views/main/scripts/sideBar.js" defer></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=<?= $googleApiKey ?>&callback=initMap&v=weekly" defer></script>
 </body>
-
 </html>
