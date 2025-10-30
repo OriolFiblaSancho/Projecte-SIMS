@@ -32,7 +32,7 @@
         </button> 
 
         <div id="sideBarIcon" >
-            <img src="/assets/logos/logoNoBg.png" alt="App logo">
+            <img src="/assets/logos/logo.jpeg" alt="App logo" class="w-16 h-16 rounded-full border-2 border-[#7E3FBC] object-cover shadow-md">
         </div>
         <div id="userNameSurname">
             Oriol Fibla Sancho
