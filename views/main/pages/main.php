@@ -185,7 +185,7 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
   </div>
 
   <!-- BOTTOM BAR (si lo quieres solo en móvil, añade md:hidden a este contenedor) -->
-  <div id="bottomBar">
+<div id="bottomBar" class="fixed inset-x-0 bottom-0 z-50 flex flex-col">
     <div id="selectedCarInfo" class="hidden">
       <p id="car_street" class="text-neutral-700">c/Street X,39</p>
       <p id="car_plate" class="text-neutral-700">0340 GDH</p>
@@ -202,9 +202,9 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </div>
 
     <a href="/views/scan/pages/scan.html">
-      <button id="scanBtn" class="scan-btn" aria-label="Scan QR">
+      <button id="scanBtn" class="scan-btn md:hidden" aria-label="Scan QR">
         <span class="scan-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 md:hidden">
             <path stroke-linecap="round" stroke-linejoin="round"
               d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 3.75 9.375v-4.5ZM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 0 1-1.125-1.125v-4.5ZM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0 1 13.5 9.375v-4.5Z" />
             <path stroke-linecap="round" stroke-linejoin="round"
