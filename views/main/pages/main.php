@@ -32,24 +32,22 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </svg>
   </button>
 
-  <header class="fixed inset-x-0 top-0 z-40 hidden md:flex h-16 items-center justify-between bg-gray-100 border-b px-6">
-    <div class="flex items-center gap-3">
-      <img src="/assets/logos/logoNoBg.png" alt="App logo" class="h-8 w-auto" />
-      </div>
+  <header class="fixed inset-x-0 top-0 z-40 hidden md:flex h-16 items-center justify-between bg-[#ddfae8] border-b border-[#0D6344] px-6">
+    <div class="flex items-center gap-3 bg-white p-1 border border-[#7E3FBC] rounded">
+      <img src="/assets/logos/logoPC.jpeg" alt="App logo" class="h-8 w-auto" />
+    </div>
 
     <div class="flex items-center justify-end gap-3">
-      <div id="userMenu" class="flex flex-col hidden fixed top-14 left-200 w-64 bg-gray-100 border border-gray-300 rounded-lg shadow-lg p-4 z-10">
+      <div id="userMenu" class="flex flex-col hidden fixed top-14 left-200 w-64 bg-[#ddfae8] border border-[#0D6344] rounded-lg shadow-2xl p-4 z-10">
         <div class="flex flex-col">
-          <p class="text-sm font-semibold text-gray-700">Current Balance: 43,56€</p>
-          <p class="text-sm text-gray-600 mt-1">254 KiloMeters</p>
-          <p class="text-sm text-gray-600">3,21 KiloGrams</p>
+          <p class="text-sm ">Current Balance: <b>43,56€</b></p>
         </div>
 
 
         <div class="mt-4 flex flex-col gap-2">
           <button
             onclick="window.location.href='/views/addBalance/pages/addBalance.html'"
-            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            class="flex items-center justify-between bg-[#7E3FBC] font-semibold text-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
             <span>Add balance</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -59,7 +57,7 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
           </button>
 
           <button
-            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            class="flex items-center justify-between text-white font-semibold bg-[#7E3FBC] border rounded-md px-3 py-2 hover:bg-gray-200 transition">
             <span>Buy single ticket</span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
               stroke="currentColor">
@@ -88,7 +86,7 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
       </div>
 
       <button id="userMenuButton" aria-label="User">
-        <span class="text-sm text-gray-700">Joel Rubio Raco</span>
+        <span class="text-md text-black font-bold">Joel Rubio Raco</span>
       </button>
 
       <script>
@@ -119,7 +117,7 @@ $googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
     </button>
 
     <div id="sideBarIcon">
-      <img src="/assets/logos/logoNoBg.png" alt="App logo">
+      <img src="/assets/logos/logo.jpeg" alt="App logo" class="w-16 h-16 rounded-full border-2 border-[#7E3FBC] object-cover shadow-md">
     </div>
     <div id="userNameSurname">Oriol Fibla Sancho</div>
 
