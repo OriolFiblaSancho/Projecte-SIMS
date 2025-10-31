@@ -13,7 +13,7 @@
 
     <p id="car_plate" class="text-neutral-700">0340 GDH</p>
 
-    <!-- Acciones (segunda línea): contenedor para Scan + Reserve -->
+    <!-- Actions (second row): container for Scan + Reserve -->
     <div id="car_actions">
       <a href="/views/scan/pages/scan.html" class="md:hidden">
         <button id="scanBtnInline" class="scan-btn scan-inline" aria-label="Scan QR">
