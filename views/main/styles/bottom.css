@@ -8,7 +8,7 @@
 	align-items: center;
 	pointer-events: auto;
 	width: 100%;
-	max-width: 560px;
+	max-width: 450px;
 	background: var(--color-mint);
 	border-radius: 18px 18px 0 0;
 	padding: 2rem 1.5rem;
@@ -24,6 +24,9 @@
 #bottomBar.expanded {
 	max-height: 18rem;
 }
+
+/* Hide the standalone mobile scan button when the bar is expanded */
+#bottomBar.expanded .mobile-scan-link { display: none !important; }
 
 #bottomBar.sliding-down {
 	transform: translateY(110%);
@@ -55,22 +58,21 @@
 	margin-bottom: 2rem;
 }
 
-#car_street,
 #car_plate {
   display: flex;
-  justify-self: center;
-  align-self: end;
+	justify-self: center;
+	align-self: center;
   font-size: 1.2rem;
 }
 .scan-btn {
 	display: inline-flex;
 	align-items: center;
-	gap: 12px;
+	gap: 8px;
 	background: white;
 	border: 2px solid var(--color-forest);
-	padding: 14px 24px;
+	padding: 14px 16px;
 	border-radius: 46px;
-	font-size: 18px;
+	font-size: 0.95rem; /* ~15px */
 	cursor: pointer;
 	max-height: 55%;
 	box-shadow: 0 4px 5px var(--color-forest);
@@ -117,6 +119,22 @@ img.scan-icon {
   font-weight: 600;
   letter-spacing: 0.02em;
   box-shadow: 0 4px 12px var(--color-purple);
+}
+
+/* Actions row spans full width under first line */
+#car_actions {
+	grid-column: 1 / -1;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	width: 100%;
+}
+
+/* Desktop (>=768px): hide inline scan; center reserve spanning both columns */
+@media (min-width: 768px) {
+	#selectedCarInfo .scan-inline { display: none !important; }
+	#car_actions { justify-content: center; }
 }
 
 @media (min-width: 640px) {
