@@ -10,15 +10,8 @@
     </div>
     
     <ul>
-        <li>Vehicle 1</li>
-        <li>Vehicle 2</li>
-        <li>Vehicle 3</li>
-        <li>Vehicle 4</li>
-        <li>Vehicle 5</li>
-        <li>Vehicle 6</li>
-        <li>Vehicle 7</li>
-        <li>Vehicle 8</li>
-        <li>Vehicle 9</li>
-        <li>Vehicle 10</li>
+    <?php foreach ($vehicles as $vehicle): ?>
+        <li><?php echo htmlspecialchars($vehicle['model']); ?></li>
+    <?php endforeach; ?>
     </ul>
 </div>

@@ -1,5 +1,5 @@
 <?php
-$googleApiKey = getenv('GOOGLE_MAPS_API_KEY');
+$googleApiKey = getenv(name:'GOOGLE_MAPS_API_KEY');
 ?>
 <!DOCTYPE html>
 <html lang="en">

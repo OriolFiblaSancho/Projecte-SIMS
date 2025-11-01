@@ -22,15 +22,17 @@
             </li>
         </ul>
     </nav>
-    <?php
-      $adminSection = $_GET['admin'] ?? null;
-      if ($adminSection === 'ViewVehicles') {
-        include __DIR__ . '/AdminMenuComponents/Vehicles/VehiclesTable.php';
-      }else if ($adminSection === 'FormVehicles') {
-        include __DIR__ . '/AdminMenuComponents/Vehicles/VehiclesForm.php';
-      } 
-      //Add more sections as needed, pls peña read the comments
-    ?>
+        <?php
+            $adminSection = $_GET['admin'] ?? null;
+            if ($adminSection === 'ViewVehicles') {
+                require_once __DIR__ . '/../../../controllers/vehicleController.php';
+                $vc = new VehicleController();
+                $vc->getAll();
+            } else if ($adminSection === 'FormVehicles') {
+                include __DIR__ . '/AdminMenuComponents/Vehicles/VehiclesForm.php';
+            }
+            // Add more sections as needed, pls peña leed los comments
+        ?>
 
 </div>
 <script >
