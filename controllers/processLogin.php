@@ -26,7 +26,7 @@ if (strlen($password) < 8) {
 
 // Database lookup
 try {
-  $stmt = $pdo->prepare("SELECT id, password FROM users WHERE email = ?");
+  $stmt = $pdo->prepare("SELECT user_id, password FROM users WHERE email = ?");
   $stmt->execute([$email]);
   $user = $stmt->fetch();
 
@@ -47,7 +47,7 @@ try {
   }
 
   // Session handling
-  $_SESSION['user_id'] = $user['id'];
+  $_SESSION['user_id'] = $user['user_id'];
   echo json_encode([
     'success' => true,
     'message' => 'Login successful.'

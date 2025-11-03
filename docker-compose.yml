@@ -5,7 +5,7 @@ services:
     build: .
     container_name: Blink_Docker
     ports:
-      - "8080:80"
+      - "9090:80"
     volumes:
       - ./:/var/www/html
     environment:
