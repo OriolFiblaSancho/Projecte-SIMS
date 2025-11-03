@@ -1,4 +1,4 @@
-<div class="absolute top-20 left-4 z-10 bg-[#CB97FF] rounded-md p-4 shadow-lg hidden md:block border border-[#7E3FBC]" id="adminMenu">
+<div class="absolute top-20 left-4 z-10 bg-[#CB97FF] rounded-md p-4 shadow-lg hidden md:block border border-[#7E3FBC] max-w-xl " id="adminMenu">
     <div class="flex relative justify-between">
         <h1 class="text-lg font-semibold mb-2">Admin Menu</h1>
         <button class="absolute right-0 top-0" id='closeAdminMenu'>
@@ -9,7 +9,7 @@
     </div>
     
 
-    <nav aria-label="Admin navigation" class="bg-white/70 rounded-md border border-[#7E3FBC]">
+    <nav aria-label="Admin navigation" class="bg-white/70 rounded-md border border-[#7E3FBC] w-full max-w-[280px]">
         <ul class="flex">
             <li class="border-r border-[#7E3FBC]">
                 <a href="?admin=ViewUsers" class="text-center mx-3 hover:bg-[#d5c3eb] font-medium text-md text-[#2d0a4a]">Users</a>
