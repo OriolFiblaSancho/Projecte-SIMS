@@ -29,7 +29,9 @@
                 $vc = new VehicleController();
                 $vc->getAll();
             } else if ($adminSection === 'FormVehicles') {
-                include __DIR__ . '/AdminMenuComponents/Vehicles/VehiclesForm.php';
+                include __DIR__ . '/../../../controllers/vehicleTypeController.php';
+                $vtc = new VehicleTypeController();
+                $vtc->getAll();
             }
             // Add more sections as needed, pls peña leed los comments
         ?>

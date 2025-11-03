@@ -139,7 +139,6 @@ CREATE TABLE user_logs (
 
 -- Foreign keys
 ALTER TABLE vehicles ADD FOREIGN KEY (vehicle_type_id) REFERENCES vehicle_types (type_id);
-ALTER TABLE vehicles ADD FOREIGN KEY (owner_id) REFERENCES users (user_id);
 
 ALTER TABLE reservations ADD FOREIGN KEY (user_id) REFERENCES users (user_id);
 ALTER TABLE reservations ADD FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id);
@@ -168,7 +167,7 @@ INSERT INTO users (user_id, username, name, last_name, email, password, phone, u
 (1, 'admin', 'Admin', 'User', 'admin@example.com', 'adminpass', '0000000000', 'admin', 1000.00, 'verified', '', NOW(), false),
 (2, 'jdoe', 'John', 'Doe', 'john.doe@example.com', 'password', '111222333', 'customer', 25.50, 'verified', 'DL123456', NOW(), false),
 (3, 'jane', 'Jane', 'Smith', 'jane.smith@example.com', 'password', '222333444', 'customer', 0.00, 'non-verified', 'DL654321', NOW(), false),
-(4, 'bob', 'Bob', 'Brown', 'demo@test.com', 'Passw0rd_', 'admin', 10000.00, 'verified', 'DL999999', NOW(), false);
+(4, 'bob', 'Bob', 'Brown', 'demo@test.com', 'Passw0rd_', '333444555', 'admin', 10000.00, 'verified', 'DL999999', NOW(), false);
 -- Vehicle types
 INSERT INTO vehicle_types (type_id, name, description, range_km, max_speed, adapted_reduced_mobility, deleted) VALUES
 (1, 'E-Scooter', 'Light electric scooter', 20, 25, false, false),

@@ -38,8 +38,31 @@ class Vehicle {
         $query = "INSERT INTO " . $this->table . " (license_plate, model, vehicle_type_id, battery_level, current_range, total_km, status, deleted) 
                   VALUES (:license_plate, :model, :vehicle_type_id, :battery_level, :current_range, :total_km, :status, 0)";
         $stmt = $this->db->prepare($query);
+
+        // Neteja les dades
+        $data['license_plate'] = htmlspecialchars(strip_tags($data['license_plate']));
+        $data['model'] = htmlspecialchars(strip_tags($data['model']));
+        $data['vehicle_type_id'] = htmlspecialchars(strip_tags($data['vehicle_type_id']));
+        $data['battery_level'] = htmlspecialchars(strip_tags($data['battery_level']));
+        $data['current_range'] = htmlspecialchars(strip_tags($data['current_range']));
+        $data['total_km'] = htmlspecialchars(strip_tags($data['total_km']));
+        $data['status'] = htmlspecialchars(strip_tags($data['status']));
+
+        // Vincula els paràmetres
+        $stmt->bindParam(':license_plate', $data['license_plate']);
+        $stmt->bindParam(':model', $data['model']);
+        $stmt->bindParam(':vehicle_type_id', $data['vehicle_type_id']);
+        $stmt->bindParam(':battery_level', $data['battery_level']);
+        $stmt->bindParam(':current_range', $data['current_range']);
+        $stmt->bindParam(':total_km', $data['total_km']);
+        $stmt->bindParam(':status', $data['status']);   
+
         $stmt->execute($data);
-        return $this->db->lastInsertId();
+
+        if ($stmt->execute()) {
+            return $this->db->lastInsertId();
+        }
+        return false;
     }
 
 }
