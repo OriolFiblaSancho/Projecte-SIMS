@@ -41,6 +41,15 @@
               d="M3 10h18M3 14h18M5 6h14M5 18h14" />
           </svg>
         </button>
+
+        <button
+            onclick="window.location.href='/views/pages/cookies.html'"
+            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            <span>Cookie Policy</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+        </button>
       </div>
 
       <div class="flex mt-4 justify-between">
