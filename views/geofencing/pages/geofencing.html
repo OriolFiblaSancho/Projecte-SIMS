@@ -31,6 +31,16 @@
 
     <h2>Zonas Activas</h2>
     <button onclick="getZones()">Actualizar Lista</button>
+    <br>
+    <input type="number" id="get_id" placeholder="ID para buscar">
+    <button onclick="getZoneById()">Buscar por ID</button>
+    <br>
+    <input type="number" id="update_id" placeholder="ID para actualizar">
+    <input type="text" id="update_name" placeholder="Nuevo nombre">
+    <button onclick="updateZone()">Actualizar Nombre</button>
+    <br>
+    <input type="text" id="delete_ids" placeholder="IDs para eliminar (ej: 1,2,3)">
+    <button onclick="deleteSelection()">Eliminar Selección</button>
     <table id="zonesTable">
         <thead>
             <tr>
@@ -104,8 +114,48 @@ function createZone() {
 // Eliminar zona (soft delete)
 function deleteZone(id) {
     if (!confirm('¿Seguro que deseas eliminar esta zona?')) return;
-
     fetch(`${apiUrl}?id=${id}`, { method: 'DELETE' })
+        .then(res => res.json())
+        .then(res => {
+            alert(res.message);
+            getZones();
+        });
+}
+
+// Buscar zona por ID
+function getZoneById() {
+    const id = document.getElementById('get_id').value;
+    if (!id) return alert('Introduce un ID');
+    fetch(`${apiUrl}?id=${id}`)
+        .then(res => res.json())
+        .then(res => {
+            alert(JSON.stringify(res, null, 2));
+        });
+}
+
+// Actualizar nombre de zona
+function updateZone() {
+    const id = document.getElementById('update_id').value;
+    const name = document.getElementById('update_name').value;
+    if (!id || !name) return alert('Introduce ID y nuevo nombre');
+    fetch(`${apiUrl}?id=${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ zone_name: name })
+    })
+    .then(res => res.json())
+    .then(res => {
+        alert(res.message);
+        getZones();
+    });
+}
+
+// Eliminar selección de zonas (soft delete)
+function deleteSelection() {
+    const ids = document.getElementById('delete_ids').value;
+    if (!ids) return alert('Introduce IDs separados por coma');
+    const idArray = ids.split(',').map(x => x.trim()).filter(x => x);
+    fetch(`${apiUrl}?ids=${idArray.join(',')}`, { method: 'DELETE' })
         .then(res => res.json())
         .then(res => {
             alert(res.message);

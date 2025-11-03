@@ -1,5 +1,5 @@
 <?php
-require_once 'BaseModel.php';
+require_once __DIR__ . '/baseModel.php';
 
 class GeofencingConfig extends BaseModel {
     public function __construct() {
@@ -13,27 +13,39 @@ class GeofencingConfig extends BaseModel {
             return ['success' => false, 'message' => 'Invalid zone type.'];
         }
 
+        // Omit `deleted` so the database default (false) is applied.
         $data = [
             'zone_name' => $zone_name,
             'center_latitude' => $center_latitude,
             'center_longitude' => $center_longitude,
             'radius_meters' => $radius_meters,
             'max_speed_allowed' => $max_speed_allowed,
-            'type' => $type,
-            'deleted' => false
+            'type' => $type
         ];
 
-        if ($this->create($data)) {
-            return ['success' => true, 'message' => 'Zone created successfully.'];
+        try {
+            if ($this->create($data)) {
+                return ['success' => true, 'message' => 'Zone created successfully.'];
+            } else {
+                $errorInfo = $this->pdo->errorInfo();
+                return [
+                    'success' => false,
+                    'message' => 'Error creating zone.',
+                    'errorInfo' => $errorInfo
+                ];
+            }
+        } catch (PDOException $e) {
+            return [
+                'success' => false,
+                'message' => 'PDOException: ' . $e->getMessage()
+            ];
         }
-
-        return ['success' => false, 'message' => 'Error creating zone.'];
     }
 
     // Obtener una zona por ID
-    public function getZoneById($id) {
-        return $this->find($id, 'zone_id');
-    }
+        public function getZoneById($id) {
+            return $this->findById($id, 'zone_id');
+        }
 
     // Actualizar zona
     public function updateZone($zone_id, $data) {
