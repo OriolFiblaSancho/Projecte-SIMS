@@ -4,7 +4,14 @@ ini_set('display_errors', 0); // Evita imprimir HTML en errores
 error_reporting(E_ALL);
 header('Content-Type: application/json; charset=utf-8');
 
-require_once '/models/geofencingModel.php';
+// Require the model using a safe relative path. If the file is missing, return a JSON error
+$modelPath = __DIR__ . '/../models/geofencingModel.php';
+if (!file_exists($modelPath)) {
+    http_response_code(500);
+    echo json_encode(['success' => false, 'message' => 'Model file not found.', 'path' => $modelPath]);
+    exit;
+}
+require_once $modelPath;
 
 try {
     $geofencing = new GeofencingConfig();
@@ -26,7 +33,7 @@ try {
                     echo json_encode(['success' => false, 'message' => 'Zone not found.']);
                 }
             } else {
-                $zones = $geofencing->all();
+                $zones = $geofencing->getAllUndeleted();
                 echo json_encode(['success' => true, 'data' => $zones]);
             }
             break;
@@ -81,6 +88,22 @@ try {
          * Ejemplo: DELETE /GeofencingController.php?id=5
          */
         case 'DELETE':
+            // Support batch delete via ?ids=1,2,3 or single delete via ?id=1
+            if (isset($_GET['ids'])) {
+                $ids = array_filter(array_map('trim', explode(',', $_GET['ids'])));
+                if (empty($ids)) {
+                    echo json_encode(['success' => false, 'message' => 'No IDs provided.']);
+                    exit;
+                }
+
+                $success = $geofencing->softDeleteSelection($ids, 'zone_id');
+                echo json_encode([
+                    'success' => $success,
+                    'message' => $success ? 'Zones deleted successfully.' : 'Error deleting zones.'
+                ]);
+                break;
+            }
+
             if (!isset($_GET['id'])) {
                 echo json_encode(['success' => false, 'message' => 'Zone ID required.']);
                 exit;
