@@ -19,23 +19,16 @@ class VehicleController {
             return;
         }
 
-        $errors = $this->validateVehicle($_POST);
-        
-        if (empty($errors)) {
-            $result = $this->vehicleModel->create($_POST);
+        $result = $this->vehicleModel->create($_POST);
 
-            if ($result) {
-                $_SESSION['success'] = "Vehicle created successfully!";
-                Router::redirect('/main.php?admin=ViewVehicles');
-            } else {
-                $_SESSION['error'] = "Error creating vehicle";
-            }
+        if ($result) {
+            $_SESSION['success'] = "Vehicle created successfully!";
+            Router::redirect('/main?admin=ViewVehicles');
         } else {
-            $_SESSION['errors'] = $errors;
-            $_SESSION['old'] = $_POST;
+            $_SESSION['error'] = "Error creating vehicle";
+             Router::redirect('/main?admin=FormVehicles');
         }
-
-        Router::redirect('/main.php?admin=FormVehicles');
+    
     }
 
     private function validateVehicle($data) {
