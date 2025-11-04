@@ -18,7 +18,7 @@
             <option value="available">Available</option>
             <option value="reserved">Reserved</option>
             <option value="in_use">In Use</option>
-            <option value="maintenance">Maintenance</option>
+            <option value="out_of_service">Out of Service</option>
         </select>
         <button type="submit" class="bg-[#CB97FF] text-black rounded-md p-2 w-full hover:bg-[#7E3FBC] hover:border-[#f0e0ff] hover:text-white bg-[#f0e0ff] border border-[#7E3FBC] border-[2px]">Add Vehicle</button>
     </form>
