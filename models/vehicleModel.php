@@ -27,7 +27,7 @@ class Vehicle {
     }
 
     public function getById($id) {
-        $query = "SELECT * FROM " . $this->table . " WHERE id = :id AND deleted = false";
+        $query = "SELECT * FROM " . $this->table . " WHERE vehicle_id = :id AND deleted = false";
         $stmt = $this->db->prepare($query);
         $stmt->bindParam(':id', $id);
         $stmt->execute();
@@ -41,14 +41,14 @@ class Vehicle {
 
         $data['battery_level'] = 0;
         $data['current_range'] = 0;
-        $data['total_km'] = 0;
 
         // Neteja les dades
         $data['license_plate'] = htmlspecialchars(strip_tags($data['license_plate']));
         $data['model'] = htmlspecialchars(strip_tags($data['model']));
         $data['vehicle_type_id'] = htmlspecialchars(strip_tags($data['vehicle_type_id']));
         $data['status'] = htmlspecialchars(strip_tags($data['status']));
-
+        $data['total_km'] = htmlspecialchars(strip_tags($data['total_km']));
+        
         // Vincula els paràmetres
         $stmt->bindParam(':license_plate', $data['license_plate']);
         $stmt->bindParam(':model', $data['model']);
@@ -64,6 +64,12 @@ class Vehicle {
         return false;
     }
 
+    public function delete($id) {
+        $query = "UPDATE " . $this->table . " SET deleted = true WHERE vehicle_id = :id";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':id', $id);
+        return $stmt->execute();
+    }
 }
 
 ?>

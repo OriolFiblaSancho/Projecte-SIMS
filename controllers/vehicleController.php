@@ -1,16 +1,19 @@
 <?php
 require_once __DIR__ . '/../models/vehicleModel.php';
 require_once __DIR__ . '/../config/router.php';
-
+require_once __DIR__ . '/../models/vehicleTypeModel.php';
 class VehicleController {
     private $vehicleModel;
+    private $vehicleTypeModel;
 
     public function __construct() {
         $this->vehicleModel = new Vehicle();
+        $this->vehicleTypeModel = new VehicleType();
     }
 
     public function getAll() {
         $vehicles = $this->vehicleModel->getAllVehicles();
+        $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Vehicles/VehiclesTable.php';
     }
 
@@ -30,7 +33,26 @@ class VehicleController {
         }
     
     }
+    public function delete($id = null) {
+        if ($id === null) {
+            $id = $_GET['id'] ?? null;
+        }
 
+        if (!$id){
+            Router::redirect('/main?admin=ViewVehicles');
+        }
+    
+        $result = $this->vehicleModel->delete($id);
+
+        if ($result) {
+            $_SESSION['success'] = "Vehicle deleted successfully!";
+        } else {
+            $_SESSION['error'] = "Error deleting vehicle";
+        }
+        Router::redirect('/main?admin=ViewVehicles');
+    }
+
+    // I would need to add vehicle validation 
     private function validateVehicle($data) {
         $errors = [];
 

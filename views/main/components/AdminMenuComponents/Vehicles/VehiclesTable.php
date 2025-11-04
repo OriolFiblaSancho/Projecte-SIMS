@@ -18,20 +18,24 @@
                     <th class="px-4 py-2">Type</th>
                     <th class="px-4 py-2">Total KM</th>
                     <th class="px-4 py-2">Status</th>
-                    <th class="px-4 py-2" colspan="3">Actions</th>
+                    <th class="px-4 py-2" colspan="4">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-100">
                 <?php if (empty($vehicles)): ?>
                 <tr class="odd:bg-white even:bg-gray-50">
-                    <td class="px-4 py-6 text-sm text-gray-500 text-center" colspan="5">No vehicles found.</td>
+                    <td class="px-4 py-6 text-sm text-gray-500 text-center" colspan="6">No vehicles found.</td>
                 </tr>
                 <?php else: ?>
                 <?php foreach ($vehicles as $vehicle): ?>
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-3 text-sm font-medium text-gray-800"><?php echo htmlspecialchars($vehicle['model']); ?></td>
                     <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($vehicle['license_plate']); ?></td>
-                    <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($vehicle['vehicle_type_id']); ?></td>
+                    <?php foreach ($vehicleTypes as $type): ?>
+                        <?php if ($type['type_id'] == $vehicle['vehicle_type_id']): ?>
+                            <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($type['name']); ?></td>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                     <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($vehicle['total_km']); ?></td>
                     <td class="px-4 py-3 text-sm">
                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
@@ -39,6 +43,7 @@
                         </span>
                     </td>
                     <td>
+                        <!-- View Button -->
                         <button class="px-2 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                                 <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
@@ -47,6 +52,7 @@
                         </button>
                     </td>
                     <td>
+                        <!-- Edit Button -->
                         <button class="px-2 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                                 <path d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />
@@ -56,11 +62,14 @@
                         </button>
                     </td>
                     <td>
+                        <!-- Delete Button -->
+                        <a href="/vehicles/delete/<?= $vehicle['vehicle_id'] ?>">
                         <button class="px-2 py-3">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                                 <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
                             </svg>
                         </button>
+                        </a>
                     </td>
                 </tr>
                 <?php endforeach; ?>

@@ -9,6 +9,14 @@
 // Sessió per a missatges i autenticació
 session_start();
 
+function console_log($data) {
+    $output = $data;
+    if (is_array($output))
+        $output = implode(',', $output);
+
+    echo "<script>console.log('$output');</script>";
+}
+
 // Carrega el sistema de rutes existent
 require_once __DIR__ . '/config/router.php';
 
@@ -23,6 +31,7 @@ try {
     $router->dispatch();
 } catch (Exception $e) {
     $_SESSION['error'] = 'Error: ' . $e->getMessage();
+    console_log($e->getMessage());
     header('Location: /main');
     exit;
 }
