@@ -32,6 +32,11 @@
                 include __DIR__ . '/../../../controllers/vehicleTypeController.php';
                 $vtc = new VehicleTypeController();
                 $vtc->getAll();
+            } else if ($adminSection === 'ViewVehicle') {
+                require_once __DIR__ . '/../../../controllers/vehicleController.php';
+                $vc = new VehicleController();
+                $id = $_GET['id'] ?? null;
+                $vc->view($id);
             }
             // Add more sections as needed, pls peña leed los comments
         ?>

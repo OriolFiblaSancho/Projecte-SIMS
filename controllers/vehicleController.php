@@ -52,6 +52,26 @@ class VehicleController {
         Router::redirect('/main?admin=ViewVehicles');
     }
 
+    public function view($id = null) {
+        if ($id === null) {
+            $id = $_GET['id'] ?? null;
+        }
+
+        if (!$id) {
+            $_SESSION['error'] = "Vehicle ID not provided.";
+            Router::redirect('/main?admin=ViewVehicles');
+        }
+
+        $vehicle = $this->vehicleModel->getById($id);
+        if (!$vehicle) {
+            $_SESSION['error'] = "Vehicle not found.";
+            Router::redirect('/main?admin=ViewVehicles');
+        }
+
+        $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
+        require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Vehicles/VehicleView.php';
+    }
+
     // I would need to add vehicle validation 
     private function validateVehicle($data) {
         $errors = [];

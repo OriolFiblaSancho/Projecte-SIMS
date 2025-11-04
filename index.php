@@ -31,7 +31,6 @@ try {
     $router->dispatch();
 } catch (Exception $e) {
     $_SESSION['error'] = 'Error: ' . $e->getMessage();
-    console_log($e->getMessage());
     header('Location: /main');
     exit;
 }
