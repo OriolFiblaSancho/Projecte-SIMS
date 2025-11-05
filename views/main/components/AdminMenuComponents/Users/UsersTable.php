@@ -42,7 +42,16 @@
                                 </span>
                             </td>
                             <td>
-                                <!-- View Button (opcional) -->
+                                <!-- View Button -->
+                                <a href="?admin=ViewUser&id=<?= $u['user_id'] ?>" class="px-2 py-3" title="View">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
+                                        <path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+                                        <path fill-rule="evenodd" d="M1.38 8.28a.87.87 0 0 1 0-.566 7.003 7.003 0 0 1 13.238.006.87.87 0 0 1 0 .566A7.003 7.003 0 0 1 1.379 8.28ZM11 8a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" clip-rule="evenodd" />
+                                    </svg>
+                                </a>
+                            </td>
+                            <td>
+                                <!-- Edit Button -->
                                 <a href="?admin=FormUsers&id=<?= $u['user_id'] ?>" class="px-2 py-3" title="Edit">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                                         <path d="M13.488 2.513a1.75 1.75 0 0 0-2.475 0L6.75 6.774a2.75 2.75 0 0 0-.596.892l-.848 2.047a.75.75 0 0 0 .98.98l2.047-.848a2.75 2.75 0 0 0 .892-.596l4.261-4.262a1.75 1.75 0 0 0 0-2.474Z" />

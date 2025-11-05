@@ -14,6 +14,21 @@ class UserController {
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Users/UsersTable.php';
     }
 
+    /**
+     * Mostra el detall d'un usuari concret
+     */
+    public function show($id = null) {
+        if ($id === null) {
+            Router::redirect('/main?admin=ViewUsers');
+        }
+        $user = $this->userModel->getById((int)$id);
+        if (!$user) {
+            $_SESSION['error'] = 'User not found';
+            Router::redirect('/main?admin=ViewUsers');
+        }
+        require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Users/UserSingleView.php';
+    }
+
     public function form($id = null) {
         $user = null;
         
@@ -24,8 +39,9 @@ class UserController {
     }
 
     public function create() {
+        // Igual que a VehicleController::create(): si no és POST, sortim
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Router::redirect('/main?admin=FormUsers');
+            return;
         }
 
         $result = $this->userModel->create($_POST);
@@ -43,8 +59,10 @@ class UserController {
         if ($id === null) {
             $id = $_POST['id'] ?? null;
         }
-        if (!$id || $_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Router::redirect('/main?admin=ViewUsers');
+
+        // Seguint l'estil de VehicleController: si no és POST, sortim
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$id) {
+            return;
         }
 
         $ok = $this->userModel->update((int)$id, $_POST);

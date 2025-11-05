@@ -31,6 +31,11 @@ $googleApiKey = getenv(name:'GOOGLE_MAPS_API_KEY');
       echo "<div class='flash flash-error' role='alert' style='background:#fee; color:#800; padding:8px; border:1px solid #f99; margin:8px;'>$msg</div>";
       unset($_SESSION['error']);
     }
+    if (!empty($_SESSION['success'])) {
+      $msg = htmlspecialchars($_SESSION['success'], ENT_QUOTES, 'UTF-8');
+      echo "<div class='flash flash-success' role='status' style='background:#e7f9ed; color:#14532d; padding:8px; border:1px solid #86efac; margin:8px;'>$msg</div>";
+      unset($_SESSION['success']);
+    }
   ?>
   <div id="map" class="fixed inset-0"></div>
   <?php require_once __DIR__ . '/../components/SideBar.php'; ?>

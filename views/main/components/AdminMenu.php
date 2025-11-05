@@ -37,6 +37,11 @@
                 require_once __DIR__ . '/../../../controllers/userController.php';
                 $uc = new UserController();
                 $uc->getAll();
+            } else if ($adminSection === 'ViewUser') {
+                // Mostrar detalle de un usuario
+                require_once __DIR__ . '/../../../controllers/userController.php';
+                $uc = new UserController();
+                $uc->show($_GET['id'] ?? null);
             } else if ($adminSection === 'FormUsers') {
                 // Mostrar formulario de usuario (nuevo/editar)
                 require_once __DIR__ . '/../../../controllers/userController.php';
