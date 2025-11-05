@@ -19,7 +19,7 @@
             </div>
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
-                <input type="text" name="name" value="<?= htmlspecialchars($user['name'] ?? '') ?>" placeholder="Name" class="border border-gray-300 rounded-md p-2 w-full mb-2" required>
+                <input type="text" name="name" value="<?= htmlspecialchars($user['name'] ?? '') ?>" placeholder="Name" class="border border-gray-300 rounded-md p-2 w-full mb-2">
             </div>
             <div>
                 <label for="last_name" class="block text-sm font-medium text-gray-700 mb-1">Last name</label>
