@@ -1,5 +1,21 @@
 <?php
-// Header component with mobile sidebar toggle and desktop user menu
+if (session_status() === PHP_SESSION_NONE) {
+  session_start();
+}
+
+$displayName = 'Guest';
+if (!empty($_SESSION['user_id'])) {
+  require_once __DIR__ . '/../../../models/userModel.php';
+  try {
+    $um = new UserModel();
+    $u = $um->getById((int)$_SESSION['user_id']);
+    if ($u) {
+      $displayName = trim(($u['name'] ?? '') . ' ' . ($u['last_name'] ?? '')) ?: ($u['username'] ?? 'User');
+    }
+  } catch (Exception $e) {
+    error_log('Header: could not load user: ' . $e->getMessage());
+  }
+}
 ?>
 <button id="sideBarButton" aria-label="Open menu" class="block md:hidden">
   <svg id="openSideBar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
@@ -70,7 +86,7 @@
     </div>
 
     <button id="userMenuButton" aria-label="User">
-      <span class="text-md text-black font-bold">Joel Rubio Raco</span>
+      <span class="text-md text-black font-bold"><?= htmlspecialchars($displayName) ?></span>
     </button>
 
     <script>

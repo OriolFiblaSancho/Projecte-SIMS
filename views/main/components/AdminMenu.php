@@ -32,8 +32,18 @@
                 include __DIR__ . '/../../../controllers/vehicleTypeController.php';
                 $vtc = new VehicleTypeController();
                 $vtc->getAll();
+            } else if ($adminSection === 'ViewUsers') {
+                // Mostrar listado de usuarios
+                require_once __DIR__ . '/../../../controllers/userController.php';
+                $uc = new UserController();
+                $uc->getAll();
+            } else if ($adminSection === 'FormUsers') {
+                // Mostrar formulario de usuario (nuevo/editar)
+                require_once __DIR__ . '/../../../controllers/userController.php';
+                $uc = new UserController();
+                $uc->form($_GET['id'] ?? null);
             }
-            // Add more sections as needed, pls peña leed los comments
+            // Add more sections as needed
         ?>
 
 </div>
