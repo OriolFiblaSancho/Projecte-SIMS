@@ -24,31 +24,33 @@
     </nav>
         <?php
             $adminSection = $_GET['admin'] ?? null;
-            if ($adminSection === 'ViewVehicles') {
-                require_once __DIR__ . '/../../../controllers/vehicleController.php';
-                $vc = new VehicleController();
-                $vc->getAll();
-            } else if ($adminSection === 'FormVehicles') {
-                include __DIR__ . '/../../../controllers/vehicleTypeController.php';
-                $vtc = new VehicleTypeController();
-                $vtc->getAll();
-            } else if ($adminSection === 'ViewUsers') {
-                // Mostrar listado de usuarios
-                require_once __DIR__ . '/../../../controllers/userController.php';
-                $uc = new UserController();
-                $uc->getAll();
-            } else if ($adminSection === 'ViewUser') {
-                // Mostrar detalle de un usuario
-                require_once __DIR__ . '/../../../controllers/userController.php';
-                $uc = new UserController();
-                $uc->show($_GET['id'] ?? null);
-            } else if ($adminSection === 'FormUsers') {
-                // Mostrar formulario de usuario (nuevo/editar)
-                require_once __DIR__ . '/../../../controllers/userController.php';
-                $uc = new UserController();
-                $uc->form($_GET['id'] ?? null);
+            if ($adminSection !== null) {
+                if (strpos($adminSection, 'Vehicle') !== false) {
+                    require_once __DIR__ . '/../../../controllers/vehicleController.php';
+                    require_once __DIR__ . '/../../../controllers/vehicleTypeController.php';
+                    $vc = new VehicleController();
+                    $vtc = new VehicleTypeController();
+
+                    if ($adminSection === 'ViewVehicles') {
+                        $vc->getAll();
+                    } else if ($adminSection === 'FormVehicles') {
+                        $vtc->getAll();
+                    }
+                }
+
+                else if (strpos($adminSection, 'User') !== false) {
+                    require_once __DIR__ . '/../../../controllers/userController.php';
+                    $uc = new UserController();
+
+                    if ($adminSection === 'ViewUsers') {
+                        $uc->getAll();
+                    } else if ($adminSection === 'ViewUser') {
+                        $uc->show($_GET['id'] ?? null);
+                    } else if ($adminSection === 'FormUsers') {
+                        $uc->form($_GET['id'] ?? null);
+                    }
+                }
             }
-            // Add more sections as needed
         ?>
 
 </div>
