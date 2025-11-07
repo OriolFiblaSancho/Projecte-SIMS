@@ -12,7 +12,11 @@ $router->get('/main', 'PageController@main');
 // Vehicles
 $router->post('/vehicles/create', 'vehicleController@create');
 $router->get('/vehicles/delete/:id', 'vehicleController@delete');
+
 // Users
 $router->post('/users/create', 'userController@create');
 $router->post('/users/update/:id', 'userController@update');
 $router->get('/users/delete/:id', 'userController@delete');
+
+#Menu settings user
+$router->post('/settings/save', 'userSettingsController@save');

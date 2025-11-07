@@ -31,55 +31,50 @@ if (!empty($_SESSION['user_id'])) {
   </div>
 
   <div class="flex items-center justify-end gap-3">
-    <div id="userMenu" class="flex flex-col hidden fixed top-14 left-200 w-64 bg-[#ddfae8] border border-[#0D6344] rounded-lg shadow-2xl p-4 z-10">
-      <div class="flex flex-col">
-        <p class="text-sm ">Current Balance: <b>43,56€</b></p>
+  <div id="userMenu" class="flex flex-col hidden fixed top-14 right-4 w-64 bg-[#e7fff6] border border-[#8bd7bf] rounded-lg shadow-md p-3 z-30">
+      <div class="px-3 py-2 rounded-md">
+        <p class="text-sm text-neutral-700">Current Balance: <b class="text-black">43,56€</b></p>
       </div>
 
-      <div class="mt-4 flex flex-col gap-2">
+      <div class="mt-3 flex flex-col gap-3 px-3">
         <button
           onclick="window.location.href='/views/addBalance/pages/addBalance.html'"
-          class="flex items-center justify-between bg-[#7E3FBC] font-semibold text-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+          class="w-full flex items-center justify-between bg-[#7E3FBC] text-white font-semibold rounded-lg px-4 py-3 shadow-sm hover:opacity-95 transition">
           <span>Add balance</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M12 4v16m8-8H4" />
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
         </button>
 
         <button
-          class="flex items-center justify-between text-white font-semibold bg-[#7E3FBC] border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+          onclick="window.location.href='/views/scan/pages/scan.html'"
+          class="w-full flex items-center justify-between bg-[#7E3FBC] text-white font-semibold rounded-lg px-4 py-3 shadow-sm hover:opacity-95 transition">
           <span>Buy single ticket</span>
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M3 10h18M3 14h18M5 6h14M5 18h14" />
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18M5 6h14M5 18h14" />
           </svg>
         </button>
 
         <button
             onclick="window.location.href='/views/pages/cookies.html'"
-            class="flex items-center justify-between bg-white border rounded-md px-3 py-2 hover:bg-gray-200 transition">
+            class="w-full flex items-center justify-between bg-white border rounded-lg px-4 py-3 shadow-sm hover:bg-gray-50 transition">
             <span>Cookie Policy</span>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
         </button>
       </div>
 
-      <div class="flex mt-4 justify-between">
-        <button id="userMenuConfigButton">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+      <div class="flex items-center justify-between mt-3 px-3">
+        <button id="userMenuConfigButton" class="p-2 text-black">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
             <path fill-rule="evenodd" d="M11.078 2.25c-.917 0-1.699.663-1.85 1.567L9.05 4.889c-.02.12-.115.26-.297.348a7.493 7.493 0 0 0-.986.57c-.166.115-.334.126-.45.083L6.3 5.508a1.875 1.875 0 0 0-2.282.819l-.922 1.597a1.875 1.875 0 0 0 .432 2.385l.84.692c.095.078.17.229.154.43a7.598 7.598 0 0 0 0 1.139c.015.2-.059.352-.153.43l-.841.692a1.875 1.875 0 0 0-.432 2.385l.922 1.597a1.875 1.875 0 0 0 2.282.818l1.019-.382c.115-.043.283-.031.45.082.312.214.641.405.985.57.182.088.277.228.297.35l.178 1.071c.151.904.933 1.567 1.85 1.567h1.844c.916 0 1.699-.663 1.85-1.567l.178-1.072c.02-.12.114-.26.297-.349.344-.165.673-.356.985-.57.167-.114.335-.125.45-.082l1.02.382a1.875 1.875 0 0 0 2.28-.819l.923-1.597a1.875 1.875 0 0 0-.432-2.385l-.84-.692c-.095-.078-.17-.229-.154-.43a7.614 7.614 0 0 0 0-1.139c-.016-.2.59-.352.153-.43l.84-.692c.708-.582.891-1.59.433-2.385l-.922-1.597a1.875 1.875 0 0 0-2.282-.818l-1.02.382c-.114.043-.282.031-.449-.083a7.49 7.49 0 0 0-.985-.57c-.183-.087-.277-.227-.297-.348l-.179-1.072a1.875 1.875 0 0 0-1.85-1.567h-1.843ZM12 15.75a3.75 3.75 0 1 0 0-7.5 3.75 3.75 0 0 0 0 7.5Z" clip-rule="evenodd" />
           </svg>
         </button>
 
-        <button id="Logout" onclick="window.location.href='/index.html'">
+        <button id="Logout" onclick="window.location.href='/index.html'" class="p-2 text-black">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
-            <path fill-rule="evenodd"
-              d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z"
-              clip-rule="evenodd" />
+            <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
           </svg>
         </button>
       </div>
@@ -93,14 +88,17 @@ if (!empty($_SESSION['user_id'])) {
       const userMenuButton = document.getElementById('userMenuButton');
       const userMenu = document.getElementById('userMenu');
 
-      // Mostrar / ocultar el menú al hacer click
       userMenuButton.addEventListener('click', () => {
         userMenu.classList.toggle('hidden');
       });
 
-      // Cerrar el menú si se hace click fuera
+      const userSettingsPanel = document.getElementById('userSettingsPanel');
       document.addEventListener('click', (e) => {
-        if (!userMenu.contains(e.target) && !userMenuButton.contains(e.target)) {
+        // If the click is outside the user menu, the user menu button, AND outside
+        // the settings panel, then hide the user menu. This prevents the settings
+        // panel from causing the header click handler to close UI while interacting
+        // with the panel.
+        if (!userMenu.contains(e.target) && !userMenuButton.contains(e.target) && !(userSettingsPanel && userSettingsPanel.contains(e.target))) {
           userMenu.classList.add('hidden');
         }
       });

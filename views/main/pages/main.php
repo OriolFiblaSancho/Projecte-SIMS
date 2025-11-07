@@ -41,6 +41,7 @@ $googleApiKey = getenv(name:'GOOGLE_MAPS_API_KEY');
   <?php require_once __DIR__ . '/../components/SideBar.php'; ?>
   <?php require_once __DIR__ . '/../components/BottomBar.php'; ?>
   <?php require_once __DIR__ . '/../components/ReserveModal.php'; ?>
+  <?php require_once __DIR__ . '/../components/UserSettings.php'; ?>
 
   <script type="module" src="/views/main/scripts/init.js"></script>
   <script src="/views/main/scripts/reserve.js" defer></script>

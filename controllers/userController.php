@@ -14,9 +14,6 @@ class UserController {
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Users/UsersTable.php';
     }
 
-    /**
-     * Mostra el detall d'un usuari concret
-     */
     public function show($id = null) {
         if ($id === null) {
             Router::redirect('/main?admin=ViewUsers');
@@ -39,7 +36,6 @@ class UserController {
     }
 
     public function create() {
-        // Igual que a VehicleController::create(): si no és POST, sortim
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
             return;
         }
@@ -60,7 +56,6 @@ class UserController {
             $id = $_POST['id'] ?? null;
         }
 
-        // Seguint l'estil de VehicleController: si no és POST, sortim
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$id) {
             return;
         }

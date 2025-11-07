@@ -55,7 +55,6 @@
 
 </div>
 <script >
-    // Close Menu when clicking outside
     document.getElementById('closeAdminMenu').addEventListener('click', function(event) {
         window.location.href = '?';
     });
