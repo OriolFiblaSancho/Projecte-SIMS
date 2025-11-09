@@ -1,4 +1,4 @@
-<div class="absolute top-20 left-4 z-10 bg-[#CB97FF] rounded-md p-4 shadow-lg hidden md:block border border-[#7E3FBC]" id="adminMenu">
+<div class="absolute top-20 left-4 z-10 bg-[#CB97FF] rounded-md p-4 shadow-lg hidden md:block border border-[#7E3FBC] max-h-[calc(100vh-6rem)] overflow-y-auto scrolling-touch" id="adminMenu">
     <div class="flex relative justify-between">
         <h1 class="text-lg font-semibold mb-2">Admin Menu</h1>
         <button class="absolute right-0 top-0" id='closeAdminMenu'>

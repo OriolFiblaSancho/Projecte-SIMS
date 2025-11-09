@@ -13,6 +13,10 @@
         </select>
         <label for="total_km" class="block text-sm font-medium text-gray-700 mb-1">Total KM</label>
         <input type="number" name="total_km" placeholder="Total KM" class="border border-gray-300 rounded-md p-2 w-full mb-4">
+        <label for="latitude" class="block text-sm font-medium text-gray-700 mb-1">Latitude</label>
+        <input type="number" step="0.00000001" name="latitude" placeholder="Latitude" class="border border-gray-300 rounded-md p-2 w-full mb-4">
+        <label for="longitude" class="block text-sm font-medium text-gray-700 mb-1">Longitude</label>
+        <input type="number" step="0.00000001" name="longitude" placeholder="Longitude" class="border border-gray-300 rounded-md p-2 w-full mb-4">
         <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
         <select name="status" class="border border-gray-300 rounded-md p-2 w-full mb-4">
             <option value="available">Available</option>
