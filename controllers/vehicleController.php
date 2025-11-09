@@ -2,6 +2,7 @@
 require_once __DIR__ . '/../models/vehicleModel.php';
 require_once __DIR__ . '/../config/router.php';
 require_once __DIR__ . '/../models/vehicleTypeModel.php';
+require_once __DIR__ . '/../models/locationModel.php';
 class VehicleController {
     private $vehicleModel;
     private $vehicleTypeModel;
@@ -22,14 +23,30 @@ class VehicleController {
             return;
         }
 
-        $result = $this->vehicleModel->create($_POST);
+        // Create the vehicle first
+        $newVehicleId = $this->vehicleModel->create($_POST);
 
-        if ($result) {
+        if ($newVehicleId) {
+            // If latitude and longitude were provided, create a location record
+            $lat = $_POST['latitude'] ?? null;
+            $lng = $_POST['longitude'] ?? null;
+
+            if (!empty($lat) && !empty($lng)) {
+                $locationModel = new Location();
+                $locationData = [
+                    'vehicle_id' => $newVehicleId,
+                    'latitude' => $lat,
+                    'longitude' => $lng,
+                    'datetime' => date('Y-m-d H:i:s')
+                ];
+                $locationModel->create($locationData);
+            }
+
             $_SESSION['success'] = "Vehicle created successfully!";
             Router::redirect('/main?admin=ViewVehicles');
         } else {
             $_SESSION['error'] = "Error creating vehicle";
-             Router::redirect('/main?admin=FormVehicles');
+            Router::redirect('/main?admin=FormVehicles');
         }
     
     }
@@ -50,6 +67,60 @@ class VehicleController {
             $_SESSION['error'] = "Error deleting vehicle";
         }
         Router::redirect('/main?admin=ViewVehicles');
+    }
+
+    public function update() {
+        if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+            return;
+        }
+
+        $id = $_POST['vehicle_id'] ?? null;
+        if (!$id) {
+            $_SESSION['error'] = 'Vehicle id missing.';
+            Router::redirect('/main?admin=ViewVehicles');
+        }
+
+        $success = $this->vehicleModel->update($id, $_POST);
+
+        if ($success) {
+            // If latitude and longitude provided, create a new location entry
+            $lat = $_POST['latitude'] ?? null;
+            $lng = $_POST['longitude'] ?? null;
+            if (!empty($lat) && !empty($lng)) {
+                $locationModel = new Location();
+                $locationModel->create([
+                    'vehicle_id' => $id,
+                    'latitude' => $lat,
+                    'longitude' => $lng,
+                    'datetime' => date('Y-m-d H:i:s')
+                ]);
+            }
+
+            $_SESSION['success'] = 'Vehicle updated successfully.';
+        } else {
+            $_SESSION['error'] = 'Error updating vehicle.';
+        }
+        Router::redirect('/main?admin=ViewVehicles');
+    }
+
+    public function view($id = null) {
+        if ($id === null) {
+            $id = $_GET['id'] ?? null;
+        }
+
+        if (!$id) {
+            $_SESSION['error'] = "Vehicle ID not provided.";
+            Router::redirect('/main?admin=ViewVehicles');
+        }
+
+        $vehicle = $this->vehicleModel->getById($id);
+        if (!$vehicle) {
+            $_SESSION['error'] = "Vehicle not found.";
+            Router::redirect('/main?admin=ViewVehicles');
+        }
+
+        $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
+        require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Vehicles/VehicleView.php';
     }
 
     // I would need to add vehicle validation 
@@ -85,6 +156,13 @@ class VehicleController {
         }
 
         return $errors;
+    }
+
+    public function getVehiclesWithLocations() {
+        header('Content-Type: application/json');
+        $vehicles = $this->vehicleModel->getAllVehicles();
+        echo json_encode($vehicles);
+        exit;
     }
 
 }
