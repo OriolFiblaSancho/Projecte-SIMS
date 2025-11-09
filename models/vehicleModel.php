@@ -64,6 +64,27 @@ class Vehicle {
         return false;
     }
 
+    public function update($id, $data) {
+        $query = "UPDATE " . $this->table . " SET license_plate = :license_plate, model = :model, vehicle_type_id = :vehicle_type_id, total_km = :total_km, status = :status WHERE vehicle_id = :id";
+        $stmt = $this->db->prepare($query);
+
+        // Neteja les dades
+        $data['license_plate'] = htmlspecialchars(strip_tags($data['license_plate']));
+        $data['model'] = htmlspecialchars(strip_tags($data['model']));
+        $data['vehicle_type_id'] = htmlspecialchars(strip_tags($data['vehicle_type_id']));
+        $data['status'] = htmlspecialchars(strip_tags($data['status']));
+        $data['total_km'] = htmlspecialchars(strip_tags($data['total_km']));
+
+        $stmt->bindParam(':license_plate', $data['license_plate']);
+        $stmt->bindParam(':model', $data['model']);
+        $stmt->bindParam(':vehicle_type_id', $data['vehicle_type_id']);
+        $stmt->bindParam(':total_km', $data['total_km']);
+        $stmt->bindParam(':status', $data['status']);
+        $stmt->bindParam(':id', $id);
+
+        return $stmt->execute();
+    }
+
     public function delete($id) {
         $query = "UPDATE " . $this->table . " SET deleted = true WHERE vehicle_id = :id";
         $stmt = $this->db->prepare($query);

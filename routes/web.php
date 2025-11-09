@@ -11,5 +11,6 @@ $router->get('/main', 'PageController@main');
 
 // Vehicles
 $router->post('/vehicles/create', 'vehicleController@create');
+$router->post('/vehicles/update', 'vehicleController@update');
 $router->get('/vehicles/delete/:id', 'vehicleController@delete');
 $router->get('/main?admin=ViewVehicle&id=:id', 'vehicleController@view');
