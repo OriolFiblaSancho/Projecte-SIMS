@@ -12,7 +12,7 @@ const svg2 = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
 const SELECTED = document.getElementById('selectedCarInfo');
 const BOTTOM = document.getElementById('bottomBar');
 let lastMarker;
-
+let currentVehicleData = null;
 
 // ===== NOU CODI =====
 // Aquesta funció controla la visibilitat de la barra
@@ -87,6 +87,100 @@ export function createCenterMarker(map, center) {
         anchor: new google.maps.Point(25, 50)
       }
     });
+}
+
+// Fetch vehicles with locations from the API
+async function fetchVehiclesWithLocations() {
+  try {
+    const response = await fetch('/api/vehicles/locations');
+    if (!response.ok) {
+      throw new Error('Failed to fetch vehicles');
+    }
+    const vehicles = await response.json();
+    return vehicles;
+  } catch (error) {
+    console.error('Error fetching vehicles:', error);
+    return [];
+  }
+}
+
+// Create markers for real vehicles from the database
+export async function createVehicleMarkers(map) {
+  const vehicles = await fetchVehiclesWithLocations();
+  const markers = [];
+
+  vehicles.forEach((vehicle) => {
+    if (!vehicle.latitude || !vehicle.longitude) {
+      return; // Skip vehicles without location
+    }
+
+    const position = {
+      lat: parseFloat(vehicle.latitude),
+      lng: parseFloat(vehicle.longitude)
+    };
+
+    const m = new google.maps.Marker({
+      position,
+      map,
+      icon: {
+        url: svg,
+        scaledSize: new google.maps.Size(32, 32),
+        anchor: new google.maps.Point(14, 28)
+      },
+      title: vehicle.license_plate
+    });
+
+    // Store vehicle data in the marker
+    m.vehicleData = vehicle;
+
+    // Expand bottom bar on marker click
+    m.addListener('click', () => {
+      if (m == lastMarker) return;
+      
+      // Store current vehicle data
+      currentVehicleData = vehicle;
+      
+      BOTTOM.classList.add('sliding-down');
+
+      // Show the bottom bar on desktop
+      BOTTOM.style.display = 'flex';
+
+      setTimeout(() => {
+        BOTTOM.classList.add('expanded');
+        SELECTED.classList.add('grid');
+        SELECTED.classList.remove('hidden');
+        BOTTOM.classList.remove('sliding-down');
+        BOTTOM.classList.remove('get-up');
+        
+        // Update the bottom bar with vehicle data
+        updateBottomBarWithVehicleData(vehicle);
+        
+        toggleActiveMarker(m);
+      }, 200);
+    });
+
+    markers.push(m);
+  });
+
+  return markers;
+}
+
+// Update bottom bar with real vehicle data
+function updateBottomBarWithVehicleData(vehicle) {
+  // Update license plate
+  const plateElement = document.getElementById('car_plate');
+  if (plateElement) {
+    plateElement.textContent = vehicle.license_plate || 'N/A';
+  }
+
+  // Update battery/range info
+  const rangeElement = document.getElementById('car_range');
+  if (rangeElement) {
+    rangeElement.textContent = `${vehicle.current_range || 0} Km`;
+  }
+
+  // You can add more updates here for other vehicle information
+  console.log('Vehicle data:', vehicle);
 }
 
 export function createRandomMarkers(map, center, count, radiusMeters) {

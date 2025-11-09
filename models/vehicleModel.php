@@ -20,7 +20,19 @@ class Vehicle {
     }
 
     public function getAllVehicles() {
-        $query = "SELECT * FROM " . $this->table . " WHERE deleted = false";
+        $query = "SELECT 
+                    v.*,
+                    l.latitude,
+                    l.longitude,
+                    l.datetime as location_datetime
+                  FROM " . $this->table . " v
+                  LEFT JOIN (
+                    SELECT vehicle_id, latitude, longitude, datetime,
+                           ROW_NUMBER() OVER (PARTITION BY vehicle_id ORDER BY datetime DESC) as rn
+                    FROM locations
+                    WHERE deleted = false
+                  ) l ON v.vehicle_id = l.vehicle_id AND l.rn = 1
+                  WHERE v.deleted = false";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

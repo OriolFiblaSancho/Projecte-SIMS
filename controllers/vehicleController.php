@@ -158,6 +158,13 @@ class VehicleController {
         return $errors;
     }
 
+    public function getVehiclesWithLocations() {
+        header('Content-Type: application/json');
+        $vehicles = $this->vehicleModel->getAllVehicles();
+        echo json_encode($vehicles);
+        exit;
+    }
+
 }
 
 ?>
