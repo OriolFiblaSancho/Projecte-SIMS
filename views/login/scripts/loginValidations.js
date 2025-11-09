@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const data = await res.json();
       if (data.success) {
-        window.location.href = '/views/main/pages/main.php';
+        window.location.href = '/main';
       } else {
         let general = document.getElementById('login-general-error');
         if (!general) {

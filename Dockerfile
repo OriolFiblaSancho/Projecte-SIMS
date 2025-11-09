@@ -8,4 +8,8 @@ RUN apt-get update && apt-get upgrade -y \
 
 RUN a2enmod rewrite
 
+# Allow .htaccess overrides for routing
+COPY apache-allow-override.conf /etc/apache2/conf-available/allow-override.conf
+RUN a2enconf allow-override
+
 COPY ./ /var/www/html

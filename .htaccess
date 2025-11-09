@@ -1,0 +1,16 @@
+# Enable URL rewriting for front controller routing
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteBase /
+
+  # Serve existing files/directories directly
+  RewriteCond %{REQUEST_FILENAME} -f [OR]
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteRule ^ - [L]
+
+  # Otherwise, route everything to index.php
+  RewriteRule ^ index.php [L]
+</IfModule>
+
+# Prefer index.php as the directory index
+DirectoryIndex index.php index.html

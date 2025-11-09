@@ -139,7 +139,6 @@ CREATE TABLE user_logs (
 
 -- Foreign keys
 ALTER TABLE vehicles ADD FOREIGN KEY (vehicle_type_id) REFERENCES vehicle_types (type_id);
-ALTER TABLE vehicles ADD FOREIGN KEY (owner_id) REFERENCES users (user_id);
 
 ALTER TABLE reservations ADD FOREIGN KEY (user_id) REFERENCES users (user_id);
 ALTER TABLE reservations ADD FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id);
@@ -159,5 +158,64 @@ ALTER TABLE alerts ADD FOREIGN KEY (vehicle_id) REFERENCES vehicles (vehicle_id)
 ALTER TABLE alerts ADD FOREIGN KEY (user_id) REFERENCES users (user_id);
 
 ALTER TABLE user_logs ADD FOREIGN KEY (user_id) REFERENCES users (user_id);
+
+
+ 
+-- Sample data inserts
+-- Users
+INSERT INTO users (user_id, username, name, last_name, email, password, phone, user_type, balance, status, driver_license, created_at, deleted) VALUES
+(1, 'admin', 'Admin', 'User', 'admin@example.com', 'adminpass', '0000000000', 'admin', 1000.00, 'verified', '', NOW(), false),
+(2, 'jdoe', 'John', 'Doe', 'john.doe@example.com', 'password', '111222333', 'customer', 25.50, 'verified', 'DL123456', NOW(), false),
+(3, 'jane', 'Jane', 'Smith', 'jane.smith@example.com', 'password', '222333444', 'customer', 0.00, 'non-verified', 'DL654321', NOW(), false),
+(4, 'bob', 'Bob', 'Brown', 'demo@test.com', 'Passw0rd_', '333444555', 'admin', 10000.00, 'verified', 'DL999999', NOW(), false);
+-- Vehicle types
+INSERT INTO vehicle_types (type_id, name, description, range_km, max_speed, adapted_reduced_mobility, deleted) VALUES
+(1, 'E-Scooter', 'Light electric scooter', 20, 25, false, false),
+(2, 'E-Bike', 'Pedal-assisted electric bike', 60, 30, false, false),
+(3, 'Electric Car', 'Small electric car', 200, 120, true, false);
+
+-- Vehicles
+INSERT INTO vehicles (vehicle_id, license_plate, model, vehicle_type_id, battery_level, current_range, total_km, status, deleted) VALUES
+(1, 'SC-1001', 'Xiaomi M365', 1, 85, 17, 123.45, 'available', false),
+(2, 'BK-2002', 'RadRunner 1', 2, 60, 36, 560.00, 'available', false),
+(3, 'EC-3003', 'CityEV', 3, 95, 190, 10234.50, 'in_use', false);
+
+-- Reservations
+INSERT INTO reservations (reservation_id, user_id, vehicle_id, reservation_datetime, deadline_datetime, reservation_status, deleted) VALUES
+(1, 2, 1, NOW(), NOW() + INTERVAL '30 minutes', 'confirmed', false);
+
+-- Trips
+INSERT INTO trips (trip_id, user_id, vehicle_id, start_latitude, start_longitude, end_latitude, end_longitude, start_datetime, end_datetime, trip_status, payment_type, total_price, traveled_km, time_used, deleted) VALUES
+(1, 2, 1, 41.38510000, 2.17340000, 41.39000000, 2.17000000, NOW() - INTERVAL '20 minutes', NOW(), 'finished', 'balance', 3.50, 1.20, 15, false);
+
+-- Balance movements
+INSERT INTO balance_movements (movement_id, user_id, type, amount, movement_datetime, description, deleted) VALUES
+(1, 2, 'recharge', 50.00, NOW() - INTERVAL '1 day', 'Initial top-up', false),
+(2, 2, 'consumption', 3.50, NOW(), 'Trip payment', false);
+
+-- Single tickets
+INSERT INTO single_tickets (ticket_id, user_id, trip_id, amount, purchase_date, status, deleted) VALUES
+(1, 3, NULL, 2.50, NOW(), 'pending', false);
+
+-- Maintenance
+INSERT INTO maintenance (maintenance_id, vehicle_id, start_date, end_date, type, description, status, cost, deleted) VALUES
+(1, 3, NOW() - INTERVAL '7 days', NOW() - INTERVAL '6 days', 'inspection', 'Routine inspection', 'completed', 0.00, false);
+
+-- Locations
+INSERT INTO locations (location_id, vehicle_id, latitude, longitude, datetime, deleted) VALUES
+(1, 1, 41.38510000, 2.17340000, NOW() - INTERVAL '10 minutes', false);
+
+-- Alerts
+INSERT INTO alerts (alert_id, vehicle_id, user_id, type, description, alert_date, status, priority, deleted) VALUES
+(1, 3, NULL, 'technical', 'Low tire pressure', NOW() - INTERVAL '5 days', 'open', 'medium', false);
+
+-- Geofencing configuration
+INSERT INTO geofencing_config (zone_id, zone_name, center_latitude, center_longitude, radius_meters, max_speed_allowed, type, deleted) VALUES
+(1, 'City Center', 41.38510000, 2.17340000, 500, 20, 'historic_center', false);
+
+-- User logs
+INSERT INTO user_logs (log_id, user_id, action, datetime, extra_data, deleted) VALUES
+(1, 2, 'login', NOW() - INTERVAL '1 hour', NULL, false),
+(2, 2, 'reservation', NOW() - INTERVAL '30 minutes', 'reservation_id=1', false);
 
 
