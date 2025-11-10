@@ -258,19 +258,38 @@ document.addEventListener('DOMContentLoaded', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData)
     })
-
-      .then(res => res.json())
-      .then(data => {
-        if (data.success) {
-          FORM.reset();
-          window.location.href = '/views/login/pages/login.html';
-        } else {
-          alert(data.message || 'Error to connect with Database');
+    .then(async (res) => {
+      // Read raw text first so we can show non-JSON output (PHP warnings, HTML, etc.)
+      const text = await res.text();
+      let data = null;
+      if (text) {
+        try {
+          data = JSON.parse(text);
+        } catch (err) {
+          // Server did not return valid JSON: show raw text to help debugging
+          console.error('Invalid JSON from register endpoint:', text);
+          alert('Server returned unexpected response:\n' + text);
+          return;
         }
-      })
-      .catch(() => {
-        alert('Network error. Try again.');
-      });
+      }
+
+      if (!res.ok) {
+        // HTTP error status
+        alert((data && data.message) ? data.message : ('Server error: ' + res.status));
+        return;
+      }
+
+      if (data && data.success) {
+        FORM.reset();
+        window.location.href = '/views/login/pages/login.html';
+      } else {
+        alert((data && data.message) ? data.message : 'Error connecting to the server');
+      }
+    })
+    .catch((err) => {
+      console.error('Fetch failed:', err);
+      alert('Network error. Try again.');
+    });
 
     updateSubmitState();
   });
