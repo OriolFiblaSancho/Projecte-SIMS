@@ -1,0 +1,16 @@
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ "SPRINT-2" ]
+  pull_request:
+    branches: [ "SPRINT-2" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Build the Docker image
+      run: docker compose up --build --tag image-name:$(date +%s)
