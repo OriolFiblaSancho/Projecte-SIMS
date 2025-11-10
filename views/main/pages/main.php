@@ -25,7 +25,7 @@ $googleApiKey = getenv(name:'GOOGLE_MAPS_API_KEY');
 <body class="min-w-[390px] relative">
   <?php require_once __DIR__ . '/../components/AdminMenu.php'; ?>
   <?php require_once __DIR__ . '/../components/Header.php'; ?>
-
+  
   <div id="map" class="fixed inset-0"></div>
   <?php require_once __DIR__ . '/../components/SideBar.php'; ?>
   <?php require_once __DIR__ . '/../components/BottomBar.php'; ?>
