@@ -114,6 +114,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Mark field as touched on first focus to avoid showing invalid state when page auto-focuses
+  [EMAIL, PASSWORD].forEach(inp => {
+    const onFocus = () => {
+      inp.classList.add('touched');
+      inp.removeEventListener('focus', onFocus);
+    };
+    inp.addEventListener('focus', onFocus);
+  });
+
   // Show & hide password
   (function addPasswordToggle() {
     const wrapper = PASSWORD.closest('.relative') || PASSWORD.parentElement;

@@ -11,14 +11,13 @@
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
     <script src="../../common/styles/tailwindStyle.js"></script>
     <style>
-            /* Igual que register: feedback con pseudo-clases y aria-invalid */
             input, textarea { transition: box-shadow .15s, border-color .15s; }
             input:valid, textarea:valid, input:focus:valid, textarea:focus:valid {
-                border-color: #d1d5db !important; /* gray-300 */
+                border-color: #d1d5db !important; 
                 box-shadow: none !important;
             }
             input:focus:invalid, textarea:focus:invalid {
-                border-color: #ef4444; /* red-500 */
+                border-color: #ef4444; 
                 box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.2);
             }
             input[aria-invalid="true"], textarea[aria-invalid="true"],
