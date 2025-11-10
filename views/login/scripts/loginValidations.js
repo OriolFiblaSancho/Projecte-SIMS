@@ -165,7 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // mark form as submitted so CSS shows validation borders even for empty fields
     FORM.classList.add('submitted');
   
-  // run visible validations
+    // run visible validations
 
   const emailOk = validateEmail(true);
   const passOk = validatePassword(true);
