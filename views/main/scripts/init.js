@@ -17,6 +17,24 @@ export function initMap() {
     .catch((e) => {
       console.warn('Initial locate failed or timed out:', e);
     });
+  // If a geofencing form with latitude/longitude inputs exists on the page,
+  // enable clicking the map to fill them and show a temporary marker.
+  try {
+    const latInput = document.querySelector('input[name="center_latitude"]');
+    const lngInput = document.querySelector('input[name="center_longitude"]');
+    if (latInput && lngInput) {
+      // lazy-import the helper from map module (available in same file)
+      import('./map.js').then(mod => {
+        if (mod.enableClickToFill) {
+          // attach and keep cleanup on window for possible later use
+          window.__enableClickToFillCleanup = mod.enableClickToFill(map, 'input[name="center_latitude"]', 'input[name="center_longitude"]');
+        }
+      }).catch(err => console.warn('Failed to attach map click handler', err));
+    }
+  } catch (err) {
+    console.warn('initMap: error checking for geofencing inputs', err);
+  }
+  
 }
 
 window.initMap = initMap;

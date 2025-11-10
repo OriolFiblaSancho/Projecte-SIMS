@@ -28,3 +28,41 @@ export function createMap(elementId, center, zoom) {
 
   return map;
 }
+
+/**
+ * Enable clicking on the map to fill latitude/longitude inputs and show a marker.
+ * @param {google.maps.Map} map
+ * @param {string} latSelector - CSS selector for latitude input (e.g. 'input[name="center_latitude"]')
+ * @param {string} lngSelector - CSS selector for longitude input
+ * @returns {function} cleanup function to remove marker
+ */
+export function enableClickToFill(map, latSelector, lngSelector) {
+  if (!map) return () => {};
+  let clickMarker = null;
+
+  const listener = map.addListener('click', (e) => {
+    const lat = e.latLng.lat();
+    const lng = e.latLng.lng();
+
+    try {
+      const latEl = document.querySelector(latSelector);
+      const lngEl = document.querySelector(lngSelector);
+      if (latEl) latEl.value = Number(lat).toFixed(6);
+      if (lngEl) lngEl.value = Number(lng).toFixed(6);
+    } catch (err) {
+      // ignore if document not ready or selectors not present
+      console.warn('enableClickToFill: could not set inputs', err);
+    }
+
+    if (clickMarker) {
+      clickMarker.setPosition(e.latLng);
+    } else {
+      clickMarker = new google.maps.Marker({ position: e.latLng, map });
+    }
+  });
+
+  return () => {
+    if (clickMarker) clickMarker.setMap(null);
+    if (listener) listener.remove();
+  };
+}

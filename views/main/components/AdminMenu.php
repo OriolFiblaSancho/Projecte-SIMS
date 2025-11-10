@@ -37,7 +37,26 @@
                 $vc = new VehicleController();
                 $id = $_GET['id'] ?? null;
                 $vc->view($id);
+            } else if ($adminSection === 'ViewGeofencing') {
+                require_once __DIR__ . '/../../../controllers/geofencingController.php';
+                $gfc = new GeofencingController();
+                $gfc->getAll();
+            } else if ($adminSection === 'FormGeofencing') {
+                require_once __DIR__ . '/../../../controllers/geofencingController.php';
+                $gfc = new GeofencingController();
+                $editId = $_GET['edit'] ?? null;
+                if ($editId) {
+                    $gfc->edit($editId);
+                } else {
+                    $gfc->create();
+                }
+            } else if ($adminSection === 'ViewGeofencingSingle') {
+                require_once __DIR__ . '/../../../controllers/geofencingController.php';
+                $gfc = new GeofencingController();
+                $id = $_GET['id'] ?? null;
+                $gfc->view($id);
             }
+            
             // Add more sections as needed, pls peña leed los comments
         ?>
 
