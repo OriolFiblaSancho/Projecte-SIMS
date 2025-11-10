@@ -183,7 +183,7 @@ document.addEventListener('DOMContentLoaded', () => {
     inp.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
         e.preventDefault();
-        // actualizar estado del submit
+        // update submit state
         updateSubmitState();
         if (!SUBMIT_BTN.disabled) {
           SUBMIT_BTN.click();
