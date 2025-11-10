@@ -178,6 +178,31 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Añadir soporte para enviar el formulario con la tecla Enter
+  [NAME, EMAIL, PASSWORD].forEach(inp => {
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // actualizar estado del submit
+        updateSubmitState();
+        if (!SUBMIT_BTN.disabled) {
+          SUBMIT_BTN.click();
+        } else {
+          // mostrar validaciones y enfocar primer inválido
+          FORM.classList.add('submitted');
+          validateName(true);
+          validateEmail(true);
+          validatePassword(true);
+          if (!isValidName(NAME.value)) NAME.setAttribute('aria-invalid', 'true'); else NAME.removeAttribute('aria-invalid');
+          if (!isValidEmail(EMAIL.value)) EMAIL.setAttribute('aria-invalid', 'true'); else EMAIL.removeAttribute('aria-invalid');
+          if (!isValidPassword(PASSWORD.value)) PASSWORD.setAttribute('aria-invalid', 'true'); else PASSWORD.removeAttribute('aria-invalid');
+          const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
+          if (firstInvalid) firstInvalid.focus();
+        }
+      }
+    });
+  });
+
 
   // Show & hide password
   (function addPasswordToggle() {

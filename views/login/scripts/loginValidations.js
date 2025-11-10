@@ -114,7 +114,29 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Mark field as touched on first focus to avoid showing invalid state when page auto-focuses
+  // Añadir soporte para enviar el formulario con la tecla Enter
+  [EMAIL, PASSWORD].forEach(inp => {
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // actualizar estado del submit por si el usuario ha modificado algo
+        updateSubmitState();
+        if (!SUBMIT_BTN.disabled) {
+          SUBMIT_BTN.click();
+        } else {
+          // mostrar validaciones visibles y enfocar el primer campo inválido
+          FORM.classList.add('submitted');
+          validateEmail(true);
+          validatePassword(true);
+          reflectAriaInvalid(EMAIL);
+          reflectAriaInvalid(PASSWORD);
+          const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
+          if (firstInvalid) firstInvalid.focus();
+        }
+      }
+    });
+  });
+
   [EMAIL, PASSWORD].forEach(inp => {
     const onFocus = () => {
       inp.classList.add('touched');
