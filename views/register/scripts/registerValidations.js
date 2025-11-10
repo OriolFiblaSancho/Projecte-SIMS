@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const NAME = document.getElementById('name');
   const EMAIL = document.getElementById('email');
   const PASSWORD = document.getElementById('password');
-  const SUBMIT_BTN = FORM.querySelector('button[type="submit"]');
+  const SUBMIT_BTN = FORM.querySelector('button[type="submit"]'); 
 
   console.log('Register validations script loaded.');
 
@@ -32,6 +32,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ensureErrorEl(EMAIL);
   ensureErrorEl(PASSWORD);
 
+  // No touch-checkbox logic needed: inputs use native :invalid styling to show red border.
+
 
   // Functions
   function isValidName(value) {
@@ -46,87 +48,134 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  function validateName() {
-    const value = NAME.value.trim()
+  function validateName(show = false) {
+    const value = NAME.value.trim();
     const err = document.getElementById(`${NAME.id}-error`);
     if (!value) {
-      NAME.setAttribute('aria-invalid', 'true');
+      if (show) NAME.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (!isValidName(value)) {
-      err.textContent = 'Invalid name format. Use letters and spaces only.';
-      NAME.setAttribute('aria-invalid', 'true');
+      if (show) {
+        err.textContent = 'Invalid name format. Use letters and spaces only.';
+        NAME.setAttribute('aria-invalid', 'true');
+      }
       return false;
     }
-    err.textContent = '';
-    NAME.removeAttribute('aria-invalid');
+    if (show) {
+      err.textContent = '';
+      NAME.removeAttribute('aria-invalid');
+    }
     return true;
   }
 
 
-  function validateEmail() {
+  function validateEmail(show = false) {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
     if (!value) {
-      EMAIL.setAttribute('aria-invalid', 'true');
+      if (show) EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (!isValidEmail(value)) {
-      err.textContent = 'Invalid email format.';
-      EMAIL.setAttribute('aria-invalid', 'true');
+      if (show) {
+        err.textContent = 'Invalid email format.';
+        EMAIL.setAttribute('aria-invalid', 'true');
+      }
       return false;
     }
-    err.textContent = '';
-    EMAIL.removeAttribute('aria-invalid');
+    if (show) {
+      err.textContent = '';
+      EMAIL.removeAttribute('aria-invalid');
+    }
     return true;
   }
 
 
-  function validatePassword() {
+  function validatePassword(show = false) {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
     if (!value) {
-      PASSWORD.setAttribute('aria-invalid', 'true');
+      if (show) PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (value.length < 8) {
-      err.textContent = 'Your password must contain a minimum of 8 characters.';
-      PASSWORD.setAttribute('aria-invalid', 'true');
+      if (show) {
+        err.textContent = 'Your password must contain a minimum of 8 characters.';
+        PASSWORD.setAttribute('aria-invalid', 'true');
+      }
       return false;
     }
 
     if (!isValidPassword(value)) {
-      err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
-      PASSWORD.setAttribute('aria-invalid', 'true');
+      if (show) {
+        err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
+        PASSWORD.setAttribute('aria-invalid', 'true');
+      }
       return false;
-    };
-    err.textContent = '';
-    PASSWORD.removeAttribute('aria-invalid');
+    }
+    if (show) {
+      err.textContent = '';
+      PASSWORD.removeAttribute('aria-invalid');
+    }
     return true;
   }
 
 
   // Enable & disable submit button
   function updateSubmitState() {
-    const ok = validateName() && validateEmail() && validatePassword();
+    const ok = validateName(false) && validateEmail(false) && validatePassword(false);
     SUBMIT_BTN.disabled = !ok;
     SUBMIT_BTN.classList.toggle('opacity-50', !ok);
     SUBMIT_BTN.classList.toggle('cursor-not-allowed', !ok);
   }
 
   NAME.addEventListener('input', () => {
-    validateName();
+    // Live border feedback without showing text yet
+    const ok = validateName(false);
+    if (!ok && NAME.value.trim() !== '') {
+      NAME.setAttribute('aria-invalid', 'true');
+    } else if (ok) {
+      NAME.removeAttribute('aria-invalid');
+    }
     updateSubmitState();
   });
 
   EMAIL.addEventListener('input', () => {
-    validateEmail();
+    const ok = validateEmail(false);
+    if (!ok && EMAIL.value.trim() !== '') {
+      EMAIL.setAttribute('aria-invalid', 'true');
+    } else if (ok) {
+      EMAIL.removeAttribute('aria-invalid');
+    }
     updateSubmitState();
   });
 
   PASSWORD.addEventListener('input', () => {
-    validatePassword();
+    const ok = validatePassword(false);
+    if (!ok && PASSWORD.value !== '') {
+      PASSWORD.setAttribute('aria-invalid', 'true');
+    } else if (ok) {
+      PASSWORD.removeAttribute('aria-invalid');
+    }
     updateSubmitState();
+  });
+
+  // On blur, if field invalid (and not empty) show red border (handled by aria-invalid attribute)
+  [NAME, EMAIL, PASSWORD].forEach(inp => {
+    inp.addEventListener('blur', () => {
+      let ok = true;
+      switch (inp) {
+        case NAME: ok = validateName(false); break;
+        case EMAIL: ok = validateEmail(false); break;
+        case PASSWORD: ok = validatePassword(false); break;
+      }
+      if (!ok && inp.value.trim() !== '') {
+        inp.setAttribute('aria-invalid', 'true');
+      } else if (ok) {
+        inp.removeAttribute('aria-invalid');
+      }
+    });
   });
 
 
@@ -153,9 +202,18 @@ document.addEventListener('DOMContentLoaded', () => {
   FORM.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const nameOK = validateName();
-    const emailOk = validateEmail();
-    const passOk = validatePassword();
+  // mark form as submitted so CSS shows validation borders even for empty fields
+  FORM.classList.add('submitted');
+
+  // run visible validations (show error text and aria-invalid)
+  const nameOK = validateName(true);
+  const emailOk = validateEmail(true);
+  const passOk = validatePassword(true);
+
+    // After submit attempt reflect current validity for borders
+    if (!nameOK) NAME.setAttribute('aria-invalid', 'true'); else NAME.removeAttribute('aria-invalid');
+    if (!emailOk) EMAIL.setAttribute('aria-invalid', 'true'); else EMAIL.removeAttribute('aria-invalid');
+    if (!passOk) PASSWORD.setAttribute('aria-invalid', 'true'); else PASSWORD.removeAttribute('aria-invalid');
 
     if (!nameOK || !emailOk || !passOk) {
       const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
