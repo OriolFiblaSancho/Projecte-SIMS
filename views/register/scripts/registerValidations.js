@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!SUBMIT_BTN.disabled) {
           SUBMIT_BTN.click();
         } else {
-          // mostrar validaciones y enfocar primer inválido
+          // show validations and focus first invalid field
           FORM.classList.add('submitted');
           validateName(true);
           validateEmail(true);
