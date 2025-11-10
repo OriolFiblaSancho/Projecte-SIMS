@@ -137,13 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  [EMAIL, PASSWORD].forEach(inp => {
-    const onFocus = () => {
-      inp.classList.add('touched');
-      inp.removeEventListener('focus', onFocus);
-    };
-    inp.addEventListener('focus', onFocus);
-  });
+  // Removed unused 'touched' class logic per CodeQL recommendation.
 
   // Show & hide password
   (function addPasswordToggle() {
