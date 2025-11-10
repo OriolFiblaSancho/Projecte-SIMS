@@ -1,1 +1,1 @@
-{"version":2,"defects":[],"times":{"VehicleControllerTest::testBasic":0.001}}
+{"version":2,"defects":[],"times":{"VehicleControllerTest::testBasic":0.001,"VehicleControllerTest::testGetAllVehicles":0.002}}
