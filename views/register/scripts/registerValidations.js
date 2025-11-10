@@ -178,7 +178,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Añadir soporte para enviar el formulario con la tecla Enter
+  // Add support for form submission with Enter key
   [NAME, EMAIL, PASSWORD].forEach(inp => {
     inp.addEventListener('keydown', (e) => {
       if (e.key === 'Enter') {
