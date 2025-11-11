@@ -1,5 +1,5 @@
 import { createMap } from './map.js';
-import { createRandomMarkers, bottomBarToggle } from './markers.js';
+import { createRandomMarkers, bottomBarToggle, paintCoords, getZonesCoordinates } from './markers.js';
 import { attachUserLocationControl } from './userLocation.js';
 
 const CENTER = { lat: 40.70922331914339, lng: 0.5771204885805513 };
@@ -34,7 +34,7 @@ export function initMap() {
   } catch (err) {
     console.warn('initMap: error checking for geofencing inputs', err);
   }
-  
+  paintCoords(map, getZonesCoordinates());
 }
 
 window.initMap = initMap;

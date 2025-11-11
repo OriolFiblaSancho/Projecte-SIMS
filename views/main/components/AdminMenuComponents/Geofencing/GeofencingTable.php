@@ -13,11 +13,11 @@
         <table class="min-w-full divide-y divide-gray-200 bg-white shadow-sm rounded-md overflow-hidden">
             <thead class="bg-[#7E3FBC] text-white text-left text-xs font-semibold uppercase">
                 <tr>
-                    <th class="px-4 py-2">Nom</th>
-                    <th class="px-4 py-2">Tipus</th>
-                    <th class="px-4 py-2">Centre</th>
-                    <th class="px-4 py-2">Radi (m)</th>
-                    <th class="px-4 py-2">Accions</th>
+                    <th class="px-4 py-2">Name</th>
+                    <th class="px-4 py-2">Tipe</th>
+                    <th class="px-4 py-2">Radius (m)</th>
+                    <th class="px-4 py-2">Coordinates</th>
+                    <th class="px-4 py-2">Actions</th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-100">
@@ -30,8 +30,8 @@
                 <tr class="hover:bg-gray-50">
                     <td class="px-4 py-3 text-sm font-medium text-gray-800"><?php echo htmlspecialchars($zone['zone_name']); ?></td>
                     <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($zone['type']); ?></td>
-                    <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($zone['center_latitude']) . ', ' . htmlspecialchars($zone['center_longitude']); ?></td>
                     <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($zone['radius_meters']); ?></td>
+                    <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($zone['center_latitude']) . ', ' . htmlspecialchars($zone['center_longitude']); ?></td>
                     <td class="px-4 py-3 text-sm text-gray-700">
                         <a href="/main?admin=ViewGeofencingSingle&id=<?= $zone['zone_id'] ?>" class="mr-2">View</a>
                         <a href="/main?admin=FormGeofencing&edit=<?= $zone['zone_id'] ?>" class="mr-2">Edit</a>
