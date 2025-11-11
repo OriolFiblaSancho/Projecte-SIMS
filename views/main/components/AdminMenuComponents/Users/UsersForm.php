@@ -60,7 +60,7 @@
             </div>
         </div>
 
-        <button type="submit" class="mt-2 bg-[#CB97FF] text-black rounded-md p-2 w-full hover:bg-[#7E3FBC] hover:border-[#f0e0ff] hover:text-white bg-[#f0e0ff] border border-[#7E3FBC] border-[2px]">
+        <button type="submit" class="mt-2 bg-[#ddfae8] text-[#0D6344] rounded-md p-2 w-full hover:bg-[#0D6344] hover:text-white border border-[#0D6344] border-2">
             <?= $isEdit ? 'Update User' : 'Add User' ?>
         </button>
     </form>
