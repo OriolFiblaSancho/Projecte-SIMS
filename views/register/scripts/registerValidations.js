@@ -227,13 +227,13 @@ document.addEventListener('DOMContentLoaded', () => {
   FORM.addEventListener('submit', (e) => {
     e.preventDefault();
 
-  // mark form as submitted so CSS shows validation borders even for empty fields
-  FORM.classList.add('submitted');
+    // mark form as submitted so CSS shows validation borders even for empty fields
+    FORM.classList.add('submitted');
 
-  // run visible validations (show error text and aria-invalid)
-  const nameOK = validateName(true);
-  const emailOk = validateEmail(true);
-  const passOk = validatePassword(true);
+    // run visible validations (show error text and aria-invalid)
+    const nameOK = validateName(true);
+    const emailOk = validateEmail(true);
+    const passOk = validatePassword(true);
 
     // After submit attempt reflect current validity for borders
     if (!nameOK) NAME.setAttribute('aria-invalid', 'true'); else NAME.removeAttribute('aria-invalid');
