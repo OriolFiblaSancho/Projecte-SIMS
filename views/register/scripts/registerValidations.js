@@ -193,9 +193,6 @@ document.addEventListener('DOMContentLoaded', () => {
           validateName(true);
           validateEmail(true);
           validatePassword(true);
-          if (!isValidName(NAME.value)) NAME.setAttribute('aria-invalid', 'true'); else NAME.removeAttribute('aria-invalid');
-          if (!isValidEmail(EMAIL.value)) EMAIL.setAttribute('aria-invalid', 'true'); else EMAIL.removeAttribute('aria-invalid');
-          if (!isValidPassword(PASSWORD.value)) PASSWORD.setAttribute('aria-invalid', 'true'); else PASSWORD.removeAttribute('aria-invalid');
           const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
           if (firstInvalid) firstInvalid.focus();
         }
