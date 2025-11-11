@@ -20,7 +20,19 @@ class Vehicle {
     }
 
     public function getAllVehicles() {
-        $query = "SELECT * FROM " . $this->table . " WHERE deleted = false";
+        $query = "SELECT 
+                    v.*,
+                    l.latitude,
+                    l.longitude,
+                    l.datetime as location_datetime
+                  FROM " . $this->table . " v
+                  LEFT JOIN (
+                    SELECT vehicle_id, latitude, longitude, datetime,
+                           ROW_NUMBER() OVER (PARTITION BY vehicle_id ORDER BY datetime DESC) as rn
+                    FROM locations
+                    WHERE deleted = false
+                  ) l ON v.vehicle_id = l.vehicle_id AND l.rn = 1
+                  WHERE v.deleted = false";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -62,6 +74,27 @@ class Vehicle {
             return $this->db->lastInsertId();
         }
         return false;
+    }
+
+    public function update($id, $data) {
+        $query = "UPDATE " . $this->table . " SET license_plate = :license_plate, model = :model, vehicle_type_id = :vehicle_type_id, total_km = :total_km, status = :status WHERE vehicle_id = :id";
+        $stmt = $this->db->prepare($query);
+
+        // Neteja les dades
+        $data['license_plate'] = htmlspecialchars(strip_tags($data['license_plate']));
+        $data['model'] = htmlspecialchars(strip_tags($data['model']));
+        $data['vehicle_type_id'] = htmlspecialchars(strip_tags($data['vehicle_type_id']));
+        $data['status'] = htmlspecialchars(strip_tags($data['status']));
+        $data['total_km'] = htmlspecialchars(strip_tags($data['total_km']));
+
+        $stmt->bindParam(':license_plate', $data['license_plate']);
+        $stmt->bindParam(':model', $data['model']);
+        $stmt->bindParam(':vehicle_type_id', $data['vehicle_type_id']);
+        $stmt->bindParam(':total_km', $data['total_km']);
+        $stmt->bindParam(':status', $data['status']);
+        $stmt->bindParam(':id', $id);
+
+        return $stmt->execute();
     }
 
     public function delete($id) {

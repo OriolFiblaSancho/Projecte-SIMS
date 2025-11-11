@@ -1,0 +1,1 @@
+{"version":2,"defects":{"VehicleControllerTest::testCreateVehicle":8,"VehicleControllerTest::testUpdateVehicle":8},"times":{"VehicleControllerTest::testGetAllVehicles":0.005,"VehicleControllerTest::testGetVehicleById":0,"VehicleControllerTest::testCreateVehicle":0,"VehicleControllerTest::testUpdateVehicle":0,"VehicleControllerTest::testDeleteVehicle":0}}

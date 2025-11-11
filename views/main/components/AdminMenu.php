@@ -1,4 +1,4 @@
-<div class="absolute top-20 left-4 z-10 bg-[#CB97FF] rounded-md p-4 shadow-lg hidden md:block border border-[#7E3FBC]" id="adminMenu">
+<div class="absolute top-20 left-4 z-10 bg-[#CB97FF] rounded-md p-4 shadow-lg hidden md:block border border-[#7E3FBC] max-h-[calc(100vh-6rem)] overflow-y-auto scrolling-touch" id="adminMenu">
     <div class="flex relative justify-between">
         <h1 class="text-lg font-semibold mb-2">Admin Menu</h1>
         <button class="absolute right-0 top-0" id='closeAdminMenu'>
@@ -24,20 +24,23 @@
     </nav>
         <?php
             $adminSection = $_GET['admin'] ?? null;
-            if ($adminSection === 'ViewVehicles') {
-                require_once __DIR__ . '/../../../controllers/vehicleController.php';
-                $vc = new VehicleController();
-                $vc->getAll();
-            } else if ($adminSection === 'FormVehicles') {
-                include __DIR__ . '/../../../controllers/vehicleTypeController.php';
-                $vtc = new VehicleTypeController();
-                $vtc->getAll();
+            if ($adminSection !== null) {
+                if (strpos($adminSection, 'Vehicle') !== false) {
+                    require_once __DIR__ . '/../../../controllers/vehicleController.php';
+                    require_once __DIR__ . '/../../../controllers/vehicleTypeController.php';
+                    $vc = new VehicleController();
+                    $vtc = new VehicleTypeController();
+
+                    if ($adminSection === 'ViewVehicles') {
+                        $vc->getAll();
+                    } else if ($adminSection === 'FormVehicles') {
+                        $vtc->getAll();
             } else if ($adminSection === 'ViewVehicle') {
                 require_once __DIR__ . '/../../../controllers/vehicleController.php';
                 $vc = new VehicleController();
                 $id = $_GET['id'] ?? null;
                 $vc->view($id);
-            } else if ($adminSection === 'ViewGeofencing') {
+                    } else if ($adminSection === 'ViewGeofencing') {
                 require_once __DIR__ . '/../../../controllers/geofencingController.php';
                 $gfc = new GeofencingController();
                 $gfc->getAll();
@@ -57,12 +60,25 @@
                 $gfc->view($id);
             }
             
-            // Add more sections as needed, pls peña leed los comments
+                }
+
+                else if (strpos($adminSection, 'User') !== false) {
+                    require_once __DIR__ . '/../../../controllers/userController.php';
+                    $uc = new UserController();
+
+                    if ($adminSection === 'ViewUsers') {
+                        $uc->getAll();
+                    } else if ($adminSection === 'ViewUser') {
+                        $uc->show($_GET['id'] ?? null);
+                    } else if ($adminSection === 'FormUsers') {
+                        $uc->form($_GET['id'] ?? null);
+                    }
+                }
+            }
         ?>
 
 </div>
 <script >
-    // Close Menu when clicking outside
     document.getElementById('closeAdminMenu').addEventListener('click', function(event) {
         window.location.href = '?';
     });
