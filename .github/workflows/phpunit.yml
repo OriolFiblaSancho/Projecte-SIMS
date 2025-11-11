@@ -1,0 +1,23 @@
+name: Test PHP Cruds
+on:
+  pull_request:
+    branches:
+      - SPRINT-2
+
+jobs:
+  phpunit:
+    name: PHPUnit on PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.2, 8.3]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Run tests
+        run: composer test
