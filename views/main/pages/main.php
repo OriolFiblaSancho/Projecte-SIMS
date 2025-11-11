@@ -23,8 +23,19 @@ $googleApiKey = getenv(name:'GOOGLE_MAPS_API_KEY');
 </head>
 
 <body class="min-w-[390px] relative">
-  <?php require_once __DIR__ . '/../components/AdminMenu.php'; ?>
   <?php require_once __DIR__ . '/../components/Header.php'; ?>
+
+  <?php
+  if (session_status() === PHP_SESSION_NONE) session_start();
+
+  if (!empty($_SESSION['user_id'])) {
+    require_once __DIR__ . '/../../../models/userModel.php';
+    $u = (new UserModel())->getById((int)$_SESSION['user_id']);
+    if (!empty($u['user_type']) && $u['user_type'] === 'admin') {
+      require_once __DIR__ . '/../components/AdminMenu.php';
+    }
+  }
+  ?>
   
   <div id="map" class="fixed inset-0"></div>
   <?php require_once __DIR__ . '/../components/SideBar.php'; ?>
