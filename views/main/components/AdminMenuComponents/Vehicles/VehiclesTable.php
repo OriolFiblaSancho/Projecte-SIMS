@@ -1,16 +1,17 @@
 <div class="flex flex-col rounded-md p-3 max-h-[60vh] overflow-auto">
-    <div class="flex justify-center">
+    <div class="flex">
         <a href="?admin=FormVehicles">
-        <button class="bg-[#ddfae8] text-[#0D6344] border border-[#0D6344] rounded-md p-1 hover:bg-[#0D6344] hover:text-white">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
-                <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
-            </svg>
-        </button>
-    </a>
+            <button class="bg-[#ddfae8] text-[#0D6344] border border-[#0D6344] rounded-md p-1 hover:bg-[#0D6344] hover:text-white flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
+                    <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
+                </svg>
+                Add Vehicle
+            </button>
+        </a>
     </div>
     
-    <div class="overflow-x-auto mt-2">
-        <table class="min-w-full divide-y divide-gray-200 bg-white shadow-sm rounded-md overflow-hidden">
+    <div class="overflow-x-auto mt-2 border border-gray-300 rounded-md">
+        <table class=" min-w-full divide-y divide-gray-200 bg-white shadow-sm  overflow-hidden ">
             <thead class="bg-[#0D6344] text-white text-left text-xs font-semibold uppercase">
                 <tr>
                     <th class="px-4 py-2">Model</th>
@@ -21,14 +22,14 @@
                     <th class="px-4 py-2" colspan="4">Actions</th>
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-100">
+            <tbody class="bg-white divide-y divide-gray-10 border border-gray-300">
                 <?php if (empty($vehicles)): ?>
                 <tr class="odd:bg-white even:bg-gray-50">
                     <td class="px-4 py-6 text-sm text-gray-500 text-center" colspan="6">No vehicles found.</td>
                 </tr>
                 <?php else: ?>
                 <?php foreach ($vehicles as $vehicle): ?>
-                <tr class="hover:bg-gray-50">
+                <tr class="hover:bg-gray-50 ">
                     <td class="px-4 py-3 text-sm font-medium text-gray-800"><?php echo htmlspecialchars($vehicle['model']); ?></td>
                     <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($vehicle['license_plate']); ?></td>
                     <?php foreach ($vehicleTypes as $type): ?>
