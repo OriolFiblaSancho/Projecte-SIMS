@@ -1,7 +1,7 @@
 <div class="flex flex-col rounded-md p-3 max-h-[60vh] overflow-auto">
     <div class="flex justify-center">
         <a href="?admin=FormUsers">
-            <button class="bg-[#f0e0ff] text-black rounded-md p-1">
+            <button class="bg-[#ddfae8] text-[#0D6344] border border-[#0D6344] rounded-md p-1 hover:bg-[#0D6344] hover:text-white">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                     <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                 </svg>
@@ -11,7 +11,7 @@
 
     <div class="overflow-x-auto mt-2">
         <table class="min-w-full divide-y divide-gray-200 bg-white shadow-sm rounded-md overflow-hidden">
-            <thead class="bg-[#7E3FBC] text-white text-left text-xs font-semibold uppercase">
+            <thead class="bg-[#0D6344] text-white text-left text-xs font-semibold uppercase">
                 <tr>
                     <th class="px-4 py-2">Name</th>
                     <th class="px-4 py-2">Email</th>
