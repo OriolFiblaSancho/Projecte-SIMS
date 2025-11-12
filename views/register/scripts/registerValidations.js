@@ -39,7 +39,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function isValidEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    const v = value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return false;
+
+    const parts = v.split('@');
+    const local = (parts[0] || '').trim();
+    const domain = (parts[1] || '').trim();
+
+    if (!/^[A-Za-z0-9.-]+$/.test(local)) return false;
+    if (/^\.|\.$/.test(local) || local.includes('..')) return false;
+
+    // Domain part: only letters, digits, dots and hyphens, no leading/trailing dot, no consecutive dots
+    if (!/^[A-Za-z0-9.-]+$/.test(domain)) return false;
+    if (/^\.|\.$/.test(domain) || domain.includes('..')) return false;
+
+    return true;
   }
   function isValidPassword(value) {
     return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}/.test(value.trim());
@@ -58,7 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
     if (!isValidName(value)) {
-      err.textContent = 'Invalid name format. Use letters and spaces only.';
+      err.textContent = 'Invalid name format. Use letters and spaces only (no special characters).';
   NAME.setAttribute('aria-invalid', 'true');
   NAME.classList.add('border', 'border-red-600');
   NAME.style.borderColor = '#dc2626';
