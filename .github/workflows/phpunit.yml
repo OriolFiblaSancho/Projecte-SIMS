@@ -1,31 +1,23 @@
-name: Run PHPUnit
-
+name: Test PHP Cruds
 on:
-  push:
-    branches: [ '**' ]
   pull_request:
-    branches: [ '**' ]
+    branches:
+      - SPRINT-2
 
 jobs:
   phpunit:
+    name: PHPUnit on PHP ${{ matrix.php }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: [8.2, 8.3]
+
     steps:
-      - name: Checkout
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Setup PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          extensions: mbstring, xml, dom, xmlwriter, json
-
-      - name: Get composer cache directory
-        id: composer-cache
-        run: echo "COMPOSER_CACHE_DIR=$(composer config cache-files-dir)" >> $GITHUB_ENV
-
       - name: Install dependencies
-        run: |
-          composer install --no-progress --no-suggest --prefer-dist
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
 
-      - name: Run PHPUnit
-        run: ./vendor/bin/phpunit --configuration phpunit.xml --verbose
+      - name: Run tests
+        run: composer test

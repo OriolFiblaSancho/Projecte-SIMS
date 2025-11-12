@@ -1,4 +1,3 @@
-// script.js
 document.addEventListener('DOMContentLoaded', () => {
   'use strict';
 
@@ -9,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('loginValidations: DOMContentLoaded —', { FORMExists: !!FORM, EMAILExists: !!EMAIL, PASSWORDExists: !!PASSWORD, SUBMITBtnExists: !!SUBMIT_BTN });
 
-  // --- Helpers ---
+  // No touch-checkbox logic needed: we use native :invalid styles to show red border.
+
   function ensureErrorEl(input) {
     const wrapper = input.closest('.relative') || input.parentElement;
     const id = `${input.id}-error`;
@@ -52,73 +52,94 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
     if (!value) {
-      if (showErrors) {
-        EMAIL.setAttribute('aria-invalid', 'true');
-        EMAIL.classList.add('border', 'border-red-600');
-        EMAIL.style.borderColor = '#dc2626';
-        EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
-        err.textContent = 'Email is required.';
-      }
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (!isValidEmail(value)) {
-      if (showErrors) {
-        err.textContent = 'Invalid email format.';
-        EMAIL.setAttribute('aria-invalid', 'true');
-        EMAIL.classList.add('border', 'border-red-600');
-        EMAIL.style.borderColor = '#dc2626';
-        EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
-      }
+      err.textContent = 'Invalid email format.';
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
     err.textContent = '';
     EMAIL.removeAttribute('aria-invalid');
-    EMAIL.classList.remove('border', 'border-red-600');
-    EMAIL.style.borderColor = '';
-    EMAIL.style.boxShadow = '';
     return true;
   }
 
-  function validatePassword() {
+  function validatePassword(show = false) {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
     if (!value) {
-      if (showErrors) {
-        PASSWORD.setAttribute('aria-invalid', 'true');
-        PASSWORD.classList.add('border', 'border-red-600');
-        PASSWORD.style.borderColor = '#dc2626';
-        PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
-        err.textContent = 'Password is required.';
-      }
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
     err.textContent = '';
     PASSWORD.removeAttribute('aria-invalid');
-    PASSWORD.classList.remove('border', 'border-red-600');
-    PASSWORD.style.borderColor = '';
-    PASSWORD.style.boxShadow = '';
     return true;
   }
 
   // Enable & disable submit button
   function updateSubmitState() {
-    const ok = validateEmail() && validatePassword();
+    // silent validation (don't show messages) while typing
+    const ok = validateEmail(false) && validatePassword(false);
     SUBMIT_BTN.disabled = !ok;
     SUBMIT_BTN.classList.toggle('opacity-50', !ok);
     SUBMIT_BTN.classList.toggle('cursor-not-allowed', !ok);
   }
 
+  function reflectAriaInvalid(inputEl) {
+    const hasValue = (inputEl.type === 'password') ? inputEl.value !== '' : inputEl.value.trim() !== '';
+    if (!hasValue) {
+      inputEl.removeAttribute('aria-invalid');
+      return;
+    }
+    if (!inputEl.checkValidity()) {
+      inputEl.setAttribute('aria-invalid', 'true');
+    } else {
+      inputEl.removeAttribute('aria-invalid');
+    }
+  }
+
   EMAIL.addEventListener('input', () => {
-    emailTouched = true;
-    validateEmail(true);
+    validateEmail();
     updateSubmitState();
   });
 
   PASSWORD.addEventListener('input', () => {
-    passwordTouched = true;
-    validatePassword(true);
+    validatePassword();
     updateSubmitState();
   });
+
+  // Añadir feedback en blur como en register
+  [EMAIL, PASSWORD].forEach(inp => {
+    inp.addEventListener('blur', () => {
+      reflectAriaInvalid(inp);
+    });
+  });
+
+  // Añadir soporte para enviar el formulario con la tecla Enter
+  [EMAIL, PASSWORD].forEach(inp => {
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // actualizar estado del submit por si el usuario ha modificado algo
+        updateSubmitState();
+        if (!SUBMIT_BTN.disabled) {
+          SUBMIT_BTN.click();
+        } else {
+          // show visible validations and focus the first invalid field
+          FORM.classList.add('submitted');
+          validateEmail(true);
+          validatePassword(true);
+          reflectAriaInvalid(EMAIL);
+          reflectAriaInvalid(PASSWORD);
+          const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
+          if (firstInvalid) firstInvalid.focus();
+        }
+      }
+    });
+  });
+
+  // Removed unused 'touched' class logic per CodeQL recommendation.
 
   // Show & hide password
   (function addPasswordToggle() {
@@ -143,8 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
   FORM.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-  const emailOk = validateEmail(true);
-  const passOk = validatePassword(true);
+    const emailOk = validateEmail();
+    const passOk = validatePassword();
 
     if (!emailOk || !passOk) {
       const firstInvalid = FORM.querySelector('[aria-invalid="true"]');

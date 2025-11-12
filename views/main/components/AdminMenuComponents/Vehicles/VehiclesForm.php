@@ -58,7 +58,7 @@
             </div>
 
             <div class="md:col-span-2">
-                <button type="submit" class="bg-[#CB97FF] text-black rounded-md p-2 w-full hover:bg-[#7E3FBC] hover:border-[#f0e0ff] hover:text-white border border-[#7E3FBC] border-[2px]"><?php echo $isEdit ? 'Save Changes' : 'Add Vehicle'; ?></button>
+                <button type="submit" class="bg-[#ddfae8] text-[#0D6344] rounded-md p-2 w-full hover:bg-[#0D6344] hover:text-white border border-[#0D6344] border-2"><?php echo $isEdit ? 'Save Changes' : 'Add Vehicle'; ?></button>
             </div>
         </div>
     </form>

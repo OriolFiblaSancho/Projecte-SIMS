@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const NAME = document.getElementById('name');
   const EMAIL = document.getElementById('email');
   const PASSWORD = document.getElementById('password');
-  const SUBMIT_BTN = FORM.querySelector('button[type="submit"]');
+  const SUBMIT_BTN = FORM.querySelector('button[type="submit"]'); 
 
   console.log('Register validations script loaded.');
 
@@ -31,6 +31,8 @@ document.addEventListener('DOMContentLoaded', () => {
   ensureErrorEl(NAME);
   ensureErrorEl(EMAIL);
   ensureErrorEl(PASSWORD);
+
+  // No touch-checkbox logic needed: inputs use native :invalid styling to show red border.
 
 
   // Functions
@@ -60,8 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
 
-  function validateName() {
-    const value = NAME.value.trim()
+  function validateName(show = false) {
+    const value = NAME.value.trim();
     const err = document.getElementById(`${NAME.id}-error`);
     if (!value) {
   NAME.setAttribute('aria-invalid', 'true');
@@ -72,108 +74,134 @@ document.addEventListener('DOMContentLoaded', () => {
       return false;
     }
     if (!isValidName(value)) {
-      err.textContent = 'Invalid name format. Use letters and spaces only (no special characters).';
-  NAME.setAttribute('aria-invalid', 'true');
-  NAME.classList.add('border', 'border-red-600');
-  NAME.style.borderColor = '#dc2626';
-  NAME.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+      err.textContent = 'Invalid name format. Use letters and spaces only.';
+      NAME.setAttribute('aria-invalid', 'true');
       return false;
     }
     err.textContent = '';
-  NAME.removeAttribute('aria-invalid');
-  NAME.classList.remove('border', 'border-red-600');
-  NAME.style.borderColor = '';
-  NAME.style.boxShadow = '';
+    NAME.removeAttribute('aria-invalid');
     return true;
   }
 
 
-  function validateEmail() {
+  function validateEmail(show = false) {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
     if (!value) {
-  EMAIL.setAttribute('aria-invalid', 'true');
-  EMAIL.classList.add('border', 'border-red-600');
-  EMAIL.style.borderColor = '#dc2626';
-  EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
-  err.textContent = 'Email is required.';
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (!isValidEmail(value)) {
-  err.textContent = 'Invalid email format.';
-  EMAIL.setAttribute('aria-invalid', 'true');
-  EMAIL.classList.add('border', 'border-red-600');
-  EMAIL.style.borderColor = '#dc2626';
-  EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+      err.textContent = 'Invalid email format.';
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
     err.textContent = '';
-  EMAIL.removeAttribute('aria-invalid');
-  EMAIL.classList.remove('border', 'border-red-600');
-  EMAIL.style.borderColor = '';
-  EMAIL.style.boxShadow = '';
+    EMAIL.removeAttribute('aria-invalid');
     return true;
   }
 
 
-  function validatePassword() {
+  function validatePassword(show = false) {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
     if (!value) {
-  PASSWORD.setAttribute('aria-invalid', 'true');
-  PASSWORD.classList.add('border', 'border-red-600');
-  PASSWORD.style.borderColor = '#dc2626';
-  PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
-  err.textContent = 'Password is required.';
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (value.length < 8) {
-  err.textContent = 'Your password must contain a minimum of 8 characters.';
-  PASSWORD.setAttribute('aria-invalid', 'true');
-  PASSWORD.classList.add('border', 'border-red-600');
-  PASSWORD.style.borderColor = '#dc2626';
-  PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+      err.textContent = 'Your password must contain a minimum of 8 characters.';
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
 
     if (!isValidPassword(value)) {
-  err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
-  PASSWORD.setAttribute('aria-invalid', 'true');
-  PASSWORD.classList.add('border', 'border-red-600');
-  PASSWORD.style.borderColor = '#dc2626';
-  PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+      err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     };
     err.textContent = '';
-  PASSWORD.removeAttribute('aria-invalid');
-  PASSWORD.classList.remove('border', 'border-red-600');
-  PASSWORD.style.borderColor = '';
-  PASSWORD.style.boxShadow = '';
+    PASSWORD.removeAttribute('aria-invalid');
     return true;
   }
 
 
   // Enable & disable submit button
   function updateSubmitState() {
-    const ok = validateName() && validateEmail() && validatePassword();
+    const ok = validateName(false) && validateEmail(false) && validatePassword(false);
     SUBMIT_BTN.disabled = !ok;
     SUBMIT_BTN.classList.toggle('opacity-50', !ok);
     SUBMIT_BTN.classList.toggle('cursor-not-allowed', !ok);
   }
 
   NAME.addEventListener('input', () => {
-    validateName();
+    // Live border feedback without showing text yet
+    const ok = validateName(false);
+    if (!ok && NAME.value.trim() !== '') {
+      NAME.setAttribute('aria-invalid', 'true');
+    } else if (ok) {
+      NAME.removeAttribute('aria-invalid');
+    }
     updateSubmitState();
   });
 
   EMAIL.addEventListener('input', () => {
-    validateEmail();
+    const ok = validateEmail(false);
+    if (!ok && EMAIL.value.trim() !== '') {
+      EMAIL.setAttribute('aria-invalid', 'true');
+    } else if (ok) {
+      EMAIL.removeAttribute('aria-invalid');
+    }
     updateSubmitState();
   });
 
   PASSWORD.addEventListener('input', () => {
-    validatePassword();
+    const ok = validatePassword(false);
+    if (!ok && PASSWORD.value !== '') {
+      PASSWORD.setAttribute('aria-invalid', 'true');
+    } else if (ok) {
+      PASSWORD.removeAttribute('aria-invalid');
+    }
     updateSubmitState();
+  });
+
+  // On blur, if field invalid (and not empty) show red border (handled by aria-invalid attribute)
+  [NAME, EMAIL, PASSWORD].forEach(inp => {
+    inp.addEventListener('blur', () => {
+      let ok = true;
+      switch (inp) {
+        case NAME: ok = validateName(false); break;
+        case EMAIL: ok = validateEmail(false); break;
+        case PASSWORD: ok = validatePassword(false); break;
+      }
+      if (!ok && inp.value.trim() !== '') {
+        inp.setAttribute('aria-invalid', 'true');
+      } else if (ok) {
+        inp.removeAttribute('aria-invalid');
+      }
+    });
+  });
+
+  // Add support for form submission with Enter key
+  [NAME, EMAIL, PASSWORD].forEach(inp => {
+    inp.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        // update submit state
+        updateSubmitState();
+        if (!SUBMIT_BTN.disabled) {
+          SUBMIT_BTN.click();
+        } else {
+          // show validations and focus first invalid field
+          FORM.classList.add('submitted');
+          validateName(true);
+          validateEmail(true);
+          validatePassword(true);
+          const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
+          if (firstInvalid) firstInvalid.focus();
+        }
+      }
+    });
   });
 
 
@@ -200,9 +228,18 @@ document.addEventListener('DOMContentLoaded', () => {
   FORM.addEventListener('submit', (e) => {
     e.preventDefault();
 
-    const nameOK = validateName();
-    const emailOk = validateEmail();
-    const passOk = validatePassword();
+    // mark form as submitted so CSS shows validation borders even for empty fields
+    FORM.classList.add('submitted');
+
+    // run visible validations (show error text and aria-invalid)
+    const nameOK = validateName(true);
+    const emailOk = validateEmail(true);
+    const passOk = validatePassword(true);
+
+    // After submit attempt reflect current validity for borders
+    if (!nameOK) NAME.setAttribute('aria-invalid', 'true'); else NAME.removeAttribute('aria-invalid');
+    if (!emailOk) EMAIL.setAttribute('aria-invalid', 'true'); else EMAIL.removeAttribute('aria-invalid');
+    if (!passOk) PASSWORD.setAttribute('aria-invalid', 'true'); else PASSWORD.removeAttribute('aria-invalid');
 
     if (!nameOK || !emailOk || !passOk) {
       const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
@@ -228,40 +265,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.success) {
           FORM.reset();
           window.location.href = '/views/login/pages/login.html';
-          return;
+        } else {
+          alert(data.message || 'Error to connect with Database');
         }
-
-        // If server returned structured field errors, display them under inputs
-        // expected format: { success: false, errors: { email: 'msg', name: 'msg', password: 'msg' }, message: '...'}
-        if (data.errors && typeof data.errors === 'object') {
-          // clear previous server-side errors first
-          ['name', 'email', 'password'].forEach(field => {
-            const input = document.getElementById(field);
-            const errEl = document.getElementById(`${field}-error`);
-            if (input && errEl) {
-              errEl.textContent = '';
-              input.classList.remove('border', 'border-red-600');
-              input.removeAttribute('aria-invalid');
-            }
-          });
-
-          let first = null;
-          Object.keys(data.errors).forEach(field => {
-            const input = document.getElementById(field);
-            const errEl = document.getElementById(`${field}-error`);
-            if (input && errEl) {
-              errEl.textContent = data.errors[field];
-              input.classList.add('border', 'border-red-600');
-              input.setAttribute('aria-invalid', 'true');
-              if (!first) first = input;
-            }
-          });
-          if (first) first.focus();
-          return;
-        }
-
-        // Fallback alert for non-structured errors
-        alert(data.message || 'Error connecting with Database');
       })
       .catch(() => {
         alert('Network error. Try again.');
