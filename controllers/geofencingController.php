@@ -41,7 +41,7 @@ class GeofencingController {
             $result = $this->model->create($_POST);
             if ($result) {
                 $_SESSION['success'] = "Zona creada correctament!";
-                Router::redirect('/main?admin=geofencing');
+                Router::redirect('/main?admin=ViewGeofencing');
             } else {
                 $_SESSION['error'] = "Error creant la zona";
                 $_SESSION['old'] = $_POST;
@@ -83,12 +83,12 @@ class GeofencingController {
     // Handle update (POST)
     public function update() {
         if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-            Router::redirect('/main?admin=geofencing');
+            Router::redirect('/main?admin=ViewGeofencing');
         }
         $id = $_POST['zone_id'] ?? null;
         if (!$id) {
             $_SESSION['error'] = 'Id de zona faltant.';
-            Router::redirect('/main?admin=geofencing');
+            Router::redirect('/main?admin=ViewGeofencing');
         }
 
         $errors = $this->validateZone($_POST);
@@ -99,7 +99,7 @@ class GeofencingController {
             } else {
                 $_SESSION['error'] = 'Error actualitzant la zona.';
             }
-            Router::redirect('/main?admin=geofencing');
+            Router::redirect('/main?admin=ViewGeofencing');
         }
 
         $_SESSION['errors'] = $errors;
@@ -109,14 +109,14 @@ class GeofencingController {
 
     // Soft delete
     public function delete($id = null) {
-        if (!$id) Router::redirect('/geofencing');
+        if (!$id) Router::redirect('/main?admin=ViewGeofencing');
         $ok = $this->model->softDelete($id);
         if ($ok) {
             $_SESSION['success'] = 'Zona eliminada.';
         } else {
             $_SESSION['error'] = 'Error eliminant la zona.';
         }
-        Router::redirect('/main?admin=geofencing');
+        Router::redirect('/main?admin=ViewGeofencing');
     }
 
     private function validateZone($data) {
