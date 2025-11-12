@@ -27,6 +27,23 @@
             } else if ($adminSection === 'FormUsers') {
                 $uc->form($_GET['id'] ?? null);
             }
+        } else if (strpos($adminSection, 'Geofencing') !== false) {
+            require_once __DIR__ . '/./geofencingController.php';
+            $gfc = new GeofencingController();
+
+            if ($adminSection === 'ViewGeofencing') {
+                $gfc->getAll();
+            } else if ($adminSection === 'FormGeofencing') {
+                $id = $_GET['edit'] ?? null;
+                if ($id) {
+                    $gfc->edit($id);
+                } else {
+                    $gfc->create();
+                }
+            } else if ($adminSection === 'ViewGeofencingSingle') {
+                $id = $_GET['id'] ?? null;
+                $gfc->view($id);
+            }
         }
     }
     ?>
