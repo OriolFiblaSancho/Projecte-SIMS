@@ -40,6 +40,22 @@ class UserController {
             return;
         }
 
+        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        $errors = [];
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Invalid email.';
+        }
+        if ($password === '' || strlen($password) < 8) {
+            $errors[] = 'Password must be at least 8 characters.';
+        }
+
+        if (!empty($errors)) {
+            $_SESSION['error'] = implode(' ', $errors);
+            Router::redirect('/main?admin=FormUsers');
+            return;
+        }
+
         $result = $this->userModel->create($_POST);
 
         if ($result) {
@@ -57,6 +73,23 @@ class UserController {
         }
 
         if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !$id) {
+            return;
+        }
+
+        $email = isset($_POST['email']) ? trim($_POST['email']) : '';
+        $password = isset($_POST['password']) ? $_POST['password'] : '';
+        $errors = [];
+        if ($email === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors[] = 'Invalid email.';
+        }
+
+        if ($password !== '' && strlen($password) < 8) {
+            $errors[] = 'Password must be at least 8 characters.';
+        }
+
+        if (!empty($errors)) {
+            $_SESSION['error'] = implode(' ', $errors);
+            Router::redirect('/main?admin=FormUsers');
             return;
         }
 

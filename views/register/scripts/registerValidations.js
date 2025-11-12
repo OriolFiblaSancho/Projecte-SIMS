@@ -41,7 +41,21 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function isValidEmail(value) {
-    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    const v = value.trim();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)) return false;
+
+    const parts = v.split('@');
+    const local = (parts[0] || '').trim();
+    const domain = (parts[1] || '').trim();
+
+    if (!/^[A-Za-z0-9.-]+$/.test(local)) return false;
+    if (/^\.|\.$/.test(local) || local.includes('..')) return false;
+
+    // Domain part: only letters, digits, dots and hyphens, no leading/trailing dot, no consecutive dots
+    if (!/^[A-Za-z0-9.-]+$/.test(domain)) return false;
+    if (/^\.|\.$/.test(domain) || domain.includes('..')) return false;
+
+    return true;
   }
   function isValidPassword(value) {
     return /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^a-zA-Z0-9]).{8,}/.test(value.trim());
@@ -52,20 +66,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = NAME.value.trim();
     const err = document.getElementById(`${NAME.id}-error`);
     if (!value) {
-      if (show) NAME.setAttribute('aria-invalid', 'true');
+  NAME.setAttribute('aria-invalid', 'true');
+  NAME.classList.add('border', 'border-red-600');
+  NAME.style.borderColor = '#dc2626';
+  NAME.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+  err.textContent = 'Name is required.';
       return false;
     }
     if (!isValidName(value)) {
-      if (show) {
-        err.textContent = 'Invalid name format. Use letters and spaces only.';
-        NAME.setAttribute('aria-invalid', 'true');
-      }
+      err.textContent = 'Invalid name format. Use letters and spaces only.';
+      NAME.setAttribute('aria-invalid', 'true');
       return false;
     }
-    if (show) {
-      err.textContent = '';
-      NAME.removeAttribute('aria-invalid');
-    }
+    err.textContent = '';
+    NAME.removeAttribute('aria-invalid');
     return true;
   }
 
@@ -74,20 +88,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
     if (!value) {
-      if (show) EMAIL.setAttribute('aria-invalid', 'true');
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (!isValidEmail(value)) {
-      if (show) {
-        err.textContent = 'Invalid email format.';
-        EMAIL.setAttribute('aria-invalid', 'true');
-      }
+      err.textContent = 'Invalid email format.';
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
-    if (show) {
-      err.textContent = '';
-      EMAIL.removeAttribute('aria-invalid');
-    }
+    err.textContent = '';
+    EMAIL.removeAttribute('aria-invalid');
     return true;
   }
 
@@ -96,28 +106,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
     if (!value) {
-      if (show) PASSWORD.setAttribute('aria-invalid', 'true');
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (value.length < 8) {
-      if (show) {
-        err.textContent = 'Your password must contain a minimum of 8 characters.';
-        PASSWORD.setAttribute('aria-invalid', 'true');
-      }
+      err.textContent = 'Your password must contain a minimum of 8 characters.';
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
 
     if (!isValidPassword(value)) {
-      if (show) {
-        err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
-        PASSWORD.setAttribute('aria-invalid', 'true');
-      }
+      err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
-    }
-    if (show) {
-      err.textContent = '';
-      PASSWORD.removeAttribute('aria-invalid');
-    }
+    };
+    err.textContent = '';
+    PASSWORD.removeAttribute('aria-invalid');
     return true;
   }
 
@@ -255,38 +259,19 @@ document.addEventListener('DOMContentLoaded', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(userData)
     })
-    .then(async (res) => {
-      // Read raw text first so we can show non-JSON output (PHP warnings, HTML, etc.)
-      const text = await res.text();
-      let data = null;
-      if (text) {
-        try {
-          data = JSON.parse(text);
-        } catch (err) {
-          // Server did not return valid JSON: show raw text to help debugging
-          console.error('Invalid JSON from register endpoint:', text);
-          alert('Server returned unexpected response:\n' + text);
-          return;
+
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          FORM.reset();
+          window.location.href = '/views/login/pages/login.html';
+        } else {
+          alert(data.message || 'Error to connect with Database');
         }
-      }
-
-      if (!res.ok) {
-        // HTTP error status
-        alert((data && data.message) ? data.message : ('Server error: ' + res.status));
-        return;
-      }
-
-      if (data && data.success) {
-        FORM.reset();
-        window.location.href = '/views/login/pages/login.html';
-      } else {
-        alert((data && data.message) ? data.message : 'Error connecting to the server');
-      }
-    })
-    .catch((err) => {
-      console.error('Fetch failed:', err);
-      alert('Network error. Try again.');
-    });
+      })
+      .catch(() => {
+        alert('Network error. Try again.');
+      });
 
     updateSubmitState();
   });
