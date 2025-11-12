@@ -50,16 +50,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = NAME.value.trim()
     const err = document.getElementById(`${NAME.id}-error`);
     if (!value) {
-      NAME.setAttribute('aria-invalid', 'true');
+  NAME.setAttribute('aria-invalid', 'true');
+  NAME.classList.add('border', 'border-red-600');
+  NAME.style.borderColor = '#dc2626';
+  NAME.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+  err.textContent = 'Name is required.';
       return false;
     }
     if (!isValidName(value)) {
       err.textContent = 'Invalid name format. Use letters and spaces only.';
-      NAME.setAttribute('aria-invalid', 'true');
+  NAME.setAttribute('aria-invalid', 'true');
+  NAME.classList.add('border', 'border-red-600');
+  NAME.style.borderColor = '#dc2626';
+  NAME.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
       return false;
     }
     err.textContent = '';
-    NAME.removeAttribute('aria-invalid');
+  NAME.removeAttribute('aria-invalid');
+  NAME.classList.remove('border', 'border-red-600');
+  NAME.style.borderColor = '';
+  NAME.style.boxShadow = '';
     return true;
   }
 
@@ -68,16 +78,26 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
     if (!value) {
-      EMAIL.setAttribute('aria-invalid', 'true');
+  EMAIL.setAttribute('aria-invalid', 'true');
+  EMAIL.classList.add('border', 'border-red-600');
+  EMAIL.style.borderColor = '#dc2626';
+  EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+  err.textContent = 'Email is required.';
       return false;
     }
     if (!isValidEmail(value)) {
-      err.textContent = 'Invalid email format.';
-      EMAIL.setAttribute('aria-invalid', 'true');
+  err.textContent = 'Invalid email format.';
+  EMAIL.setAttribute('aria-invalid', 'true');
+  EMAIL.classList.add('border', 'border-red-600');
+  EMAIL.style.borderColor = '#dc2626';
+  EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
       return false;
     }
     err.textContent = '';
-    EMAIL.removeAttribute('aria-invalid');
+  EMAIL.removeAttribute('aria-invalid');
+  EMAIL.classList.remove('border', 'border-red-600');
+  EMAIL.style.borderColor = '';
+  EMAIL.style.boxShadow = '';
     return true;
   }
 
@@ -86,22 +106,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
     if (!value) {
-      PASSWORD.setAttribute('aria-invalid', 'true');
+  PASSWORD.setAttribute('aria-invalid', 'true');
+  PASSWORD.classList.add('border', 'border-red-600');
+  PASSWORD.style.borderColor = '#dc2626';
+  PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+  err.textContent = 'Password is required.';
       return false;
     }
     if (value.length < 8) {
-      err.textContent = 'Your password must contain a minimum of 8 characters.';
-      PASSWORD.setAttribute('aria-invalid', 'true');
+  err.textContent = 'Your password must contain a minimum of 8 characters.';
+  PASSWORD.setAttribute('aria-invalid', 'true');
+  PASSWORD.classList.add('border', 'border-red-600');
+  PASSWORD.style.borderColor = '#dc2626';
+  PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
       return false;
     }
 
     if (!isValidPassword(value)) {
-      err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
-      PASSWORD.setAttribute('aria-invalid', 'true');
+  err.textContent = 'Please choose a strong password with uppercase, lowercase, digits, and special characters.';
+  PASSWORD.setAttribute('aria-invalid', 'true');
+  PASSWORD.classList.add('border', 'border-red-600');
+  PASSWORD.style.borderColor = '#dc2626';
+  PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
       return false;
     };
     err.textContent = '';
-    PASSWORD.removeAttribute('aria-invalid');
+  PASSWORD.removeAttribute('aria-invalid');
+  PASSWORD.classList.remove('border', 'border-red-600');
+  PASSWORD.style.borderColor = '';
+  PASSWORD.style.boxShadow = '';
     return true;
   }
 
@@ -181,9 +214,40 @@ document.addEventListener('DOMContentLoaded', () => {
         if (data.success) {
           FORM.reset();
           window.location.href = '/views/login/pages/login.html';
-        } else {
-          alert(data.message || 'Error to connect with Database');
+          return;
         }
+
+        // If server returned structured field errors, display them under inputs
+        // expected format: { success: false, errors: { email: 'msg', name: 'msg', password: 'msg' }, message: '...'}
+        if (data.errors && typeof data.errors === 'object') {
+          // clear previous server-side errors first
+          ['name', 'email', 'password'].forEach(field => {
+            const input = document.getElementById(field);
+            const errEl = document.getElementById(`${field}-error`);
+            if (input && errEl) {
+              errEl.textContent = '';
+              input.classList.remove('border', 'border-red-600');
+              input.removeAttribute('aria-invalid');
+            }
+          });
+
+          let first = null;
+          Object.keys(data.errors).forEach(field => {
+            const input = document.getElementById(field);
+            const errEl = document.getElementById(`${field}-error`);
+            if (input && errEl) {
+              errEl.textContent = data.errors[field];
+              input.classList.add('border', 'border-red-600');
+              input.setAttribute('aria-invalid', 'true');
+              if (!first) first = input;
+            }
+          });
+          if (first) first.focus();
+          return;
+        }
+
+        // Fallback alert for non-structured errors
+        alert(data.message || 'Error connecting with Database');
       })
       .catch(() => {
         alert('Network error. Try again.');

@@ -5,7 +5,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const FORM = document.getElementById('loginForm') || document.querySelector('FORM');
   const EMAIL = document.getElementById('email');
   const PASSWORD = document.getElementById('password');
-  const SUBMIT_BTN = FORM.querySelector('button[type="submit"]');
+  const SUBMIT_BTN = FORM && FORM.querySelector('button[type="submit"]');
+
+  console.log('loginValidations: DOMContentLoaded —', { FORMExists: !!FORM, EMAILExists: !!EMAIL, PASSWORDExists: !!PASSWORD, SUBMITBtnExists: !!SUBMIT_BTN });
 
   // --- Helpers ---
   function ensureErrorEl(input) {
@@ -25,6 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Error message containers
+  if (!EMAIL || !PASSWORD) {
+    console.error('loginValidations: required inputs not found — aborting validations', { EMAIL, PASSWORD });
+    return;
+  }
+
   ensureErrorEl(EMAIL);
   ensureErrorEl(PASSWORD);
 
@@ -38,20 +45,37 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Validations
-  function validateEmail() {
+  let emailTouched = false;
+  let passwordTouched = false;
+
+  function validateEmail(showErrors = false) {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
     if (!value) {
-      EMAIL.setAttribute('aria-invalid', 'true');
+      if (showErrors) {
+        EMAIL.setAttribute('aria-invalid', 'true');
+        EMAIL.classList.add('border', 'border-red-600');
+        EMAIL.style.borderColor = '#dc2626';
+        EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+        err.textContent = 'Email is required.';
+      }
       return false;
     }
     if (!isValidEmail(value)) {
-      err.textContent = 'Invalid email format.';
-      EMAIL.setAttribute('aria-invalid', 'true');
+      if (showErrors) {
+        err.textContent = 'Invalid email format.';
+        EMAIL.setAttribute('aria-invalid', 'true');
+        EMAIL.classList.add('border', 'border-red-600');
+        EMAIL.style.borderColor = '#dc2626';
+        EMAIL.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+      }
       return false;
     }
     err.textContent = '';
     EMAIL.removeAttribute('aria-invalid');
+    EMAIL.classList.remove('border', 'border-red-600');
+    EMAIL.style.borderColor = '';
+    EMAIL.style.boxShadow = '';
     return true;
   }
 
@@ -59,11 +83,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
     if (!value) {
-      PASSWORD.setAttribute('aria-invalid', 'true');
+      if (showErrors) {
+        PASSWORD.setAttribute('aria-invalid', 'true');
+        PASSWORD.classList.add('border', 'border-red-600');
+        PASSWORD.style.borderColor = '#dc2626';
+        PASSWORD.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+        err.textContent = 'Password is required.';
+      }
       return false;
     }
     err.textContent = '';
     PASSWORD.removeAttribute('aria-invalid');
+    PASSWORD.classList.remove('border', 'border-red-600');
+    PASSWORD.style.borderColor = '';
+    PASSWORD.style.boxShadow = '';
     return true;
   }
 
@@ -76,12 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   EMAIL.addEventListener('input', () => {
-    validateEmail();
+    emailTouched = true;
+    validateEmail(true);
     updateSubmitState();
   });
 
   PASSWORD.addEventListener('input', () => {
-    validatePassword();
+    passwordTouched = true;
+    validatePassword(true);
     updateSubmitState();
   });
 
@@ -108,8 +143,8 @@ document.addEventListener('DOMContentLoaded', () => {
   FORM.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const emailOk = validateEmail();
-    const passOk = validatePassword();
+  const emailOk = validateEmail(true);
+  const passOk = validatePassword(true);
 
     if (!emailOk || !passOk) {
       const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
@@ -131,19 +166,56 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       if (data.success) {
         window.location.href = '/main';
-      } else {
-        let general = document.getElementById('login-general-error');
-        if (!general) {
-          general = document.createElement('p');
-          general.id = 'login-general-error';
-          general.className = 'text-red-600 text-sm mt-4';
-          general.setAttribute('role', 'alert');
-          FORM.appendChild(general);
-        }
-        general.textContent = data.message || 'Incorrect credentials.';
+        return;
+      }
+
+      // If server returned field errors, show them under each input
+      // expected format: { success:false, errors: { email: 'msg', password: 'msg' }, message: '...' }
+      if (data.errors && typeof data.errors === 'object') {
+        // clear previous server errors
+        ['email', 'password'].forEach(field => {
+          const input = document.getElementById(field);
+          const errEl = document.getElementById(`${field}-error`);
+          if (input && errEl) {
+            errEl.textContent = '';
+            input.classList.remove('border', 'border-red-600');
+            input.removeAttribute('aria-invalid');
+            input.style.borderColor = '';
+            input.style.boxShadow = '';
+          }
+        });
+
+        let first = null;
+        Object.keys(data.errors).forEach(field => {
+          const input = document.getElementById(field);
+          const errEl = document.getElementById(`${field}-error`);
+          if (input && errEl) {
+            errEl.textContent = data.errors[field];
+            input.classList.add('border', 'border-red-600');
+            input.style.borderColor = '#dc2626';
+            input.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+            input.setAttribute('aria-invalid', 'true');
+            if (!first) first = input;
+          }
+        });
+        if (first) first.focus();
         SUBMIT_BTN.disabled = false;
         SUBMIT_BTN.innerHTML = originalHTML;
+        return;
       }
+
+      // fallback: general error
+      let general = document.getElementById('login-general-error');
+      if (!general) {
+        general = document.createElement('p');
+        general.id = 'login-general-error';
+        general.className = 'text-red-600 text-sm mt-4';
+        general.setAttribute('role', 'alert');
+        FORM.appendChild(general);
+      }
+      general.textContent = data.message || 'Incorrect credentials.';
+      SUBMIT_BTN.disabled = false;
+      SUBMIT_BTN.innerHTML = originalHTML;
     } catch (err) {
       console.error(err);
       alert('Network error. Please try again later.');
