@@ -27,6 +27,23 @@ class UserModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getUsersCount() {
+        $query = "SELECT COUNT(*) as cnt FROM {$this->table} WHERE deleted = false";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt'] ?? 0);
+    }
+
+    public function getUsersPaginated($limit = 7, $offset = 0) {
+        $query = "SELECT * FROM {$this->table} WHERE deleted = false ORDER BY user_id ASC LIMIT :limit OFFSET :offset";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
     public function getById($id) {
         $query = "SELECT * FROM {$this->table} WHERE user_id = :id AND deleted = false";
         $stmt = $this->db->prepare($query);

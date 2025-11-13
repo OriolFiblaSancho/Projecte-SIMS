@@ -13,7 +13,7 @@ class VehicleController {
     }
 
     public function getAll() {
-        $limit = 5;
+        $limit = 7;
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
         $totalVehicles = $this->vehicleModel->getVehiclesCount();
@@ -24,9 +24,17 @@ class VehicleController {
             $maxOffset = max(0, ($pages - 1) * $limit);
         }
 
-        if ($offset >= $maxOffset) {
+        if ($offset > $maxOffset) {
             $offset = $maxOffset;
         }
+
+        // Align offset to page size so offset always refers to page boundaries
+        if ($limit > 0) {
+            $offset = (int) floor($offset / $limit) * $limit;
+        }
+
+        // expose step to view so pagination component can use same step
+        $step = $limit;
 
         $vehicles = $this->vehicleModel->getAllVehicles($limit, $offset );
         $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
