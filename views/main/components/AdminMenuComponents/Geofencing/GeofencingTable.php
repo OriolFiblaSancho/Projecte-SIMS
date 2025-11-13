@@ -70,4 +70,6 @@
             </tbody>
         </table>
     </div>
+    </div>
+    <?php $paginationBase = '/main?admin=ViewGeofencing'; include_once __DIR__ . '/../../../../common/components/paginationButtons.php'; ?>
 </div>

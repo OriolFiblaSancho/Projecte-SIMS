@@ -11,7 +11,26 @@ class GeofencingController {
 
     // List zones (used by admin menu)
     public function getAll() {
-        $zones = $this->model->getAllZones();
+        $limit = 7;
+        $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
+
+        $totalZones = $this->model->getZonesCount();
+        $maxOffset = 0;
+        if ($totalZones > 0) {
+            $pages = (int) ceil($totalZones / $limit);
+            $maxOffset = max(0, ($pages - 1) * $limit);
+        }
+
+        if ($offset > $maxOffset) {
+            $offset = $maxOffset;
+        }
+
+        if ($limit > 0) {
+            $offset = (int) floor($offset / $limit) * $limit;
+        }
+
+        $step = $limit;
+        $zones = $this->model->getZonesPaginated($limit, $offset);
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Geofencing/GeofencingTable.php';
     }
 

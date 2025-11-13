@@ -13,7 +13,30 @@ class VehicleController {
     }
 
     public function getAll() {
-        $vehicles = $this->vehicleModel->getAllVehicles();
+        $limit = 7;
+        $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
+
+        $totalVehicles = $this->vehicleModel->getVehiclesCount();
+        
+        $maxOffset = 0;
+        if ($totalVehicles > 0) {
+            $pages = (int) ceil($totalVehicles / $limit);
+            $maxOffset = max(0, ($pages - 1) * $limit);
+        }
+
+        if ($offset > $maxOffset) {
+            $offset = $maxOffset;
+        }
+
+        // Align offset to page size so offset always refers to page boundaries
+        if ($limit > 0) {
+            $offset = (int) floor($offset / $limit) * $limit;
+        }
+
+        // expose step to view so pagination component can use same step
+        $step = $limit;
+
+        $vehicles = $this->vehicleModel->getAllVehicles($limit, $offset );
         $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Vehicles/VehiclesTable.php';
     }
@@ -50,11 +73,9 @@ class VehicleController {
         }
     
     }
-    public function delete($id = null) {
-        if ($id === null) {
-            $id = $_GET['id'] ?? null;
-        }
-
+    public function delete() {
+        $id = $_GET['id'];
+        
         if (!$id){
             Router::redirect('/main?admin=ViewVehicles');
         }
@@ -103,10 +124,9 @@ class VehicleController {
         Router::redirect('/main?admin=ViewVehicles');
     }
 
-    public function view($id = null) {
-        if ($id === null) {
-            $id = $_GET['id'] ?? null;
-        }
+    public function view($id) {
+        $id = $_GET['id'] ?? null;
+        
 
         if (!$id) {
             $_SESSION['error'] = "Vehicle ID not provided.";

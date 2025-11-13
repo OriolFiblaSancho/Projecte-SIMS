@@ -81,4 +81,5 @@
             </tbody>
         </table>
     </div>
+    <?php $paginationBase = '/main?admin=ViewUsers'; include_once __DIR__ . '/../../../../common/components/paginationButtons.php'; ?>
 </div>

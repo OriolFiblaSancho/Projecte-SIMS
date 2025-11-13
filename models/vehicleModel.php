@@ -10,8 +10,8 @@ class Vehicle {
         $this->db = Database::getInstance()->getConnection();
     }
 
-    public function getAllVehicles() {
-        $query = "SELECT 
+        public function getAllVehicles($limit = 7, $offset = 0) {
+                $query = "SELECT 
                     v.*,
                     l.latitude,
                     l.longitude,
@@ -23,10 +23,20 @@ class Vehicle {
                     FROM locations
                     WHERE deleted = false
                   ) l ON v.vehicle_id = l.vehicle_id AND l.rn = 1
-                  WHERE v.deleted = false";
+                                    WHERE v.deleted = false ORDER BY v.vehicle_id ASC LIMIT :limit OFFSET :offset;";
         $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getVehiclesCount() {
+        $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE deleted = false";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt']);
     }
 
     public function getById($id) {

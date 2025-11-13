@@ -25,8 +25,25 @@ class GeofencingConfig {
     }
 
     public function getAllZones() {
-        $query = "SELECT * FROM geofencing_config WHERE deleted = false";
+        $query = "SELECT * FROM geofencing_config WHERE deleted = false ORDER BY zone_id ASC";
         $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getZonesCount() {
+        $query = "SELECT COUNT(*) as cnt FROM geofencing_config WHERE deleted = false";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt'] ?? 0);
+    }
+
+    public function getZonesPaginated($limit = 7, $offset = 0) {
+        $query = "SELECT * FROM geofencing_config WHERE deleted = false ORDER BY zone_id ASC LIMIT :limit OFFSET :offset";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
