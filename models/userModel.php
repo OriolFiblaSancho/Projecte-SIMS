@@ -6,8 +6,18 @@ class UserModel {
     private $db;
     private $table = 'users';
 
-    public function __construct() {
-        $this->db = Database::getInstance()->getConnection();
+    /**
+     * Allow injecting a DB connection for easier testing.
+     * If no $db is provided, fall back to the singleton Database.
+     *
+     * @param mixed|null $db PDO-like connection object
+     */
+    public function __construct($db = null) {
+        if ($db !== null) {
+            $this->db = $db;
+        } else {
+            $this->db = Database::getInstance()->getConnection();
+        }
     }
 
     public function getAllUsers() {
@@ -41,10 +51,22 @@ class UserModel {
         $driver_license = isset($data['driver_license']) ? trim($data['driver_license']) : null;
         $status = isset($data['status']) ? trim($data['status']) : 'non-verified';
 
-        if (!empty($password)) {
-            $password = password_hash($password, PASSWORD_DEFAULT);
-        } else {
-            $password = null; 
+        // Require a password of at least 8 characters on create
+        if ($password === null || $password === '') {
+            return false;
+        }
+        if (strlen($password) < 8) {
+            return false;
+        }
+        $password = password_hash($password, PASSWORD_DEFAULT);
+
+        if ($email === null || $email === '') {
+            return false;
+        }
+        $email = strtolower($email);
+        $pattern = '/^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/';
+        if (!preg_match($pattern, $email)) {
+            return false;
         }
 
         $stmt->bindParam(':username', $username);
@@ -85,12 +107,24 @@ class UserModel {
         $driver_license = isset($data['driver_license']) ? trim($data['driver_license']) : null;
         $status = isset($data['status']) ? trim($data['status']) : 'non-verified';
 
+        if ($email === null || $email === '') {
+            return false;
+        }
+        $email = strtolower($email);
+        $pattern = '/^[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}$/';
+        if (!preg_match($pattern, $email)) {
+            return false;
+        }
+
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':last_name', $last_name);
         $stmt->bindParam(':email', $email);
         if ($passwordProvided) {
+            if (strlen($data['password']) < 8) {
+                return false;
+            }
             $password = password_hash($data['password'], PASSWORD_DEFAULT);
             $stmt->bindParam(':password', $password);
         }

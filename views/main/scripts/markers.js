@@ -8,6 +8,12 @@ const svg2 = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
     <path fill-rule="evenodd" d="m11.54 22.351.07.04.028.016a.76.76 0 0 0 .723 0l.028-.015.071-.041a16.975 16.975 0 0 0 1.144-.742 19.58 19.58 0 0 0 2.683-2.282c1.944-1.99 3.963-4.98 3.963-8.827a8.25 8.25 0 0 0-16.5 0c0 3.846 2.02 6.837 3.963 8.827a19.58 19.58 0 0 0 2.682 2.282 16.975 16.975 0 0 0 1.145.742ZM12 13.5a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" clip-rule="evenodd" />
   </svg>`
 )}`;
+const svg3 = `data:image/svg+xml;charset=UTF-8,${encodeURIComponent(
+  `<svg width="800px" height="800px" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 4C5.79086 4 4 5.79086 4 8C4 10.2091 5.79086 12 8 12C10.2091 12 12 10.2091 12 8C12 5.79086 10.2091 4 8 4ZM6 8C6 6.89543 6.89543 6 8 6C9.10457 6 10 6.89543 10 8C10 9.10457 9.10457 10 8 10C6.89543 10 6 9.10457 6 8Z" fill="#0D6344"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M8 0C3.58172 0 0 3.58172 0 8C0 12.4183 3.58172 16 8 16C12.4183 16 16 12.4183 16 8C16 3.58172 12.4183 0 8 0ZM2 8C2 4.68629 4.68629 2 8 2C11.3137 2 14 4.68629 14 8C14 11.3137 11.3137 14 8 14C4.68629 14 2 11.3137 2 8Z" fill="#0D6344"/>
+</svg>`
+)}`;
 
 const SELECTED = document.getElementById('selectedCarInfo');
 const BOTTOM = document.getElementById('bottomBar');
@@ -261,4 +267,76 @@ export function bottomBarToggle(map) {
       toggleActiveMarker(lastMarker);
     }
   });
+}
+// Geofencing functions
+export function getZonesCoordinates() {
+  const rows = document.querySelectorAll('tbody tr:not(:has(td[colspan]))');
+
+  const zones = Array.from(rows).map(row => {
+    const nameCell = row.cells[0];
+    const radiusCell = row.cells[2];
+    const coordCell = row.cells[3];
+
+    if (!nameCell || !radiusCell || !coordCell) return null;
+
+    const name = nameCell.textContent.trim();
+    const radius = parseFloat(radiusCell.textContent.trim());
+    const [lat, lng] = coordCell.textContent.trim().split(',').map(s => parseFloat(s.trim()));
+
+    return { name, lat, lng, radius };
+  }).filter(Boolean);
+
+  return zones;
+}
+
+export function paintCoords(map, zones) {
+  // Clear existing markers and circles if needed
+  if (window.markers) {
+    window.markers.forEach(marker => marker.setMap(null));
+  }
+  if (window.circles) {
+    window.circles.forEach(circle => circle.setMap(null));
+  }
+  window.markers = [];
+  window.circles = [];
+
+  zones.forEach(({ name, lat, lng, radius }) => {
+    const position = { lat, lng };
+
+    // Create marker
+    const marker = new google.maps.Marker({
+      icon: {
+        url: svg3, scaledSize: new google.maps.Size(32, 32),
+        anchor: new google.maps.Point(16, 16)
+      },
+      position,
+      map,
+    });
+    window.markers.push(marker);
+
+    // Create info window with zone name
+    const infoWindow = new google.maps.InfoWindow({
+      content: `<strong>${name}</strong><br>Radius: ${radius} meters`,
+    });
+
+    // Show info window on marker click
+    marker.addListener('click', () => {
+      infoWindow.open(map, marker);
+    });
+
+    // Draw circle with radius
+    const circle = new google.maps.Circle({
+      strokeColor: '#0D6344',
+      strokeOpacity: 0.8,
+      strokeWeight: 2,
+      fillColor: '#8becc4ff',
+      fillOpacity: 0.35,
+      map,
+      center: position,
+      radius, // meters
+    });
+    window.circles.push(circle);
+  });
+  
+  
 }

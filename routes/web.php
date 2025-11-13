@@ -23,3 +23,12 @@ $router->get('/users/delete/:id', 'userController@delete');
 
 #Menu settings user
 $router->post('/settings/save', 'userSettingsController@save');
+
+// Geofencing CRUD
+$router->get('/geofencing', 'geofencingController@getAll');
+$router->get('/geofencing/create', 'geofencingController@create');
+$router->post('/geofencing/store', 'geofencingController@store');
+$router->get('/geofencing/view/:id', 'geofencingController@view');
+$router->get('/geofencing/edit/:id', 'geofencingController@edit');
+$router->post('/geofencing/update', 'geofencingController@update');
+$router->get('/geofencing/delete/:id', 'geofencingController@delete');

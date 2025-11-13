@@ -5,15 +5,6 @@ require_once __DIR__ . '/../config/database.php';
 class Vehicle {
     private $db;
     private $table = 'vehicles';
-    private $id;
-    private $license_plate;
-    private $model;
-    private $vehicle_type_id;
-    private $battery_level;
-    private $current_range;
-    private $total_km;
-    private $status;
-    private $deleted;
 
     public function __construct() {
         $this->db = Database::getInstance()->getConnection();

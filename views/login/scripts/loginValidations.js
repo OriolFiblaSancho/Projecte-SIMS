@@ -4,7 +4,9 @@ document.addEventListener('DOMContentLoaded', () => {
   const FORM = document.getElementById('loginForm') || document.querySelector('FORM');
   const EMAIL = document.getElementById('email');
   const PASSWORD = document.getElementById('password');
-  const SUBMIT_BTN = FORM.querySelector('button[type="submit"]');
+  const SUBMIT_BTN = FORM && FORM.querySelector('button[type="submit"]');
+
+  console.log('loginValidations: DOMContentLoaded —', { FORMExists: !!FORM, EMAILExists: !!EMAIL, PASSWORDExists: !!PASSWORD, SUBMITBtnExists: !!SUBMIT_BTN });
 
   // No touch-checkbox logic needed: we use native :invalid styles to show red border.
 
@@ -25,6 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Error message containers
+  if (!EMAIL || !PASSWORD) {
+    console.error('loginValidations: required inputs not found — aborting validations', { EMAIL, PASSWORD });
+    return;
+  }
+
   ensureErrorEl(EMAIL);
   ensureErrorEl(PASSWORD);
 
@@ -38,24 +45,23 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Validations
-  function validateEmail(show = false) {
+  let emailTouched = false;
+  let passwordTouched = false;
+
+  function validateEmail(showErrors = false) {
     const value = EMAIL.value.trim();
     const err = document.getElementById(`${EMAIL.id}-error`);
     if (!value) {
-      if (show) EMAIL.setAttribute('aria-invalid', 'true');
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
     if (!isValidEmail(value)) {
-      if (show) {
-        err.textContent = 'Invalid email format.';
-        EMAIL.setAttribute('aria-invalid', 'true');
-      }
+      err.textContent = 'Invalid email format.';
+      EMAIL.setAttribute('aria-invalid', 'true');
       return false;
     }
-    if (show) {
-      err.textContent = '';
-      EMAIL.removeAttribute('aria-invalid');
-    }
+    err.textContent = '';
+    EMAIL.removeAttribute('aria-invalid');
     return true;
   }
 
@@ -63,13 +69,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const value = PASSWORD.value;
     const err = document.getElementById(`${PASSWORD.id}-error`);
     if (!value) {
-      if (show) PASSWORD.setAttribute('aria-invalid', 'true');
+      PASSWORD.setAttribute('aria-invalid', 'true');
       return false;
     }
-    if (show) {
-      err.textContent = '';
-      PASSWORD.removeAttribute('aria-invalid');
-    }
+    err.textContent = '';
+    PASSWORD.removeAttribute('aria-invalid');
     return true;
   }
 
@@ -96,14 +100,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   EMAIL.addEventListener('input', () => {
-    validateEmail(false);
-    reflectAriaInvalid(EMAIL);
+    validateEmail();
     updateSubmitState();
   });
 
   PASSWORD.addEventListener('input', () => {
-    validatePassword(false);
-    reflectAriaInvalid(PASSWORD);
+    validatePassword();
     updateSubmitState();
   });
 
@@ -162,17 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
   FORM.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    // mark form as submitted so CSS shows validation borders even for empty fields
-    FORM.classList.add('submitted');
-  
-    // run visible validations
-
-  const emailOk = validateEmail(true);
-  const passOk = validatePassword(true);
-
-    // Reflejar aria-invalid según estado nativo tras intentar enviar
-    reflectAriaInvalid(EMAIL);
-    reflectAriaInvalid(PASSWORD);
+    const emailOk = validateEmail();
+    const passOk = validatePassword();
 
     if (!emailOk || !passOk) {
       const firstInvalid = FORM.querySelector('[aria-invalid="true"]');
@@ -194,19 +187,56 @@ document.addEventListener('DOMContentLoaded', () => {
       const data = await res.json();
       if (data.success) {
         window.location.href = '/main';
-      } else {
-        let general = document.getElementById('login-general-error');
-        if (!general) {
-          general = document.createElement('p');
-          general.id = 'login-general-error';
-          general.className = 'text-red-600 text-sm mt-4';
-          general.setAttribute('role', 'alert');
-          FORM.appendChild(general);
-        }
-        general.textContent = data.message || 'Incorrect credentials.';
+        return;
+      }
+
+      // If server returned field errors, show them under each input
+      // expected format: { success:false, errors: { email: 'msg', password: 'msg' }, message: '...' }
+      if (data.errors && typeof data.errors === 'object') {
+        // clear previous server errors
+        ['email', 'password'].forEach(field => {
+          const input = document.getElementById(field);
+          const errEl = document.getElementById(`${field}-error`);
+          if (input && errEl) {
+            errEl.textContent = '';
+            input.classList.remove('border', 'border-red-600');
+            input.removeAttribute('aria-invalid');
+            input.style.borderColor = '';
+            input.style.boxShadow = '';
+          }
+        });
+
+        let first = null;
+        Object.keys(data.errors).forEach(field => {
+          const input = document.getElementById(field);
+          const errEl = document.getElementById(`${field}-error`);
+          if (input && errEl) {
+            errEl.textContent = data.errors[field];
+            input.classList.add('border', 'border-red-600');
+            input.style.borderColor = '#dc2626';
+            input.style.boxShadow = '0 0 0 1px rgba(220,38,38,0.25)';
+            input.setAttribute('aria-invalid', 'true');
+            if (!first) first = input;
+          }
+        });
+        if (first) first.focus();
         SUBMIT_BTN.disabled = false;
         SUBMIT_BTN.innerHTML = originalHTML;
+        return;
       }
+
+      // fallback: general error
+      let general = document.getElementById('login-general-error');
+      if (!general) {
+        general = document.createElement('p');
+        general.id = 'login-general-error';
+        general.className = 'text-red-600 text-sm mt-4';
+        general.setAttribute('role', 'alert');
+        FORM.appendChild(general);
+      }
+      general.textContent = data.message || 'Incorrect credentials.';
+      SUBMIT_BTN.disabled = false;
+      SUBMIT_BTN.innerHTML = originalHTML;
     } catch (err) {
       console.error(err);
       alert('Network error. Please try again later.');
