@@ -13,7 +13,7 @@ class VehicleController {
     }
 
     public function getAll() {
-        $limit = 9;
+        $limit = 5;
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
         $totalVehicles = $this->vehicleModel->getVehiclesCount();
@@ -23,8 +23,12 @@ class VehicleController {
             $pages = (int) ceil($totalVehicles / $limit);
             $maxOffset = max(0, ($pages - 1) * $limit);
         }
-        
-        $vehicles = $this->vehicleModel->getAllVehicles($limit, $offset, );
+
+        if ($offset >= $maxOffset) {
+            $offset = $maxOffset;
+        }
+
+        $vehicles = $this->vehicleModel->getAllVehicles($limit, $offset );
         $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Vehicles/VehiclesTable.php';
     }

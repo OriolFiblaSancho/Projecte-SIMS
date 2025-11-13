@@ -10,7 +10,7 @@ class Vehicle {
         $this->db = Database::getInstance()->getConnection();
     }
 
-    public function getAllVehicles($limit = 7, $offset = 0) {
+    public function getAllVehicles($limit = 5, $offset = 0) {
         $query = "SELECT 
                     v.*,
                     l.latitude,
@@ -36,7 +36,7 @@ class Vehicle {
         $stmt = $this->db->prepare($query);
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
-        return (int) ($row['cnt'] ?? 0);
+        return (int) ($row['cnt']);
     }
 
     public function getById($id) {
