@@ -76,6 +76,83 @@ class UserModel {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getUsersFiltered($limit = 7, $offset = 0, $filters = []) {
+        $where = ["deleted = false"];
+        $params = [];
+
+        // Text search across multiple fields
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $where[] = "(name ILIKE :search OR last_name ILIKE :search OR email ILIKE :search OR username ILIKE :search)";
+            $params[':search'] = $search;
+        }
+
+        // Filter by user type
+        if (!empty($filters['user_type'])) {
+            $where[] = "user_type = :user_type";
+            $params[':user_type'] = $filters['user_type'];
+        }
+
+        // Filter by status
+        if (!empty($filters['status'])) {
+            $where[] = "status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        $whereClause = implode(' AND ', $where);
+        $query = "SELECT * FROM {$this->table} WHERE {$whereClause} ORDER BY user_id ASC LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->db->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getUsersCountFiltered($filters = []) {
+        $where = ["deleted = false"];
+        $params = [];
+
+        // Text search across multiple fields
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $where[] = "(name ILIKE :search OR last_name ILIKE :search OR email ILIKE :search OR username ILIKE :search)";
+            $params[':search'] = $search;
+        }
+
+        // Filter by user type
+        if (!empty($filters['user_type'])) {
+            $where[] = "user_type = :user_type";
+            $params[':user_type'] = $filters['user_type'];
+        }
+
+        // Filter by status
+        if (!empty($filters['status'])) {
+            $where[] = "status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        $whereClause = implode(' AND ', $where);
+        $query = "SELECT COUNT(*) as cnt FROM {$this->table} WHERE {$whereClause}";
+        
+        $stmt = $this->db->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return (int) ($row['cnt'] ?? 0);
+    }
+
     public function getById($id) {
         $query = "SELECT * FROM {$this->table} WHERE user_id = :id AND deleted = false";
         $stmt = $this->db->prepare($query);

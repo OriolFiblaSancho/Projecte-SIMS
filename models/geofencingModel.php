@@ -48,6 +48,71 @@ class GeofencingConfig {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
+    public function getZonesFiltered($limit = 7, $offset = 0, $filters = []) {
+        $where = ["deleted = false"];
+        $params = [];
+
+        // Text search on zone name
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $where[] = "zone_name ILIKE :search";
+            $params[':search'] = $search;
+        }
+
+        // Filter by type
+        if (!empty($filters['type'])) {
+            $where[] = "type = :type";
+            $params[':type'] = $filters['type'];
+        }
+
+        $whereClause = implode(' AND ', $where);
+        $query = "SELECT * FROM geofencing_config WHERE {$whereClause} ORDER BY zone_id ASC LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->db->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getZonesCountFiltered($filters = []) {
+        $where = ["deleted = false"];
+        $params = [];
+
+        // Text search on zone name
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $where[] = "zone_name ILIKE :search";
+            $params[':search'] = $search;
+        }
+
+        // Filter by type
+        if (!empty($filters['type'])) {
+            $where[] = "type = :type";
+            $params[':type'] = $filters['type'];
+        }
+
+        $whereClause = implode(' AND ', $where);
+        $query = "SELECT COUNT(*) as cnt FROM geofencing_config WHERE {$whereClause}";
+        
+        $stmt = $this->db->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return (int) ($row['cnt'] ?? 0);
+    }
+
     public function getById($id) {
         $query = "SELECT * FROM geofencing_config WHERE zone_id = :id AND deleted = false";
         $stmt = $this->db->prepare($query);

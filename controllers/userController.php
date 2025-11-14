@@ -13,7 +13,21 @@ class UserController {
         $limit = 7;
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
-        $totalUsers = $this->userModel->getUsersCount();
+        // Capture filter parameters
+        $filters = [];
+        if (!empty($_GET['search'])) {
+            $filters['search'] = trim($_GET['search']);
+        }
+        if (!empty($_GET['user_type'])) {
+            $filters['user_type'] = trim($_GET['user_type']);
+        }
+        if (!empty($_GET['status'])) {
+            $filters['status'] = trim($_GET['status']);
+        }
+
+        // Get total count with filters
+        $totalUsers = empty($filters) ? $this->userModel->getUsersCount() : $this->userModel->getUsersCountFiltered($filters);
+        
         $maxOffset = 0;
         if ($totalUsers > 0) {
             $pages = (int) ceil($totalUsers / $limit);
@@ -29,7 +43,10 @@ class UserController {
         }
 
         $step = $limit;
-        $users = $this->userModel->getUsersPaginated($limit, $offset);
+        
+        // Get filtered/paginated data
+        $users = empty($filters) ? $this->userModel->getUsersPaginated($limit, $offset) : $this->userModel->getUsersFiltered($limit, $offset, $filters);
+        
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Users/UsersTable.php';
     }
 
