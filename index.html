@@ -18,17 +18,45 @@
             padding-top: 5rem;
             padding-bottom: 5rem;
         }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in-up {
+            animation: fadeInUp 0.8s ease-out;
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .btn-modern {
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .btn-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
     </style>
 </head>
 <body class="bg-gray-50 font-montserrat">
     <!-- Header -->
     <header class="bg-white shadow-sm sticky top-0 z-50">
-        <div class="container mx-auto px-4 py-4">
+        <div class="container mx-auto px-4 py-2">
             <div class="flex justify-between items-center">
 
                 <div class="flex items-center">
-                    <img src="assets/logos/logoPC.jpeg" alt="Blink Logo" class="hidden md:block max-w-xs">
-                    <img src="assets/logos/logo.jpeg" alt="Blink Mobile Logo" class="md:hidden max-w-[150px]" width="70%" height="70%">
+                    <img src="assets/logos/logoPC.jpeg" alt="Blink Logo" class="hidden md:block max-w-24">
+                    <img src="assets/logos/logo.jpeg" alt="Blink Mobile Logo" class="md:hidden " width="50%" height="50%">
                 </div>
 
 
@@ -41,39 +69,39 @@
 
 
                 <div class="flex space-x-4">
-                    <a href="/views/login/pages/login.html" class="text-accent border border-accent px-4 py-2 rounded-lg font-medium hover:bg-accent hover:text-white transition-colors">Log in</a>
-                    <a href="/views/register/pages/register.html" class="bg-accent text-white px-4 py-2 rounded-lg font-medium hover:bg-accent/90 transition-colors">Sign up</a>
+                    <a href="/views/login/pages/login.html" class="text-accent border border-accent px-4 py-2 rounded-lg font-medium hover:bg-accent hover:text-white transition-colors btn-modern">Log in</a>
+                    <a href="/views/register/pages/register.html" class="bg-accent text-white px-4 py-2 rounded-lg font-medium hover:bg-accent/90 transition-colors btn-modern">Sign up</a>
                 </div>
             </div>
         </div>
     </header>
 
     <!-- Hero Section -->
-    <section class="gradient-bg text-white">
+    <section class="gradient-bg text-white fade-in-up">
         <div class="container mx-auto px-4 py-20 md:py-28 text-center">
             <h1 class="text-4xl md:text-5xl font-bold mb-6">Blink</h1>
             <p class="text-xl mb-10 opacity-90">Smart Fleet Management with Geofencing and Balance Control</p>
-            <a href="#" class="inline-block bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg">Get Started</a>
+            <a href="#" class="inline-block bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg btn-modern">Get Started</a>
         </div>
     </section>
 
     <!-- What is Blink -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white fade-in-up">
         <div class="container mx-auto px-4 text-center mb-16">
             <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">What is Blink?</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Blink is a modern fleet tracking platform that combines advanced geolocation, balance management, and intelligent control tools.</p>
+            <p class="text-gray-600 max-w-3xl mx-auto">Blink is a comprehensive fleet management platform that integrates GPS tracking, geofencing, balance control, and AI-powered analytics to help businesses optimize their vehicle operations, reduce costs, and enhance safety.</p>
         </div>
 
         <div class="container mx-auto px-4 flex flex-col md:flex-row items-center gap-10 text-center">
             <div class="md:w-1/2">
-                <h3 class="text-2xl font-bold text-secondary mb-6">Full control from a single platform</h3>
-                <p class="text-gray-600 mb-4">Monitor your vehicles’ locations in real time, set geofencing zones, and manage the available balance of each driver or unit.</p>
-                <p class="text-gray-600 mb-8">With Blink, you gain transparency, control, and security in every operation of your fleet.</p>
-                <a href="#" class="inline-block bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors">Learn More</a>
+                <h3 class="text-2xl font-bold text-secondary mb-6">Complete Fleet Control</h3>
+                <p class="text-gray-600 mb-4">Monitor vehicle locations in real-time, set up geofencing zones for automated alerts, and manage driver balances to prevent unauthorized usage.</p>
+                <p class="text-gray-600 mb-8">Our platform provides full transparency, enabling data-driven decisions that improve efficiency and security across your entire fleet.</p>
+                <a href="#" class="inline-block bg-primary text-white px-6 py-3 rounded-lg font-medium hover:bg-primary/90 transition-colors btn-modern">Explore Features</a>
             </div>
         <div class="md:w-1/2 w-full bg-gray-200 rounded-xl flex items-center justify-center overflow-hidden">
             <img src="assets/adminPanel.png" 
-                alt="Blink Logo" 
+                alt="Blink Dashboard" 
                 class="w-full h-full max-h-80 md:max-h-full object-contain md:object-cover rounded-xl">
         </div>
 
@@ -81,62 +109,169 @@
     </section>
 
     <!-- Why Choose Blink -->
-    <section class="section-padding bg-gray-100">
+    <section class="section-padding bg-gray-100 fade-in-up">
         <div class="container mx-auto px-4 text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">Why Choose Blink?</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">The perfect combination of technology, efficiency, and control for your fleet.</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">Key Features</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Discover the powerful features that make Blink the ultimate choice for fleet management.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow mr-4 ml-4">
-                <div class="text-accent text-4xl mb-6"><i class="fas fa-map-marked-alt"></i></div>
-                <h3 class="text-xl font-bold text-secondary mb-4">AI asisted</h3>
-                <p class="text-gray-600">Suported by the most advanced AI technologies</p>
+            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow mr-4 ml-4 card-hover">
+                <div class="text-accent text-4xl mb-6"><i class="fas fa-brain"></i></div>
+                <h3 class="text-xl font-bold text-secondary mb-4">AI Assisted</h3>
+                <p class="text-gray-600">Supported by the most advanced AI technologies for predictive analytics and automated insights.</p>
             </div>
 
-            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow mr-4 ml-4">
+            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow mr-4 ml-4 card-hover">
                 <div class="text-accent text-4xl mb-6"><i class="fas fa-wallet"></i></div>
                 <h3 class="text-xl font-bold text-secondary mb-4">Balance Management</h3>
-                <p class="text-gray-600">Manage the individual balance of each user or vehicle, with expense control and automatic recharges.</p>
+                <p class="text-gray-600">Manage individual balances for users and vehicles, with automatic recharges and expense tracking.</p>
             </div>
 
-            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow mr-4 ml-4">
+            <div class="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow mr-4 ml-4 card-hover">
                 <div class="text-accent text-4xl mb-6"><i class="fas fa-tachometer-alt"></i></div>
                 <h3 class="text-xl font-bold text-secondary mb-4">Real-Time Monitoring</h3>
-                <p class="text-gray-600">Access live information about position, speed, routes, and critical events of your fleet.</p>
+                <p class="text-gray-600">Live tracking of position, speed, routes, and critical events with instant notifications.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How it Works -->
+    <section class="section-padding bg-white fade-in-up">
+        <div class="container mx-auto px-4 text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">How It Works</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Get started with Blink in just a few simple steps.</p>
+        </div>
+
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">1</div>
+                    <h3 class="text-xl font-bold text-secondary mb-4">Register Your Fleet</h3>
+                    <p class="text-gray-600">Create an account and add your vehicles with basic information and geofencing zones.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">2</div>
+                    <h3 class="text-xl font-bold text-secondary mb-4">Monitor in Real-Time</h3>
+                    <p class="text-gray-600">Track locations, speeds, and routes live. Receive alerts for zone entries/exits.</p>
+                </div>
+                <div class="text-center">
+                    <div class="bg-primary text-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 text-2xl font-bold">3</div>
+                    <h3 class="text-xl font-bold text-secondary mb-4">Manage & Optimize</h3>
+                    <p class="text-gray-600">Control balances, analyze usage data, and optimize your fleet operations.</p>
+                </div>
             </div>
         </div>
     </section>
 
     <!-- Payment Options -->
-    <section class="section-padding bg-white">
+    <section class="section-padding bg-white fade-in-up">
         <div class="container mx-auto px-4 text-center mb-16">
-            <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">Final user payment methods</h2>
-            <p class="text-gray-600 max-w-2xl mx-auto">Choose the option that best fits the size and needs of your fleet.</p>
+            <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">Pricing Plans</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Choose the plan that best fits your fleet size and usage needs.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div class="border-t-4 border-primary bg-white p-8 rounded-xl shadow-md mr-4 ml-4 text-center">
-                <h3 class="text-xl font-bold text-secondary mb-4">Pay for a single ride</h3>
-                <p class="text-gray-600 mb-6">For ocasional users</p>
-                <a href="#" class="inline-block bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-accent/90 transition-colors">Select</a>
+            <div class="border-t-4 border-primary bg-white p-8 rounded-xl shadow-md mr-4 ml-4 text-center card-hover">
+                <h3 class="text-xl font-bold text-secondary mb-4">Pay Per Ride</h3>
+                <p class="text-3xl font-bold text-primary mb-2">€0.50</p>
+                <p class="text-gray-600 mb-6">Per ride for occasional users</p>
+                <ul class="text-left text-gray-600 mb-6">
+                    <li>• Basic tracking</li>
+                    <li>• Geofencing alerts</li>
+                    <li>• Balance deduction</li>
+                </ul>
+                <a href="#" class="inline-block bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-accent/90 transition-colors btn-modern">Select Plan</a>
             </div>
 
-            <div class="border-t-4 border-primary bg-white p-8 rounded-xl shadow-md mr-4 ml-4 text-center">
-                <h3 class="text-xl font-bold text-secondary mb-4">Add credit</h3>
-                <p class="text-gray-600 mb-6">For our most frequent users</p>
-                <a href="#" class="inline-block bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-accent/90 transition-colors">Select</a>
+            <div class="border-t-4 border-primary bg-white p-8 rounded-xl shadow-md mr-4 ml-4 text-center card-hover relative">
+                <div class="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-accent text-white px-4 py-1 rounded-full text-sm font-bold">Most Popular</div>
+                <h3 class="text-xl font-bold text-secondary mb-4">Prepaid Credit</h3>
+                <p class="text-3xl font-bold text-primary mb-2">€10 - €100</p>
+                <p class="text-gray-600 mb-6">Top-up credits for frequent users</p>
+                <ul class="text-left text-gray-600 mb-6">
+                    <li>• All features included</li>
+                    <li>• Bulk discounts</li>
+                    <li>• Priority support</li>
+                    <li>• Advanced analytics</li>
+                </ul>
+                <a href="#" class="inline-block bg-accent text-white px-6 py-3 rounded-lg font-medium hover:bg-accent/90 transition-colors btn-modern">Select Plan</a>
             </div>
 
         </div>
     </section>
 
+    <!-- Testimonials -->
+    <section class="section-padding bg-gray-100 fade-in-up">
+        <div class="container mx-auto px-4 text-center mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold text-secondary mb-4">What Our Customers Say</h2>
+            <p class="text-gray-600 max-w-2xl mx-auto">Hear from fleet managers who have transformed their operations with Blink.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">JD</div>
+                    <div>
+                        <h4 class="font-bold text-secondary">John Doe</h4>
+                        <p class="text-gray-600 text-sm">Fleet Manager, Logistics Co.</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 italic">"Blink has revolutionized our fleet management. Real-time tracking and balance control have saved us thousands."</p>
+                <div class="flex text-accent mt-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">SM</div>
+                    <div>
+                        <h4 class="font-bold text-secondary">Sarah Miller</h4>
+                        <p class="text-gray-600 text-sm">Operations Director, Transport Ltd.</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 italic">"The AI-assisted features provide incredible insights. Our efficiency has improved by 30%."</p>
+                <div class="flex text-accent mt-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="bg-white p-6 rounded-xl shadow-md card-hover">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center text-white font-bold mr-4">MR</div>
+                    <div>
+                        <h4 class="font-bold text-secondary">Mike Rodriguez</h4>
+                        <p class="text-gray-600 text-sm">CEO, Delivery Services</p>
+                    </div>
+                </div>
+                <p class="text-gray-600 italic">"Geofencing and balance management keep everything secure and cost-effective. Highly recommend!"</p>
+                <div class="flex text-accent mt-4">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA -->
-    <section class="gradient-bg text-white">
+    <section class="gradient-bg text-white fade-in-up">
         <div class="container mx-auto px-4 py-20 text-center">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6">Optimize Your Fleet with Blink</h2>
-            <p class="text-xl mb-10 max-w-2xl mx-auto opacity-90">Discover how Blink can help you reduce costs, increase safety, and improve your business efficiency.</p>
-            <a href="#" class="inline-block bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg">Contact Us</a>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6">Ready to Transform Your Fleet?</h2>
+            <p class="text-xl mb-10 max-w-2xl mx-auto opacity-90">Join thousands of businesses already optimizing their operations with Blink. Start your free trial today and see the difference.</p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                <a href="/views/register/pages/register.html" class="inline-block bg-white text-primary px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition-colors shadow-lg btn-modern">Start Free Trial</a>
+                <a href="#" class="inline-block border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-primary transition-colors">Schedule Demo</a>
+            </div>
         </div>
     </section>
 
@@ -148,7 +283,7 @@
                     <div class="flex items-center mb-4">
                         <span class="text-xl font-bold">Blink</span>
                     </div>
-                    <p class="text-primary-light mb-6">Comprehensive fleet tracking platform with balance Management.</p>
+                    <p class="text-primary-light mb-6">Revolutionizing fleet management with AI-powered tracking, geofencing, and balance control solutions.</p>
                     <div class="flex space-x-4">
                         <a href="#" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/20 transition-colors">
                             <i class="fab fa-facebook-f"></i>

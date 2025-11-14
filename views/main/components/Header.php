@@ -25,7 +25,7 @@ if (!empty($_SESSION['user_id'])) {
   </svg>
 </button>
 
-<header class="fixed inset-x-0 top-0 z-40 hidden md:flex h-16 items-center justify-between bg-[#ddfae8] border-b border-[#0D6344] px-6">
+<header class="fixed inset-x-0 top-0 z-40 hidden md:flex h-16 items-center justify-between bg-[#ddfae8]/95 backdrop-blur-md border-b border-[#0D6344]/20 px-6 shadow-md">
   <div class="flex items-center gap-3 bg-white p-1 border border-[#7E3FBC] rounded">
     <img src="/assets/logos/logoPC.jpeg" alt="App logo" class="h-8 w-auto" />
   </div>
