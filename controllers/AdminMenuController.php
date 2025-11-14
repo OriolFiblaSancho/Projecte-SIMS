@@ -44,6 +44,10 @@
                 $id = $_GET['id'] ?? null;
                 $gfc->view($id);
             }
+        } else if ($adminSection === 'Dashboard') {
+            require_once __DIR__ . '/./dashboardController.php';
+            $dc = new DashboardController();
+            $dc->index();
         }
     }
     ?>

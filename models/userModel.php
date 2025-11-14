@@ -35,6 +35,38 @@ class UserModel {
         return (int) ($row['cnt'] ?? 0);
     }
 
+    public function getTotalBalance() {
+        $query = "SELECT SUM(balance) as total FROM {$this->table} WHERE deleted = false";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (float) ($row['total'] ?? 0.0);
+    }
+
+    public function getVerifiedUsersCount() {
+        $query = "SELECT COUNT(*) as cnt FROM {$this->table} WHERE deleted = false AND status = 'verified'";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt'] ?? 0);
+    }
+
+    public function getUsersByMonth($year = null) {
+        if ($year === null) {
+            $year = date('Y');
+        }
+        $query = "SELECT EXTRACT(MONTH FROM created_at) as month, COUNT(*) as cnt FROM {$this->table} WHERE deleted = false AND EXTRACT(YEAR FROM created_at) = :year AND created_at IS NOT NULL GROUP BY EXTRACT(MONTH FROM created_at)";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':year', $year, PDO::PARAM_INT);
+        $stmt->execute();
+        $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $data = array_fill(1, 12, 0);
+        foreach ($results as $row) {
+            $data[(int)$row['month']] = (int) $row['cnt'];
+        }
+        return $data;
+    }
+
     public function getUsersPaginated($limit = 7, $offset = 0) {
         $query = "SELECT * FROM {$this->table} WHERE deleted = false ORDER BY user_id ASC LIMIT :limit OFFSET :offset";
         $stmt = $this->db->prepare($query);
