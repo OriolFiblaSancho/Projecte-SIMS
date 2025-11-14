@@ -17,7 +17,7 @@ if (!empty($_SESSION['user_id'])) {
   }
 }
 ?>
-<button id="sideBarButton" aria-label="Open menu" class="block md:hidden">
+<button id="sideBarButton" aria-label="<?= htmlspecialchars(function_exists('t') ? t('open_menu') : 'Open menu', ENT_QUOTES) ?>" class="block md:hidden">
   <svg id="openSideBar" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-7">
     <path fill-rule="evenodd"
       d="M3 6.75A.75.75 0 0 1 3.75 6h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 6.75ZM3 12a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75A.75.75 0 0 1 3 12Zm0 5.25a.75.75 0 0 1 .75-.75h16.5a.75.75 0 0 1 0 1.5H3.75a.75.75 0 0 1-.75-.75Z"
@@ -27,38 +27,46 @@ if (!empty($_SESSION['user_id'])) {
 
 <header class="fixed inset-x-0 top-0 z-40 hidden md:flex h-16 items-center justify-between bg-[#ddfae8] border-b border-[#0D6344] px-6">
   <div class="flex items-center gap-3 bg-white p-1 border border-[#7E3FBC] rounded">
-    <img src="/assets/logos/logoPC.jpeg" alt="App logo" class="h-8 w-auto" />
+    <img src="/assets/logos/logoPC.jpeg" alt="<?= htmlspecialchars(function_exists('t') ? t('app_logo_alt') : 'App logo', ENT_QUOTES) ?>" class="h-8 w-auto" />
   </div>
 
   <div class="flex items-center justify-end gap-3">
+  <div class="flex items-center gap-2 mr-2">
+    <?php $currentLang = function_exists('get_locale') ? get_locale() : 'en'; ?>
+    <label for="langSelect" class="sr-only"><?= htmlspecialchars(function_exists('t') ? t('language_label') : 'Language', ENT_QUOTES) ?></label>
+    <select id="langSelect" class="rounded-md border px-2 py-1 text-sm" onchange="changeLang(this.value)">
+      <option value="ca" <?= $currentLang === 'ca' ? 'selected' : '' ?>><?= htmlspecialchars(function_exists('t') ? t('catala') : 'Catala', ENT_QUOTES) ?></option>
+      <option value="en" <?= $currentLang === 'en' ? 'selected' : '' ?>><?= htmlspecialchars(function_exists('t') ? t('english') : 'English', ENT_QUOTES) ?></option>
+    </select>
+  </div>
   <div id="userMenu" class="flex flex-col hidden fixed top-14 right-4 w-64 bg-[#e7fff6] border border-[#8bd7bf] rounded-lg shadow-md p-3 z-30">
       <div class="px-3 py-2 rounded-md">
-        <p class="text-sm text-neutral-700">Current Balance: <b class="text-black">43,56€</b></p>
+        <p class="text-sm text-neutral-700"><?php echo htmlspecialchars(function_exists('t') ? t('current_balance') : 'Current Balance', ENT_QUOTES); ?>: <b class="text-black">43,56€</b></p>
       </div>
 
       <div class="mt-3 flex flex-col gap-3 px-3">
         <button
-          onclick="window.location.href='/views/addBalance/pages/addBalance.html'"
+          onclick="window.location.href='/views/addBalance/pages/addBalance.php'"
           class="w-full flex items-center justify-between bg-[#7E3FBC] text-white font-semibold rounded-lg px-4 py-3 shadow-sm hover:opacity-95 transition">
-          <span>Add balance</span>
+          <span><?= htmlspecialchars(function_exists('t') ? t('add_balance') : 'Add balance', ENT_QUOTES) ?></span>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
           </svg>
         </button>
 
         <button
-          onclick="window.location.href='/views/scan/pages/scan.html'"
+          onclick="window.location.href='/views/scan/pages/scan.php'"
           class="w-full flex items-center justify-between bg-[#7E3FBC] text-white font-semibold rounded-lg px-4 py-3 shadow-sm hover:opacity-95 transition">
-          <span>Buy single ticket</span>
+          <span><?= htmlspecialchars(function_exists('t') ? t('buy_single_ticket') : 'Buy single ticket', ENT_QUOTES) ?></span>
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M3 14h18M5 6h14M5 18h14" />
           </svg>
         </button>
 
         <button
-            onclick="window.location.href='/views/pages/cookies.html'"
+          onclick="window.location.href='/views/pages/cookies.php'"
             class="w-full flex items-center justify-between bg-white border rounded-lg px-4 py-3 shadow-sm hover:bg-gray-50 transition">
-            <span>Cookie Policy</span>
+            <span><?= htmlspecialchars(function_exists('t') ? t('cookie_policy') : 'Cookie Policy', ENT_QUOTES) ?></span>
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -72,7 +80,7 @@ if (!empty($_SESSION['user_id'])) {
           </svg>
         </button>
 
-        <button id="Logout" onclick="window.location.href='/index.html'" class="p-2 text-black">
+        <button id="Logout" onclick="window.location.href='/index.php'" class="p-2 text-black" title="<?= htmlspecialchars(function_exists('t') ? t('logout') : 'Logout', ENT_QUOTES) ?>">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-5 w-5">
             <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
           </svg>
@@ -80,11 +88,24 @@ if (!empty($_SESSION['user_id'])) {
       </div>
     </div>
 
-    <button id="userMenuButton" aria-label="User">
-      <span class="text-md text-black font-bold"><?= htmlspecialchars($displayName) ?></span>
+    <button id="userMenuButton" aria-label="<?= htmlspecialchars(function_exists('t') ? t('user') : 'User', ENT_QUOTES) ?>">
+      <span class="text-md text-black font-bold"><?php if (empty($displayName)) { echo htmlspecialchars(function_exists('t') ? t('guest') : 'Guest', ENT_QUOTES); } else { echo htmlspecialchars($displayName, ENT_QUOTES); } ?></span>
     </button>
 
     <script>
+      function changeLang(lang) {
+        try {
+          const url = new URL(window.location.href);
+          url.searchParams.set('lang', lang);
+          // Reload to same path with updated lang param
+          window.location.href = url.toString();
+        } catch (e) {
+          // Fallback: append ?lang=
+          const sep = window.location.search ? '&' : '?';
+          window.location.href = window.location.pathname + window.location.search + sep + 'lang=' + encodeURIComponent(lang);
+        }
+      }
+
       const userMenuButton = document.getElementById('userMenuButton');
       const userMenu = document.getElementById('userMenu');
 

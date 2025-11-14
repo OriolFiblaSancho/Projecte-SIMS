@@ -129,23 +129,29 @@ class Router {
      */
     private function notFound() {
         http_response_code(404);
-        echo "<!DOCTYPE html>
-        <html lang='ca'>
-        <head>
-            <meta charset='UTF-8'>
-            <meta name='viewport' content='width=device-width, initial-scale=1.0'>
-            <title>404 - Pàgina no trobada</title>
-            <link rel='stylesheet' href='/public/css/style.css'>
-        </head>
-        <body>
-            <div class='container' style='text-align: center; padding: 4rem 0;'>
-                <h1 style='font-size: 6rem; color: #e74c3c;'>404</h1>
-                <h2>Pàgina no trobada</h2>
-                <p>La pàgina que cerques no existeix.</p>
-                <a href='/' class='btn btn-primary'>Tornar a l'inici</a>
-            </div>
-        </body>
-        </html>";
+
+        $lang = function_exists('get_locale') ? get_locale() : 'ca';
+        $title = function_exists('t') ? t('404_title') : '404 - Pàgina no trobada';
+        $message = function_exists('t') ? t('404_message') : 'La pàgina que cerques no existeix.';
+        $returnText = function_exists('t') ? t('return_home') : 'Tornar a l\'inici';
+
+        echo "<!DOCTYPE html>\n";
+        echo "<html lang='" . htmlspecialchars($lang, ENT_QUOTES) . "'>\n";
+        echo "<head>\n";
+        echo "    <meta charset='UTF-8'>\n";
+        echo "    <meta name='viewport' content='width=device-width, initial-scale=1.0'>\n";
+        echo "    <title>" . htmlspecialchars($title, ENT_QUOTES) . "</title>\n";
+        echo "    <link rel='stylesheet' href='/public/css/style.css'>\n";
+        echo "</head>\n";
+        echo "<body>\n";
+        echo "    <div class='container' style='text-align: center; padding: 4rem 0;'>\n";
+        echo "        <h1 style='font-size: 6rem; color: #e74c3c;'>404</h1>\n";
+        echo "        <h2>" . htmlspecialchars($title, ENT_QUOTES) . "</h2>\n";
+        echo "        <p>" . htmlspecialchars($message, ENT_QUOTES) . "</p>\n";
+        echo "        <a href='/' class='btn btn-primary'>" . htmlspecialchars($returnText, ENT_QUOTES) . "</a>\n";
+        echo "    </div>\n";
+        echo "</body>\n";
+        echo "</html>\n";
         exit;
     }
     

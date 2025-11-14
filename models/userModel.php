@@ -39,7 +39,7 @@ class UserModel {
         $query = "INSERT INTO {$this->table} (username, name, last_name, email, password, phone, user_type, balance, driver_license, status, created_at, deleted)
                   VALUES (:username, :name, :last_name, :email, :password, :phone, :user_type, :balance, :driver_license, :status, NOW(), false)";
         $stmt = $this->db->prepare($query);
-
+//si hay un valor unsername lo trimmeas  si no es null
         $username = isset($data['username']) ? trim($data['username']) : null;
         $name = isset($data['name']) ? trim($data['name']) : null;
         $last_name = isset($data['last_name']) ? trim($data['last_name']) : null;
@@ -58,7 +58,6 @@ class UserModel {
         if (strlen($password) < 8) {
             return false;
         }
-        $password = password_hash($password, PASSWORD_DEFAULT);
 
         if ($email === null || $email === '') {
             return false;
@@ -68,7 +67,8 @@ class UserModel {
         if (!preg_match($pattern, $email)) {
             return false;
         }
-
+        $password = password_hash($password, PASSWORD_DEFAULT);
+//para mapear la variable que va en la consulta con la variable php
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':name', $name);
         $stmt->bindParam(':last_name', $last_name);
@@ -87,6 +87,7 @@ class UserModel {
     }
 
     public function update($id, $data) {
+        // data es para obtener los campos del formulario desde la vista
         $passwordProvided = isset($data['password']) && $data['password'] !== '';
 
         if ($passwordProvided) {

@@ -1,9 +1,13 @@
+<?php
+require_once __DIR__ . '/../../../helpers/i18n.php';
+set_locale();
+?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= htmlspecialchars(get_locale(), ENT_QUOTES) ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - Blink</title>
+    <title><?= htmlspecialchars(t('login_title'), ENT_QUOTES) ?> - Blink</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -36,7 +40,7 @@
 
             <img 
                 src="/assets/logos/logoPC.jpeg" 
-                alt="Logo escritorio" 
+                alt="<?= htmlspecialchars(t('app_logo_alt'), ENT_QUOTES) ?>" 
                 class="hidden md:block mx-auto max-w-xs"
             >
 
@@ -44,18 +48,18 @@
             <div class="flex justify-center md:hidden mb-4">
                 <img 
                     src="/assets/logos/logoMobile.jpeg" 
-                    alt="Logo móvil" 
+                    alt="<?= htmlspecialchars(t('app_logo_alt'), ENT_QUOTES) ?>" 
                     class="max-w-[150px]"
                 >
             </div>
         </div>
         
     <form class="space-y-6" id="loginForm">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">Login</h2>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2"><?= htmlspecialchars(t('login_title'), ENT_QUOTES) ?></h2>
             
             <!-- Mail -->
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1"><?= htmlspecialchars(t('label_email'), ENT_QUOTES) ?></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-envelope text-gray-400"></i>
@@ -68,7 +72,7 @@
             
             <!-- Password -->
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1"><?= htmlspecialchars(t('label_password'), ENT_QUOTES) ?></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-lock text-gray-400"></i>
@@ -84,10 +88,10 @@
             <div class="flex justify-between items-center">
                 <label class="flex items-center">
                     <input type="checkbox" class="rounded border-gray-300 text-primary focus:ring-primary">
-                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                    <span class="ml-2 text-sm text-gray-600"><?= htmlspecialchars(t('remember_me'), ENT_QUOTES) ?></span>
                 </label>
                 <a href="#" class="text-sm text-accent hover:text-accent-light font-medium transition-colors">
-                    Forgot your password?
+                    <?= htmlspecialchars(t('forgot_password'), ENT_QUOTES) ?>
                 </a>
             </div>
             
@@ -96,7 +100,7 @@
                 type="submit" 
                 class="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 transition-all shadow-md flex items-center justify-center">
                 <i class="fas fa-sign-in-alt mr-2"></i>
-                Login
+                <?= htmlspecialchars(t('login_button'), ENT_QUOTES) ?>
             </button>
         </form>
         
@@ -108,8 +112,8 @@
         
         <!-- Register link -->
         <div class="text-center mt-8">
-            <p class="text-gray-600">Not registered? <a href="/views/register/pages/register.php" class="inline-block mt-2 text-primary hover:text-primary/80 font-semibold transition-colors">
-                Create an acount
+            <p class="text-gray-600"><?= htmlspecialchars(t('not_registered'), ENT_QUOTES) ?> <a href="/views/register/pages/register.php" class="inline-block mt-2 text-primary hover:text-primary/80 font-semibold transition-colors">
+                <?= htmlspecialchars(t('create_account'), ENT_QUOTES) ?>
             </a></p>
             
         </div>

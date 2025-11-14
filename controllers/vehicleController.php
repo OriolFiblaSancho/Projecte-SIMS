@@ -3,6 +3,8 @@ require_once __DIR__ . '/../models/vehicleModel.php';
 require_once __DIR__ . '/../config/router.php';
 require_once __DIR__ . '/../models/vehicleTypeModel.php';
 require_once __DIR__ . '/../models/locationModel.php';
+require_once __DIR__ . '/../helpers/i18n.php';
+set_locale();
 class VehicleController {
     private $vehicleModel;
     private $vehicleTypeModel;
@@ -42,10 +44,10 @@ class VehicleController {
                 $locationModel->create($locationData);
             }
 
-            $_SESSION['success'] = "Vehicle created successfully!";
+            $_SESSION['success'] = t('vehicle_created');
             Router::redirect('/main?admin=ViewVehicles');
         } else {
-            $_SESSION['error'] = "Error creating vehicle";
+            $_SESSION['error'] = t('error_creating_vehicle');
             Router::redirect('/main?admin=FormVehicles');
         }
     
@@ -62,9 +64,9 @@ class VehicleController {
         $result = $this->vehicleModel->delete($id);
 
         if ($result) {
-            $_SESSION['success'] = "Vehicle deleted successfully!";
+            $_SESSION['success'] = t('vehicle_deleted');
         } else {
-            $_SESSION['error'] = "Error deleting vehicle";
+            $_SESSION['error'] = t('error_deleting_vehicle');
         }
         Router::redirect('/main?admin=ViewVehicles');
     }
@@ -76,7 +78,7 @@ class VehicleController {
 
         $id = $_POST['vehicle_id'] ?? null;
         if (!$id) {
-            $_SESSION['error'] = 'Vehicle id missing.';
+            $_SESSION['error'] = t('vehicle_id_missing');
             Router::redirect('/main?admin=ViewVehicles');
         }
 
@@ -96,9 +98,9 @@ class VehicleController {
                 ]);
             }
 
-            $_SESSION['success'] = 'Vehicle updated successfully.';
+            $_SESSION['success'] = t('vehicle_updated');
         } else {
-            $_SESSION['error'] = 'Error updating vehicle.';
+            $_SESSION['error'] = t('error_updating_vehicle');
         }
         Router::redirect('/main?admin=ViewVehicles');
     }
@@ -109,13 +111,13 @@ class VehicleController {
         }
 
         if (!$id) {
-            $_SESSION['error'] = "Vehicle ID not provided.";
+            $_SESSION['error'] = t('vehicle_id_missing');
             Router::redirect('/main?admin=ViewVehicles');
         }
 
         $vehicle = $this->vehicleModel->getById($id);
         if (!$vehicle) {
-            $_SESSION['error'] = "Vehicle not found.";
+            $_SESSION['error'] = t('vehicle_not_found');
             Router::redirect('/main?admin=ViewVehicles');
         }
 

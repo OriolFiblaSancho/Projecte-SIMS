@@ -13,32 +13,32 @@
   </div>
   <div id="userNameSurname">Oriol Fibla Sancho</div>
 
-  <div id="userBalance">Current balance: <b>43.65 €</b></div>
+  <div id="userBalance"><?php echo htmlspecialchars(function_exists('t') ? t('current_balance') : 'Current balance', ENT_QUOTES); ?>: <b>43.65 €</b></div>
 
   <div id="userStats">
     <div id="userTotalKm">
       <p><b>254</b> KiloMeters</p>
-      <h6 class="userStatsSub">Total distance travelled</h6>
+      <h6 class="userStatsSub"><?php echo htmlspecialchars(function_exists('t') ? t('total_distance_travelled') : 'Total distance travelled', ENT_QUOTES); ?></h6>
       <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;' />
     </div>
 
     <div id="userTotalCo2">
       <p><b>3.32</b> KiloGrams</p>
-      <h6 class="userStatsSub">Total C02 saved</h6>
+      <h6 class="userStatsSub"><?php echo htmlspecialchars(function_exists('t') ? t('total_co2_saved') : 'Total C02 saved', ENT_QUOTES); ?></h6>
       <hr style='background-color:#7E3FBC;border-width:0;color:#7E3FBC;height:0.1rem;' />
     </div>
   </div>
 
   <div id="sideBarPurchases">
-    <a href="/views/addBalance/pages/addBalance.html" id="addBalanceButton" class="sideBarPurchasesButton rounded">
-      <b>Add Balance</b>
+    <a href="/views/addBalance/pages/addBalance.php" id="addBalanceButton" class="sideBarPurchasesButton rounded">
+      <b><?php echo htmlspecialchars(function_exists('t') ? t('add_balance') : 'Add Balance', ENT_QUOTES); ?></b>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
         <path d="M2.273 5.625A4.483 4.483 0 0 1 5.25 4.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 3H5.25a3 3 0 0 0-2.977 2.625ZM2.273 8.625A4.483 4.483 0 0 1 5.25 7.5h13.5c1.141 0 2.183.425 2.977 1.125A3 3 0 0 0 18.75 6H5.25a3 3 0 0 0-2.977 2.625ZM5.25 9a3 3 0 0 0-3 3v6a3 3 0 0 0 3 3h13.5a3 3 0 0 0 3-3v-6a3 3 0 0 0-3-3H15a.75.75 0 0 0-.75.75 2.25 2.25 0 0 1-4.5 0A.75.75 0 0 0 9 9H5.25Z" />
       </svg>
     </a>
 
     <button id="singleTicketButton" class="sideBarPurchasesButton rounded">
-      <b>Buy Single Ticket</b>
+      <b><?php echo htmlspecialchars(function_exists('t') ? t('buy_single_ticket') : 'Buy Single Ticket', ENT_QUOTES); ?></b>
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-12">
         <path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Zm15-1.125a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0v.75a.75.75 0 0 0 1.5 0v-.75Zm-.75 3a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0v-.75a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0V18a.75.75 0 0 0 1.5 0v-.75ZM6 12a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 12Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
       </svg>
@@ -52,7 +52,7 @@
       </svg>
     </a>
 
-    <a href="/index.html">
+    <a href="/index.php">
       <button id="sideBarLogOffButton" class="sideBarUtilityButton">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
           <path fill-rule="evenodd" d="M7.5 3.75A1.5 1.5 0 0 0 6 5.25v13.5a1.5 1.5 0 0 0 1.5 1.5h6a1.5 1.5 0 0 0 1.5-1.5V15a.75.75 0 0 1 1.5 0v3.75a3 3 0 0 1-3 3h-6a3 3 0 0 1-3-3V5.25a3 3 0 0 1 3-3h6a3 3 0 0 1 3 3V9A.75.75 0 0 1 15 9V5.25a1.5 1.5 0 0 0-1.5-1.5h-6Zm5.03 4.72a.75.75 0 0 1 0 1.06l-1.72 1.72h10.94a.75.75 0 0 1 0 1.5H10.81l1.72 1.72a.75.75 0 1 1-1.06 1.06l-3-3a.75.75 0 0 1 0-1.06l3-3a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" />
@@ -60,7 +60,7 @@
       </button>
     </a>
 
-    <a href="/views/pages/cookies.html">
+    <a href="/views/pages/cookies.php">
       <button id="sideBarCookiesButton" class="sideBarUtilityButton">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-8">
           <path fill-rule="evenodd" d="M2.25 12c0-5.385 4.365-9.75 9.75-9.75s9.75 4.365 9.75 9.75-4.365 9.75-9.75 9.75S2.25 17.385 2.25 12zm8.706-1.442c1.146-.573 2.437.463 2.126 1.706l-.709 2.836.042-.02a.75.75 0 01.67 1.34l-.04.022c-1.147.573-2.438-.463-2.127-1.706l.71-2.836-.042.02a.75.75 0 11-.671-1.34l.041-.022zM12 9a.75.75 0 100-1.5.75.75 0 000 1.5z" clip-rule="evenodd" />

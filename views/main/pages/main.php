@@ -2,12 +2,12 @@
 $googleApiKey = getenv(name:'GOOGLE_MAPS_API_KEY');
 ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= htmlspecialchars(function_exists('get_locale') ? get_locale() : 'en', ENT_QUOTES) ?>">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Blink</title>
+  <title>Blink - <?= htmlspecialchars(function_exists('t') ? t('welcome') : 'Welcome', ENT_QUOTES) ?></title>
 
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="preconnect" href="https://fonts.googleapis.com">

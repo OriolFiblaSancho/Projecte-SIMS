@@ -264,7 +264,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(data => {
         if (data.success) {
           FORM.reset();
-          window.location.href = '/views/login/pages/login.html';
+          window.location.href = '/views/login/pages/login.php';
         } else {
           alert(data.message || 'Error to connect with Database');
         }

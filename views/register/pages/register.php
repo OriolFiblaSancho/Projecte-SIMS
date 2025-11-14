@@ -1,10 +1,13 @@
+<?php
+require_once __DIR__ . '/../../../helpers/i18n.php';
+set_locale();
+?>
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="<?= htmlspecialchars(get_locale(), ENT_QUOTES) ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup - Blink</title>
+    <title><?= htmlspecialchars(t('register_title'), ENT_QUOTES) ?> - Blink</title>
 
     <link rel="stylesheet" href="../../common/styles/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -20,7 +23,6 @@
             border-color: #d1d5db !important;
             box-shadow: none !important;
         }
-        /* Visual feedback with HTML/CSS pseudo-classes */
         input:focus:invalid, textarea:focus:invalid {
             border-color: #ef4444 !important;
             box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.25);
@@ -33,32 +35,30 @@
     </style>
     <script src="../scripts/registerValidations.js"></script>
 
-
-
 </head>
 <body class="bg-gray-50 min-h-screen flex font-montserrat">
     <div class="w-full md:w-1/2 lg:w-2/5 xl:w-1/3 bg-white p-8 md:p-12 flex flex-col justify-center">
         <div class="mb-10 text-center">
             <img 
                 src="/assets/logos/logoPC.jpeg" 
-                alt="Desktop Logo" 
+                alt="<?= htmlspecialchars(t('app_logo_alt'), ENT_QUOTES) ?>" 
                 class="hidden md:block mx-auto max-w-xs"
             >
 
             <div class="flex justify-center md:hidden mb-4">
                 <img 
                     src="/assets/logos/logoMobile.jpeg" 
-                    alt="Mobile Logo" 
+                    alt="<?= htmlspecialchars(t('app_logo_alt'), ENT_QUOTES) ?>" 
                     class="max-w-[150px]"
                 >
             </div>
         </div>
         
     <form class="space-y-6" id="registerForm">
-            <h2 class="text-3xl font-bold text-gray-800 mb-2">Create account</h2>
+            <h2 class="text-3xl font-bold text-gray-800 mb-2"><?= htmlspecialchars(t('register_title'), ENT_QUOTES) ?></h2>
             
             <div>
-                <label for="Name" class="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                <label for="Name" class="block text-sm font-medium text-gray-700 mb-1"><?= htmlspecialchars(t('name_label'), ENT_QUOTES) ?></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-user text-gray-400"></i>
@@ -68,7 +68,7 @@
             </div>
 
             <div>
-                <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                <label for="email" class="block text-sm font-medium text-gray-700 mb-1"><?= htmlspecialchars(t('label_email'), ENT_QUOTES) ?></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-envelope text-gray-400"></i>
@@ -79,7 +79,7 @@
             </div>
             
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1"><?= htmlspecialchars(t('label_password'), ENT_QUOTES) ?></label>
                 <div class="relative">
                     <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <i class="fas fa-lock text-gray-400"></i>
@@ -90,7 +90,7 @@
             
             <button type="submit" class="w-full bg-primary text-white py-3 px-4 rounded-lg font-semibold hover:bg-primary/90 focus:outline-none focus:ring-1 focus:ring-gray-200 focus:ring-offset-0 transition-all flex items-center justify-center">
                 <i class="fas fa-sign-in-alt mr-2"></i>
-                <span class="text-sm">Register</span>
+                <span class="text-sm"><?= htmlspecialchars(t('btn_register'), ENT_QUOTES) ?></span>
             </button>
         </form>
         
@@ -101,8 +101,8 @@
         </div>
         
         <div class="text-center mt-8">
-            <p class="text-gray-600">Already on Blink? <a href="/views/login/pages/login.php" class="inline-block mt-2 text-primary hover:text-primary/80 font-semibold transition-colors">
-                Log in
+            <p class="text-gray-600"><?= htmlspecialchars(t('not_registered'), ENT_QUOTES) ?> <a href="/views/login/pages/login.php" class="inline-block mt-2 text-primary hover:text-primary/80 font-semibold transition-colors">
+                <?= htmlspecialchars(t('login_button'), ENT_QUOTES) ?>
             </a></p>
             
         </div>
