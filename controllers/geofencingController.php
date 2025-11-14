@@ -14,7 +14,18 @@ class GeofencingController {
         $limit = 7;
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
-        $totalZones = $this->model->getZonesCount();
+        // Capture filter parameters
+        $filters = [];
+        if (!empty($_GET['search'])) {
+            $filters['search'] = trim($_GET['search']);
+        }
+        if (!empty($_GET['type'])) {
+            $filters['type'] = trim($_GET['type']);
+        }
+
+        // Get total count with filters
+        $totalZones = empty($filters) ? $this->model->getZonesCount() : $this->model->getZonesCountFiltered($filters);
+        
         $maxOffset = 0;
         if ($totalZones > 0) {
             $pages = (int) ceil($totalZones / $limit);
@@ -30,7 +41,10 @@ class GeofencingController {
         }
 
         $step = $limit;
-        $zones = $this->model->getZonesPaginated($limit, $offset);
+        
+        // Get filtered/paginated data
+        $zones = empty($filters) ? $this->model->getZonesPaginated($limit, $offset) : $this->model->getZonesFiltered($limit, $offset, $filters);
+        
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Geofencing/GeofencingTable.php';
     }
 
