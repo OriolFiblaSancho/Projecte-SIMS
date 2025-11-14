@@ -16,7 +16,20 @@ class VehicleController {
         $limit = 7;
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
-        $totalVehicles = $this->vehicleModel->getVehiclesCount();
+        // Capture filter parameters
+        $filters = [];
+        if (!empty($_GET['search'])) {
+            $filters['search'] = trim($_GET['search']);
+        }
+        if (!empty($_GET['vehicle_type_id'])) {
+            $filters['vehicle_type_id'] = (int) $_GET['vehicle_type_id'];
+        }
+        if (!empty($_GET['status'])) {
+            $filters['status'] = trim($_GET['status']);
+        }
+
+        // Get total count with filters
+        $totalVehicles = empty($filters) ? $this->vehicleModel->getVehiclesCount() : $this->vehicleModel->getVehiclesCountFiltered($filters);
         
         $maxOffset = 0;
         if ($totalVehicles > 0) {
@@ -36,7 +49,9 @@ class VehicleController {
         // expose step to view so pagination component can use same step
         $step = $limit;
 
-        $vehicles = $this->vehicleModel->getAllVehicles($limit, $offset );
+        // Get filtered/paginated data
+        $vehicles = empty($filters) ? $this->vehicleModel->getAllVehicles($limit, $offset) : $this->vehicleModel->getAllVehiclesFiltered($limit, $offset, $filters);
+        
         $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Vehicles/VehiclesTable.php';
     }
