@@ -92,6 +92,30 @@ class Vehicle {
         return (int) ($row['cnt']);
     }
 
+    public function getAvailableVehiclesCount() {
+        $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE deleted = false AND status = 'available'";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt'] ?? 0);
+    }
+
+    public function getAverageBatteryLevel() {
+        $query = "SELECT AVG(battery_level) as avg FROM " . $this->table . " WHERE deleted = false";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (float) ($row['avg'] ?? 0.0);
+    }
+
+    public function getRentedVehiclesCount() {
+        $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE deleted = false AND status = 'rented'";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt'] ?? 0);
+    }
+
     public function getVehiclesCountFiltered($filters = []) {
         $where = ["deleted = false"];
         $params = [];

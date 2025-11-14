@@ -52,4 +52,12 @@
             return $stmt->fetch(PDO::FETCH_ASSOC);
         }
 
+        public function getLocationsCount() {
+            $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE deleted = false";
+            $stmt = $this->db->prepare($query);
+            $stmt->execute();
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            return (int) ($row['cnt'] ?? 0);
+        }
+
     }
