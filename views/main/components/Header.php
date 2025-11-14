@@ -31,13 +31,29 @@ if (!empty($_SESSION['user_id'])) {
   </div>
 
   <div class="flex items-center justify-end gap-3">
-  <div class="flex items-center gap-2 mr-2">
+  <div class="flex items-center gap-2 mr-2 relative">
     <?php $currentLang = function_exists('get_locale') ? get_locale() : 'en'; ?>
-    <label for="langSelect" class="sr-only"><?= htmlspecialchars(function_exists('t') ? t('language_label') : 'Language', ENT_QUOTES) ?></label>
-    <select id="langSelect" class="rounded-md border px-2 py-1 text-sm" onchange="changeLang(this.value)">
-      <option value="ca" <?= $currentLang === 'ca' ? 'selected' : '' ?>><?= htmlspecialchars(function_exists('t') ? t('catala') : 'Catala', ENT_QUOTES) ?></option>
-      <option value="en" <?= $currentLang === 'en' ? 'selected' : '' ?>><?= htmlspecialchars(function_exists('t') ? t('english') : 'English', ENT_QUOTES) ?></option>
-    </select>
+    <label class="sr-only"><?= htmlspecialchars(function_exists('t') ? t('language_label') : 'Language', ENT_QUOTES) ?></label>
+    <div class="relative">
+      <button id="langMenuButton" aria-haspopup="true" aria-expanded="false" type="button" class="inline-flex items-center gap-2 bg-white border border-gray-200 shadow-sm rounded-full px-3 py-1 text-sm font-medium hover:shadow-md transition">
+        <span class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full bg-gradient-to-br from-green-100 to-emerald-100 text-xs font-semibold"><?= htmlspecialchars(strtoupper($currentLang), ENT_QUOTES) ?></span>
+          <span class="hidden sm:inline text-neutral-700"><?php echo htmlspecialchars(function_exists('t') ? ($currentLang === 'ca' ? t('catala') : t('english')) : ($currentLang === 'ca' ? 'Català' : 'English'), ENT_QUOTES); ?></span>
+        </span>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-neutral-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clip-rule="evenodd"/></svg>
+      </button>
+
+      <div id="langMenu" class="hidden absolute right-0 mt-2 w-44 bg-white border border-gray-200 rounded-lg shadow-lg z-50 overflow-hidden">
+        <button type="button" onclick="changeLang('ca')" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-emerald-50 text-xs font-medium">CA</span>
+          <span class="text-sm text-neutral-700"><?= htmlspecialchars(function_exists('t') ? t('catala') : 'Català', ENT_QUOTES) ?></span>
+        </button>
+        <button type="button" onclick="changeLang('en')" class="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-md bg-sky-50 text-xs font-medium">EN</span>
+          <span class="text-sm text-neutral-700"><?= htmlspecialchars(function_exists('t') ? t('english') : 'English', ENT_QUOTES) ?></span>
+        </button>
+      </div>
+    </div>
   </div>
   <div id="userMenu" class="flex flex-col hidden fixed top-14 right-4 w-64 bg-[#e7fff6] border border-[#8bd7bf] rounded-lg shadow-md p-3 z-30">
       <div class="px-3 py-2 rounded-md">
@@ -108,6 +124,17 @@ if (!empty($_SESSION['user_id'])) {
 
       const userMenuButton = document.getElementById('userMenuButton');
       const userMenu = document.getElementById('userMenu');
+      const langMenuButton = document.getElementById('langMenuButton');
+      const langMenu = document.getElementById('langMenu');
+
+      if (langMenuButton) {
+        langMenuButton.addEventListener('click', (e) => {
+          e.stopPropagation();
+          const expanded = langMenuButton.getAttribute('aria-expanded') === 'true';
+          langMenuButton.setAttribute('aria-expanded', String(!expanded));
+          if (langMenu) langMenu.classList.toggle('hidden');
+        });
+      }
 
       userMenuButton.addEventListener('click', () => {
         userMenu.classList.toggle('hidden');
@@ -121,6 +148,12 @@ if (!empty($_SESSION['user_id'])) {
         // with the panel.
         if (!userMenu.contains(e.target) && !userMenuButton.contains(e.target) && !(userSettingsPanel && userSettingsPanel.contains(e.target))) {
           userMenu.classList.add('hidden');
+        }
+
+        // Close language menu if click is outside it
+        if (langMenu && !langMenu.contains(e.target) && !(langMenuButton && langMenuButton.contains(e.target))) {
+          langMenu.classList.add('hidden');
+          if (langMenuButton) langMenuButton.setAttribute('aria-expanded', 'false');
         }
       });
     </script>
