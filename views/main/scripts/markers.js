@@ -20,34 +20,25 @@ const BOTTOM = document.getElementById('bottomBar');
 let lastMarker;
 let currentVehicleData = null;
 
-// ===== NOU CODI =====
-// Aquesta funció controla la visibilitat de la barra
 function handleBarVisibility() {
   const isDesktop = window.matchMedia('(min-width: 768px)').matches;
   const isBarExpanded = BOTTOM.classList.contains('expanded');
 
   if (isDesktop) {
-    // Si som a ESCRIPTORI
     if (isBarExpanded) {
-      // i la barra està oberta (mostrant info), la deixem 'flex'
       BOTTOM.style.display = 'flex';
     } else {
-      // i la barra està tancada, l'amaguem
       BOTTOM.style.display = 'none';
     }
   } else {
-    // Si som a MÒBIL
-    // Sempre la mostrem (per al botó QR)
     BOTTOM.style.display = 'flex';
   }
 }
 
-// S'executa al carregar la pàgina
 handleBarVisibility();
 
-// I s'executa CADA COP que es canvia la mida de la finestra
 window.addEventListener('resize', handleBarVisibility);
-// ===== FI NOU CODI =====
+
 
 
 function toggleActiveMarker(marker) {
@@ -95,7 +86,6 @@ export function createCenterMarker(map, center) {
     });
 }
 
-// Fetch vehicles with locations from the API
 async function fetchVehiclesWithLocations() {
   try {
     const response = await fetch('/api/vehicles/locations');
@@ -142,10 +132,10 @@ export async function createVehicleMarkers(map) {
     // Expand bottom bar on marker click
     m.addListener('click', () => {
       if (m == lastMarker) return;
-      
+
       // Store current vehicle data
       currentVehicleData = vehicle;
-      
+
       BOTTOM.classList.add('sliding-down');
 
       // Show the bottom bar on desktop
@@ -157,10 +147,10 @@ export async function createVehicleMarkers(map) {
         SELECTED.classList.remove('hidden');
         BOTTOM.classList.remove('sliding-down');
         BOTTOM.classList.remove('get-up');
-        
+
         // Update the bottom bar with vehicle data
         updateBottomBarWithVehicleData(vehicle);
-        
+
         toggleActiveMarker(m);
       }, 200);
     });
@@ -171,7 +161,7 @@ export async function createVehicleMarkers(map) {
   return markers;
 }
 
-// Update bottom bar with real vehicle data
+
 function updateBottomBarWithVehicleData(vehicle) {
   // Update license plate
   const plateElement = document.getElementById('car_plate');
@@ -185,8 +175,6 @@ function updateBottomBarWithVehicleData(vehicle) {
     rangeElement.textContent = `${vehicle.current_range || 0} Km`;
   }
 
-  // You can add more updates here for other vehicle information
-  console.log('Vehicle data:', vehicle);
 }
 
 export function createRandomMarkers(map, center, count, radiusMeters) {
@@ -214,7 +202,7 @@ export function createRandomMarkers(map, center, count, radiusMeters) {
       setTimeout(() => {
         BOTTOM.classList.add('expanded'); // <-- Li diem que està oberta
         SELECTED.classList.add('grid');
-        SELECTED.classList.remove('hidden'); 
+        SELECTED.classList.remove('hidden');
         BOTTOM.classList.remove('sliding-down');
         BOTTOM.classList.remove('get-up');
         toggleActiveMarker(m);
@@ -234,15 +222,15 @@ export function bottomBarToggle(map) {
       BOTTOM.classList.add('sliding-down');
       setTimeout(() => {
         SELECTED.classList.remove('grid');
-        SELECTED.classList.add('hidden'); 
+        SELECTED.classList.add('hidden');
         BOTTOM.classList.remove('sliding-down');
         BOTTOM.classList.remove('expanded'); // <-- Li diem que s'ha tancat
         BOTTOM.classList.remove('get-up');
 
         // MODIFICAT: Cridem a la funció principal
         // Aquesta funció decidirà si s'ha d'amagar (escriptori) o no (mòbil)
-        handleBarVisibility(); 
-        
+        handleBarVisibility();
+
         toggleActiveMarker(lastMarker);
       }, 200);
     }
@@ -256,7 +244,7 @@ export function bottomBarToggle(map) {
 
       setTimeout(() => {
         SELECTED.classList.remove('grid');
-        SELECTED.classList.add('hidden'); 
+        SELECTED.classList.add('hidden');
         BOTTOM.classList.remove('sliding-down');
         BOTTOM.classList.remove('expanded'); // <-- Li diem que s'ha tancat
 
@@ -337,6 +325,6 @@ export function paintCoords(map, zones) {
     });
     window.circles.push(circle);
   });
-  
-  
+
+
 }
