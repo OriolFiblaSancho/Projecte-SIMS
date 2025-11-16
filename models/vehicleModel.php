@@ -10,7 +10,51 @@ class Vehicle {
         $this->db = Database::getInstance()->getConnection();
     }
 
-    public function getAllVehicles() {
+        public function getAllVehicles($limit = 7, $offset = 0) {
+                $query = "SELECT 
+                    v.*,
+                    l.latitude,
+                    l.longitude,
+                    l.datetime as location_datetime
+                  FROM " . $this->table . " v
+                  LEFT JOIN (
+                    SELECT vehicle_id, latitude, longitude, datetime,
+                           ROW_NUMBER() OVER (PARTITION BY vehicle_id ORDER BY datetime DESC) as rn
+                    FROM locations
+                    WHERE deleted = false
+                  ) l ON v.vehicle_id = l.vehicle_id AND l.rn = 1
+                                    WHERE v.deleted = false ORDER BY v.vehicle_id ASC LIMIT :limit OFFSET :offset;";
+        $stmt = $this->db->prepare($query);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getAllVehiclesFiltered($limit = 7, $offset = 0, $filters = []) {
+        $where = ["v.deleted = false"];
+        $params = [];
+
+        // Text search across model and license plate
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $where[] = "(v.model ILIKE :search OR v.license_plate ILIKE :search)";
+            $params[':search'] = $search;
+        }
+
+        // Filter by vehicle type
+        if (!empty($filters['vehicle_type_id'])) {
+            $where[] = "v.vehicle_type_id = :vehicle_type_id";
+            $params[':vehicle_type_id'] = $filters['vehicle_type_id'];
+        }
+
+        // Filter by status
+        if (!empty($filters['status'])) {
+            $where[] = "v.status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        $whereClause = implode(' AND ', $where);
         $query = "SELECT 
                     v.*,
                     l.latitude,
@@ -23,10 +67,91 @@ class Vehicle {
                     FROM locations
                     WHERE deleted = false
                   ) l ON v.vehicle_id = l.vehicle_id AND l.rn = 1
-                  WHERE v.deleted = false";
+                  WHERE {$whereClause} 
+                  ORDER BY v.vehicle_id ASC 
+                  LIMIT :limit OFFSET :offset";
+        
+        $stmt = $this->db->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $stmt->execute();
+        
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public function getVehiclesCount() {
+        $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE deleted = false";
         $stmt = $this->db->prepare($query);
         $stmt->execute();
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt']);
+    }
+
+    public function getAvailableVehiclesCount() {
+        $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE deleted = false AND status = 'available'";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt'] ?? 0);
+    }
+
+    public function getAverageBatteryLevel() {
+        $query = "SELECT AVG(battery_level) as avg FROM " . $this->table . " WHERE deleted = false";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (float) ($row['avg'] ?? 0.0);
+    }
+
+    public function getRentedVehiclesCount() {
+        $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE deleted = false AND status = 'rented'";
+        $stmt = $this->db->prepare($query);
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        return (int) ($row['cnt'] ?? 0);
+    }
+
+    public function getVehiclesCountFiltered($filters = []) {
+        $where = ["deleted = false"];
+        $params = [];
+
+        // Text search across model and license plate
+        if (!empty($filters['search'])) {
+            $search = '%' . $filters['search'] . '%';
+            $where[] = "(model ILIKE :search OR license_plate ILIKE :search)";
+            $params[':search'] = $search;
+        }
+
+        // Filter by vehicle type
+        if (!empty($filters['vehicle_type_id'])) {
+            $where[] = "vehicle_type_id = :vehicle_type_id";
+            $params[':vehicle_type_id'] = $filters['vehicle_type_id'];
+        }
+
+        // Filter by status
+        if (!empty($filters['status'])) {
+            $where[] = "status = :status";
+            $params[':status'] = $filters['status'];
+        }
+
+        $whereClause = implode(' AND ', $where);
+        $query = "SELECT COUNT(*) as cnt FROM " . $this->table . " WHERE {$whereClause}";
+        
+        $stmt = $this->db->prepare($query);
+        
+        foreach ($params as $key => $value) {
+            $stmt->bindValue($key, $value);
+        }
+        
+        $stmt->execute();
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        return (int) ($row['cnt'] ?? 0);
     }
 
     public function getById($id) {

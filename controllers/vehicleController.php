@@ -15,7 +15,45 @@ class VehicleController {
     }
 
     public function getAll() {
-        $vehicles = $this->vehicleModel->getAllVehicles();
+        $limit = 7;
+        $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
+
+        // Capture filter parameters
+        $filters = [];
+        if (!empty($_GET['search'])) {
+            $filters['search'] = trim($_GET['search']);
+        }
+        if (!empty($_GET['vehicle_type_id'])) {
+            $filters['vehicle_type_id'] = (int) $_GET['vehicle_type_id'];
+        }
+        if (!empty($_GET['status'])) {
+            $filters['status'] = trim($_GET['status']);
+        }
+
+        // Get total count with filters
+        $totalVehicles = empty($filters) ? $this->vehicleModel->getVehiclesCount() : $this->vehicleModel->getVehiclesCountFiltered($filters);
+        
+        $maxOffset = 0;
+        if ($totalVehicles > 0) {
+            $pages = (int) ceil($totalVehicles / $limit);
+            $maxOffset = max(0, ($pages - 1) * $limit);
+        }
+
+        if ($offset > $maxOffset) {
+            $offset = $maxOffset;
+        }
+
+        // Align offset to page size so offset always refers to page boundaries
+        if ($limit > 0) {
+            $offset = (int) floor($offset / $limit) * $limit;
+        }
+
+        // expose step to view so pagination component can use same step
+        $step = $limit;
+
+        // Get filtered/paginated data
+        $vehicles = empty($filters) ? $this->vehicleModel->getAllVehicles($limit, $offset) : $this->vehicleModel->getAllVehiclesFiltered($limit, $offset, $filters);
+        
         $vehicleTypes = $this->vehicleTypeModel->getAllVehiclesTypes();
         require_once __DIR__ . '/../views/main/components/AdminMenuComponents/Vehicles/VehiclesTable.php';
     }
@@ -52,11 +90,9 @@ class VehicleController {
         }
     
     }
-    public function delete($id = null) {
-        if ($id === null) {
-            $id = $_GET['id'] ?? null;
-        }
-
+    public function delete() {
+        $id = $_GET['id'];
+        
         if (!$id){
             Router::redirect('/main?admin=ViewVehicles');
         }
@@ -105,10 +141,9 @@ class VehicleController {
         Router::redirect('/main?admin=ViewVehicles');
     }
 
-    public function view($id = null) {
-        if ($id === null) {
-            $id = $_GET['id'] ?? null;
-        }
+    public function view($id) {
+        $id = $_GET['id'] ?? null;
+        
 
         if (!$id) {
             $_SESSION['error'] = t('vehicle_id_missing');

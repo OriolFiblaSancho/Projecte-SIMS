@@ -1,4 +1,6 @@
-<div class="flex flex-col rounded-md p-3 max-h-[60vh] overflow-auto">
+<div class="flex flex-col rounded-md p-3 overflow-auto">
+    <?php $paginationBase = '/main?admin=ViewVehicles'; include_once __DIR__ . '/../../../../common/components/filterVehicles.php'; ?>
+    
     <div class="flex">
         <a href="?admin=FormVehicles">
             <button class="bg-[#ddfae8] text-[#0D6344] border border-[#0D6344] rounded-md p-1 hover:bg-[#0D6344] hover:text-white flex items-center gap-1">
@@ -82,4 +84,6 @@
             </tbody>
         </table>
     </div>
+    <?php include_once __DIR__ . '/../../../../common/components/paginationButtons.php'; ?>
+
 </div>
