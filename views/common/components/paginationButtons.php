@@ -6,7 +6,6 @@ $isLast = isset($maxOffset) ? ($offset >= $maxOffset) : false;
 $nextOffset = $isLast ? $offset : $offset + $step;
 $sep = (strpos($paginationBase, '?') !== false) ? '&' : '?';
 
-// Build query string preserving all existing GET parameters except offset
 $queryParams = [];
 foreach ($_GET as $key => $value) {
     if ($key !== 'offset' && !empty($value)) {
@@ -14,7 +13,6 @@ foreach ($_GET as $key => $value) {
     }
 }
 
-// Function to build pagination URL with all parameters
 function buildPaginationUrl($base, $separator, $offset, $params) {
     $url = $base . $separator . 'offset=' . $offset;
     foreach ($params as $key => $value) {
