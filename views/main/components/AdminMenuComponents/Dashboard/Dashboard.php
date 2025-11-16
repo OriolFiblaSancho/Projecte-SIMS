@@ -2,37 +2,37 @@
     <?php if (isset($data['error'])): ?>
         <p>Error loading dashboard data: <?php echo htmlspecialchars($data['error']); ?></p>
     <?php else: ?>
-    <h3 class="text-lg font-semibold mb-4">Dashboard Overview</h3>
+    <h3 class="text-lg font-semibold mb-4"><?= htmlspecialchars(t('dashboard_overview'), ENT_QUOTES) ?></h3>
     <div class="grid grid-cols-3 gap-4">
         <div class="bg-white p-4 rounded shadow">
-            <h4 class="text-md font-medium">Total Users</h4>
+            <h4 class="text-md font-medium"><?= htmlspecialchars(t('total_users'), ENT_QUOTES) ?></h4>
             <p class="text-2xl font-bold text-[#0D6344]"><?php echo htmlspecialchars($data['totalUsers']); ?></p>
         </div>
         <div class="bg-white p-4 rounded shadow">
-            <h4 class="text-md font-medium">Total Vehicles</h4>
+            <h4 class="text-md font-medium"><?= htmlspecialchars(t('total_vehicles'), ENT_QUOTES) ?></h4>
             <p class="text-2xl font-bold text-[#0D6344]"><?php echo htmlspecialchars($data['totalVehicles']); ?></p>
         </div>
         <div class="bg-white p-4 rounded shadow">
-            <h4 class="text-md font-medium">Total Geofencing Zones</h4>
+            <h4 class="text-md font-medium"><?= htmlspecialchars(t('total_geofencing_zones'), ENT_QUOTES) ?></h4>
             <p class="text-2xl font-bold text-[#0D6344]"><?php echo htmlspecialchars($data['totalZones']); ?></p>
         </div>
         <div class="bg-white p-4 rounded shadow">
-            <h4 class="text-md font-medium">Total Balance</h4>
+            <h4 class="text-md font-medium"><?= htmlspecialchars(t('total_balance'), ENT_QUOTES) ?></h4>
             <p class="text-2xl font-bold text-[#0D6344]">€ <?php echo htmlspecialchars(number_format($data['totalBalance'], 2)); ?></p>
         </div>
         <div class="bg-white p-4 rounded shadow">
-            <h4 class="text-md font-medium">Verified Users</h4>
+            <h4 class="text-md font-medium"><?= htmlspecialchars(t('verified_users'), ENT_QUOTES) ?></h4>
             <p class="text-2xl font-bold text-[#0D6344]"><?php echo htmlspecialchars($data['verifiedUsers']); ?></p>
         </div>
         <div class="bg-white p-4 rounded shadow">
-            <h4 class="text-md font-medium">Available Vehicles</h4>
+            <h4 class="text-md font-medium"><?= htmlspecialchars(t('available_vehicles'), ENT_QUOTES) ?></h4>
             <p class="text-2xl font-bold text-[#0D6344]"><?php echo htmlspecialchars($data['availableVehicles']); ?></p>
         </div>
     </div>
     <div class="mt-6">
-        <h4 class="text-lg font-semibold mb-4">User Registrations by Month</h4>
+        <h4 class="text-lg font-semibold mb-4"><?= htmlspecialchars(t('user_registrations_by_month'), ENT_QUOTES) ?></h4>
         <?php
-        $months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        $months = [t('month_jan'), t('month_feb'), t('month_mar'), t('month_apr'), t('month_may'), t('month_jun'), t('month_jul'), t('month_aug'), t('month_sep'), t('month_oct'), t('month_nov'), t('month_dec')];
         $maxVal = max($data['usersByMonth']);
         $scale = $maxVal > 0 ? 120 / $maxVal : 0;
         $barWidth = 30;

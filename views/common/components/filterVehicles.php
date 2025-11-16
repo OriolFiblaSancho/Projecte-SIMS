@@ -12,26 +12,26 @@ $vehicleTypes = isset($vehicleTypes) ? $vehicleTypes : [];
         
         <!-- Search Input -->
         <div class="flex-1 min-w-[200px]">
-            <label for="search" class="block text-sm font-medium text-gray-700 mb-1">Search</label>
+            <label for="search" class="block text-sm font-medium text-gray-700 mb-1"><?php echo t('filter_search_label'); ?></label>
             <input 
                 type="text" 
                 id="search" 
                 name="search" 
                 value="<?php echo $currentSearch; ?>"
-                placeholder="Model, license plate..."
+                placeholder="<?php echo t('filter_vehicle_placeholder'); ?>"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0D6344] focus:border-transparent text-sm"
             >
         </div>
 
         <!-- Vehicle Type Filter -->
         <div class="flex-1 min-w-[150px]">
-            <label for="vehicle_type_id" class="block text-sm font-medium text-gray-700 mb-1">Vehicle Type</label>
+            <label for="vehicle_type_id" class="block text-sm font-medium text-gray-700 mb-1"><?php echo t('vehicle_form_type_label'); ?></label>
             <select 
                 id="vehicle_type_id" 
                 name="vehicle_type_id"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0D6344] focus:border-transparent text-sm"
             >
-                <option value="">All Types</option>
+                <option value=""><?php echo t('filter_all_types'); ?></option>
                 <?php foreach ($vehicleTypes as $type): ?>
                     <option value="<?php echo htmlspecialchars($type['type_id']); ?>" <?php echo $currentVehicleType == $type['type_id'] ? 'selected' : ''; ?>>
                         <?php echo htmlspecialchars($type['name']); ?>
@@ -42,17 +42,17 @@ $vehicleTypes = isset($vehicleTypes) ? $vehicleTypes : [];
 
         <!-- Status Filter -->
         <div class="flex-1 min-w-[150px]">
-            <label for="status" class="block text-sm font-medium text-gray-700 mb-1">Status</label>
+            <label for="status" class="block text-sm font-medium text-gray-700 mb-1"><?php echo t('status_label'); ?></label>
             <select 
                 id="status" 
                 name="status"
                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-[#0D6344] focus:border-transparent text-sm"
             >
-                <option value="">All Status</option>
-                <option value="available" <?php echo $currentStatus === 'available' ? 'selected' : ''; ?>>Available</option>
-                <option value="reserved" <?php echo $currentStatus === 'reserved' ? 'selected' : ''; ?>>Reserved</option>
-                <option value="in_use" <?php echo $currentStatus === 'in_use' ? 'selected' : ''; ?>>In Use</option>
-                <option value="out_of_service" <?php echo $currentStatus === 'out_of_service' ? 'selected' : ''; ?>>Out of Service</option>
+                <option value=""><?php echo t('filter_all_status'); ?></option>
+                <option value="available" <?php echo $currentStatus === 'available' ? 'selected' : ''; ?>><?php echo t('vehicle_status_available'); ?></option>
+                <option value="reserved" <?php echo $currentStatus === 'reserved' ? 'selected' : ''; ?>><?php echo t('vehicle_status_reserved'); ?></option>
+                <option value="in_use" <?php echo $currentStatus === 'in_use' ? 'selected' : ''; ?>><?php echo t('vehicle_status_in_use'); ?></option>
+                <option value="out_of_service" <?php echo $currentStatus === 'out_of_service' ? 'selected' : ''; ?>><?php echo t('vehicle_status_out_of_service'); ?></option>
             </select>
         </div>
 
@@ -62,13 +62,13 @@ $vehicleTypes = isset($vehicleTypes) ? $vehicleTypes : [];
                 type="submit"
                 class="px-4 py-2 bg-[#0D6344] text-white rounded-md hover:bg-[#0a4d33] transition-colors duration-200 text-sm font-medium"
             >
-                Apply Filters
+                <?php echo t('filter_apply_filters'); ?>
             </button>
             <a 
                 href="<?php echo $filterBase; ?>"
                 class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors duration-200 text-sm font-medium"
             >
-                Clear
+                <?php echo t('filter_clear'); ?>
             </a>
         </div>
     </form>
