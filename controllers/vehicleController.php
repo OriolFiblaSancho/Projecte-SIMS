@@ -18,7 +18,6 @@ class VehicleController {
         $limit = 7;
         $offset = isset($_GET['offset']) ? (int) $_GET['offset'] : 0;
 
-        // Capture filter parameters
         $filters = [];
         if (!empty($_GET['search'])) {
             $filters['search'] = trim($_GET['search']);
@@ -30,7 +29,6 @@ class VehicleController {
             $filters['status'] = trim($_GET['status']);
         }
 
-        // Get total count with filters
         $totalVehicles = empty($filters) ? $this->vehicleModel->getVehiclesCount() : $this->vehicleModel->getVehiclesCountFiltered($filters);
         
         $maxOffset = 0;
@@ -43,12 +41,6 @@ class VehicleController {
             $offset = $maxOffset;
         }
 
-        // Align offset to page size so offset always refers to page boundaries
-        if ($limit > 0) {
-            $offset = (int) floor($offset / $limit) * $limit;
-        }
-
-        // expose step to view so pagination component can use same step
         $step = $limit;
 
         // Get filtered/paginated data
