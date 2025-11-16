@@ -32,6 +32,3 @@ $router->get('/geofencing/view/:id', 'geofencingController@view');
 $router->get('/geofencing/edit/:id', 'geofencingController@edit');
 $router->post('/geofencing/update', 'geofencingController@update');
 $router->get('/geofencing/delete/:id', 'geofencingController@delete');
-
-// Pagination
-$router->get('/main?admin=ViewVehicles/:offset', 'vehicleController@getAll');

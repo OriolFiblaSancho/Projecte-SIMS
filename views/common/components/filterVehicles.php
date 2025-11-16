@@ -3,14 +3,13 @@ $currentSearch = isset($_GET['search']) ? htmlspecialchars($_GET['search']) : ''
 $currentVehicleType = isset($_GET['vehicle_type_id']) ? htmlspecialchars($_GET['vehicle_type_id']) : '';
 $currentStatus = isset($_GET['status']) ? htmlspecialchars($_GET['status']) : '';
 $filterBase = isset($paginationBase) ? $paginationBase : '/main?admin=ViewVehicles';
-// Vehicle types should be passed from controller
+
 $vehicleTypes = isset($vehicleTypes) ? $vehicleTypes : [];
 ?>
 <div class="bg-white border border-gray-300 rounded-lg p-4 mb-4 shadow-sm">
     <form method="GET" action="/main" class="flex flex-wrap gap-3 items-end">
         <input type="hidden" name="admin" value="ViewVehicles">
-        
-        <!-- Search Input -->
+
         <div class="flex-1 min-w-[200px]">
             <label for="search" class="block text-sm font-medium text-gray-700 mb-1"><?php echo t('filter_search_label'); ?></label>
             <input 
@@ -23,7 +22,6 @@ $vehicleTypes = isset($vehicleTypes) ? $vehicleTypes : [];
             >
         </div>
 
-        <!-- Vehicle Type Filter -->
         <div class="flex-1 min-w-[150px]">
             <label for="vehicle_type_id" class="block text-sm font-medium text-gray-700 mb-1"><?php echo t('vehicle_form_type_label'); ?></label>
             <select 
@@ -40,7 +38,6 @@ $vehicleTypes = isset($vehicleTypes) ? $vehicleTypes : [];
             </select>
         </div>
 
-        <!-- Status Filter -->
         <div class="flex-1 min-w-[150px]">
             <label for="status" class="block text-sm font-medium text-gray-700 mb-1"><?php echo t('status_label'); ?></label>
             <select 
@@ -56,7 +53,6 @@ $vehicleTypes = isset($vehicleTypes) ? $vehicleTypes : [];
             </select>
         </div>
 
-        <!-- Action Buttons -->
         <div class="flex gap-2">
             <button 
                 type="submit"
