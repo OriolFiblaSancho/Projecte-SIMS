@@ -1,4 +1,4 @@
-<div class="flex flex-col rounded-md p-3 max-h-[60vh] overflow-auto">
+<div class="flex flex-col rounded-md p-3 overflow-auto">
     <?php $paginationBase = '/main?admin=ViewUsers'; include_once __DIR__ . '/../../../../common/components/filterUsers.php'; ?>
     
     <div class="flex">
