@@ -1,7 +1,7 @@
 <?php 
     require_once __DIR__ . '/../models/locationModel.php';
     require_once __DIR__ . '/../config/router.php';
-    
+    require_once __DIR__ . '/../helpers/i18n.php';
     class LocationController {
         private $locationModel;
 
@@ -21,12 +21,12 @@
             if ($result) {
                 echo json_encode([
                     'success' => true,
-                    'message' => 'Location saved successfully.'
+                    'message' => t('location_saved')
                 ]);
             } else {
                 echo json_encode([
                     'success' => false,
-                    'message' => 'Error saving location.'
+                    'message' => t('error_saving_location')
                 ]);
             }
         }

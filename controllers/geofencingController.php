@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../models/geofencingModel.php';
 require_once __DIR__ . '/../config/router.php';
+require_once __DIR__ . '/../helpers/i18n.php';
+set_locale();
 
 class GeofencingController {
     private $model;
@@ -73,10 +75,10 @@ class GeofencingController {
         if (empty($errors)) {
             $result = $this->model->create($_POST);
             if ($result) {
-                $_SESSION['success'] = "Zona creada correctament!";
+                $_SESSION['success'] = t('zone_created');
                 Router::redirect('/main?admin=ViewGeofencing');
             } else {
-                $_SESSION['error'] = "Error creant la zona";
+                $_SESSION['error'] = t('error_creating_zone');
                 $_SESSION['old'] = $_POST;
             }
         } else {
@@ -92,7 +94,7 @@ class GeofencingController {
         if (!$id) return;
         $zone = $this->model->getById($id);
         if (!$zone) {
-            echo "Zona no trobada.";
+            echo htmlspecialchars(t('zone_not_found') , ENT_QUOTES);
             return;
         }
         $zoneData = $zone; // associative for view
@@ -104,7 +106,7 @@ class GeofencingController {
         if (!$id) return;
         $zone = $this->model->getById($id);
         if (!$zone) {
-            echo "Zona no trobada.";
+            echo htmlspecialchars(t('zone_not_found') , ENT_QUOTES);
             return;
         }
 
@@ -120,7 +122,7 @@ class GeofencingController {
         }
         $id = $_POST['zone_id'] ?? null;
         if (!$id) {
-            $_SESSION['error'] = 'Id de zona faltant.';
+            $_SESSION['error'] = t('zone_id_missing');
             Router::redirect('/main?admin=ViewGeofencing');
         }
 
@@ -128,9 +130,9 @@ class GeofencingController {
         if (empty($errors)) {
             $ok = $this->model->update($id, $_POST);
             if ($ok) {
-                $_SESSION['success'] = 'Zona actualitzada.';
+                $_SESSION['success'] = t('zone_updated');
             } else {
-                $_SESSION['error'] = 'Error actualitzant la zona.';
+                $_SESSION['error'] = t('error_updating_zone');
             }
             Router::redirect('/main?admin=ViewGeofencing');
         }
@@ -145,9 +147,9 @@ class GeofencingController {
         if (!$id) Router::redirect('/main?admin=ViewGeofencing');
         $ok = $this->model->softDelete($id);
         if ($ok) {
-            $_SESSION['success'] = 'Zona eliminada.';
+            $_SESSION['success'] = t('zone_deleted');
         } else {
-            $_SESSION['error'] = 'Error eliminant la zona.';
+            $_SESSION['error'] = t('error_deleting_zone');
         }
         Router::redirect('/main?admin=ViewGeofencing');
     }
@@ -156,19 +158,19 @@ class GeofencingController {
         $errors = [];
 
         if (empty($data['zone_name'])) {
-            $errors['zone_name'] = "El nom de la zona és obligatori.";
+            $errors['zone_name'] = t('zone_name_required');
         }
         if (!isset($data['center_latitude']) || !is_numeric($data['center_latitude'])) {
-            $errors['center_latitude'] = "La latitud ha de ser un número.";
+            $errors['center_latitude'] = t('center_latitude_numeric');
         }
         if (!isset($data['center_longitude']) || !is_numeric($data['center_longitude'])) {
-            $errors['center_longitude'] = "La longitud ha de ser un número.";
+            $errors['center_longitude'] = t('center_longitude_numeric');
         }
         if (!isset($data['radius_meters']) || !is_numeric($data['radius_meters']) || $data['radius_meters'] <= 0) {
-            $errors['radius_meters'] = "El radi ha de ser major que 0.";
+            $errors['radius_meters'] = t('radius_positive');
         }
         if (!isset($data['max_speed_allowed']) || !is_numeric($data['max_speed_allowed'])) {
-            $errors['max_speed_allowed'] = "La velocitat màxima ha de ser un número.";
+            $errors['max_speed_allowed'] = t('max_speed_numeric');
         }
         $allowedTypes = ['school','hospital','historic_center','residential_area'];
         if (empty($data['type']) || !in_array($data['type'], $allowedTypes)) {

@@ -47,7 +47,7 @@ function showCookieModal() {
     'We use cookies to improve your experience on our website. ' +
     'By clicking "Accept", you agree to the use of all cookies. ' +
     'You can check our ' +
-    '<a href="/views/pages/cookies.html" style="color: #3b82f6; text-decoration: underline;">Cookie Policy</a> ' +
+    '<a href="/views/pages/cookies.php" style="color: #3b82f6; text-decoration: underline;">Cookie Policy</a> ' +
     'for more information.</p>' +
     '<div style="display: flex; gap: 1rem; flex-wrap: wrap;">' +
     '<button id="acceptCookies" style="flex: 1; min-width: 120px; background-color: #3b82f6; color: white; padding: 0.75rem 1.5rem; border-radius: 8px; border: none; font-weight: 600; cursor: pointer;">Accept</button>' +

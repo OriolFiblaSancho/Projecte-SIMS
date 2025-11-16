@@ -7,7 +7,7 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-4">
                     <path fill-rule="evenodd" d="M12 3.75a.75.75 0 0 1 .75.75v6.75h6.75a.75.75 0 0 1 0 1.5h-6.75v6.75a.75.75 0 0 1-1.5 0v-6.75H4.5a.75.75 0 0 1 0-1.5h6.75V4.5a.75.75 0 0 1 .75-.75Z" clip-rule="evenodd" />
                 </svg>
-                Add User
+                <?= htmlspecialchars(t('user_form_add_title'), ENT_QUOTES) ?>
             </button>
         </a>
     </div>
@@ -16,19 +16,19 @@
         <table class=" min-w-full divide-y divide-gray-200 bg-white shadow-sm  overflow-hidden ">
             <thead class="bg-[#0D6344] text-white text-left text-xs font-semibold uppercase">
                 <tr>
-                    <th class="px-4 py-2">Name</th>
-                    <th class="px-4 py-2">Email</th>
-                    <th class="px-4 py-2">Username</th>
-                    <th class="px-4 py-2">Type</th>
-                    <th class="px-4 py-2">Balance</th>
-                    <th class="px-4 py-2">Status</th>
-                    <th class="px-4 py-2" colspan="3">Actions</th>
+                    <th class="px-4 py-2"><?= htmlspecialchars(t('user_name_label'), ENT_QUOTES) ?></th>
+                    <th class="px-4 py-2"><?= htmlspecialchars(t('email_label'), ENT_QUOTES) ?></th>
+                    <th class="px-4 py-2"><?= htmlspecialchars(t('username_label'), ENT_QUOTES) ?></th>
+                    <th class="px-4 py-2"><?= htmlspecialchars(t('user_type_label'), ENT_QUOTES) ?></th>
+                    <th class="px-4 py-2"><?= htmlspecialchars(t('balance_label'), ENT_QUOTES) ?></th>
+                    <th class="px-4 py-2"><?= htmlspecialchars(t('status_label'), ENT_QUOTES) ?></th>
+                    <th class="px-4 py-2" colspan="3"><?= htmlspecialchars(t('users_table_header_actions'), ENT_QUOTES) ?></th>
                 </tr>
             </thead>
             <tbody class="bg-white divide-y divide-gray-10 border border-gray-300">
                 <?php if (empty($users)): ?>
                     <tr class="odd:bg-white even:bg-gray-50">
-                        <td class="px-4 py-6 text-sm text-gray-500 text-center" colspan="8">No users found.</td>
+                        <td class="px-4 py-6 text-sm text-gray-500 text-center" colspan="8"><?= htmlspecialchars(t('users_table_no_data'), ENT_QUOTES) ?></td>
                     </tr>
                 <?php else: ?>
                     <?php foreach ($users as $u): ?>
@@ -36,12 +36,12 @@
                             <td class="px-4 py-3 text-sm font-medium text-gray-800"><?php echo htmlspecialchars(($u['name'] ?? '') . ' ' . ($u['last_name'] ?? '')); ?></td>
                             <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($u['email'] ?? ''); ?></td>
                             <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($u['username'] ?? ''); ?></td>
-                            <td class="px-4 py-3 text-sm text-gray-700"><?php echo htmlspecialchars($u['user_type'] ?? ''); ?></td>
+                            <td class="px-4 py-3 text-sm text-gray-700"><?php $utVal = $u['user_type'] ?? ''; echo htmlspecialchars(t('user_type_' . $utVal), ENT_QUOTES); ?></td>
                             <td class="px-4 py-3 text-sm text-gray-700">€ <?php echo htmlspecialchars(number_format((float)($u['balance'] ?? 0), 2)); ?></td>
 
                             <td class="px-4 py-3 text-sm">
                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                                    <?php echo htmlspecialchars($u['status'] ?? ''); ?>
+                                    <?php $stVal = isset($u['status']) ? str_replace('-', '_', $u['status']) : ''; echo htmlspecialchars(t('status_' . $stVal), ENT_QUOTES); ?>
                                 </span>
                             </td>
                             <td>
@@ -70,7 +70,7 @@
                             <td>
                                 <!-- Delete Button -->
                                 <a href="/users/delete/<?= $u['user_id'] ?>">
-                                <button class="px-2 py-3" onclick="return confirm('Are you sure you want to delete this user?');">
+                                <button class="px-2 py-3" onclick="return confirm('<?= htmlspecialchars(t('confirm_delete_user'), ENT_QUOTES) ?>');">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" fill="currentColor" class="size-4">
                                         <path fill-rule="evenodd" d="M5 3.25V4H2.75a.75.75 0 0 0 0 1.5h.3l.815 8.15A1.5 1.5 0 0 0 5.357 15h5.285a1.5 1.5 0 0 0 1.493-1.35l.815-8.15h.3a.75.75 0 0 0 0-1.5H11v-.75A2.25 2.25 0 0 0 8.75 1h-1.5A2.25 2.25 0 0 0 5 3.25Zm2.25-.75a.75.75 0 0 0-.75.75V4h3v-.75a.75.75 0 0 0-.75-.75h-1.5ZM6.05 6a.75.75 0 0 1 .787.713l.275 5.5a.75.75 0 0 1-1.498.075l-.275-5.5A.75.75 0 0 1 6.05 6Zm3.9 0a.75.75 0 0 1 .712.787l-.275 5.5a.75.75 0 0 1-1.498-.075l.275-5.5a.75.75 0 0 1 .786-.711Z" clip-rule="evenodd" />
                                     </svg>

@@ -15,7 +15,7 @@
                 $id = $_GET['id'] ?? null;
                 $vc->view($id);
             }
-            
+            //busca la palabra User en la variable adminSection si la encuentra muestra la posicion si no muestra falso
         } else if (strpos($adminSection, 'User') !== false) {
             require_once __DIR__ . '/./userController.php';
             $uc = new UserController();

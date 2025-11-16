@@ -15,7 +15,7 @@
 
     <!-- Actions (second row): container for Scan + Reserve -->
     <div id="car_actions">
-      <a href="/views/scan/pages/scan.html" class="md:hidden">
+      <a href="/views/scan/pages/scan.php" class="md:hidden">
         <button id="scanBtnInline" class="scan-btn scan-inline" aria-label="Scan QR">
           <span class="scan-icon">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 md:hidden">
@@ -25,15 +25,15 @@
                 d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
             </svg>
           </span>
-          <span class="scan-text">Scan QR</span>
+          <span class="scan-text"><?php echo htmlspecialchars(function_exists('t') ? t('scan_qr') : 'Scan QR', ENT_QUOTES); ?></span>
         </button>
       </a>
 
-      <button id="reserve_button" class="bg-[#7E3FBC] text-white rounded flex px-8 py-4 font-bold">Reserve</button>
+      <button id="reserve_button" class="bg-[#7E3FBC] text-white rounded flex px-8 py-4 font-bold"><?php echo htmlspecialchars(function_exists('t') ? t('reserve') : 'Reserve', ENT_QUOTES); ?></button>
     </div>
   </div>
 
-  <a href="/views/scan/pages/scan.html" class="mobile-scan-link">
+  <a href="/views/scan/pages/scan.php" class="mobile-scan-link">
     <button id="scanBtn" class="scan-btn md:hidden" aria-label="Scan QR">
       <span class="scan-icon">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-10 md:hidden">
@@ -43,7 +43,7 @@
             d="M6.75 6.75h.75v.75h-.75v-.75ZM6.75 16.5h.75v.75h-.75v-.75ZM16.5 6.75h.75v.75h-.75v-.75ZM13.5 13.5h.75v.75h-.75v-.75ZM13.5 19.5h.75v.75h-.75v-.75ZM19.5 13.5h.75v.75h-.75v-.75ZM19.5 19.5h.75v.75h-.75v-.75ZM16.5 16.5h.75v.75h-.75v-.75Z" />
         </svg>
       </span>
-      <span class="scan-text">Scan QR</span>
+      <span class="scan-text"><?php echo htmlspecialchars(function_exists('t') ? t('scan_qr') : 'Scan QR', ENT_QUOTES); ?></span>
     </button>
   </a>
 </div>

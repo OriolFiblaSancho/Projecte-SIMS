@@ -1,7 +1,7 @@
 <?php
 // Expects $vehicle (assoc) and $vehicleTypes (array of types)
 if (!isset($vehicle)) {
-    echo "<div class='p-4'>No vehicle data available.</div>";
+    echo "<div class='p-4'>" . htmlspecialchars(t('vehicle_view_no_data'), ENT_QUOTES) . "</div>";
     return;
 }
 ?>
@@ -15,8 +15,8 @@ if (!isset($vehicle)) {
                 </svg>
             </a>
             <div class="flex flex-wrap gap-3">
-                <a href="/vehicles/delete/<?php echo urlencode($vehicle['vehicle_id']); ?>" onclick="return confirm('Are you sure you want to delete this vehicle?');" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">Delete</a>
-                <a href="/main?admin=FormVehicles&edit=<?php echo urlencode($vehicle['vehicle_id']); ?>" class="inline-flex items-center gap-2 bg-[#0D6344] hover:bg-[#0a4d34] text-white px-4 py-2 rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0D6344]">Edit</a>
+                <a href="/vehicles/delete/<?php echo urlencode($vehicle['vehicle_id']); ?>" onclick="return confirm('<?= htmlspecialchars(t('confirm_delete_vehicle'), ENT_QUOTES) ?>');" class="inline-flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"><?= htmlspecialchars(t('action_delete'), ENT_QUOTES) ?></a>
+                <a href="/main?admin=FormVehicles&edit=<?php echo urlencode($vehicle['vehicle_id']); ?>" class="inline-flex items-center gap-2 bg-[#0D6344] hover:bg-[#0a4d34] text-white px-4 py-2 rounded-md shadow-sm text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0D6344]"><?= htmlspecialchars(t('action_edit'), ENT_QUOTES) ?></a>
             </div>
         </div>
 
@@ -31,8 +31,8 @@ if (!isset($vehicle)) {
                     <p class="mt-1 text-lg font-semibold text-[#0D6344]"><?php echo $value; ?></p>
                 </div>
                 <?php
-            }            renderField('Model', htmlspecialchars($vehicle['model']));
-            renderField('License plate', htmlspecialchars($vehicle['license_plate']));
+            }            renderField(t('vehicle_field_model'), htmlspecialchars($vehicle['model']));
+            renderField(t('vehicle_field_license_plate'), htmlspecialchars($vehicle['license_plate']));
 
             $typeName = 'Unknown';
             if (!empty($vehicleTypes)) {
@@ -43,11 +43,11 @@ if (!isset($vehicle)) {
                     }
                 }
             }
-            renderField('Type', htmlspecialchars($typeName));
-            renderField('Status', htmlspecialchars($vehicle['status']));
-            renderField('Battery level', htmlspecialchars($vehicle['battery_level']) . '%');
-            renderField('Current range', htmlspecialchars($vehicle['current_range']) . ' km');
-            renderField('Total kilometers', htmlspecialchars($vehicle['total_km']) . ' km', 2);
+            renderField(t('vehicle_field_type'), htmlspecialchars($typeName));
+            renderField(t('vehicle_field_status'), htmlspecialchars($vehicle['status']));
+            renderField(t('vehicle_field_battery_level'), htmlspecialchars($vehicle['battery_level']) . '%');
+            renderField(t('vehicle_field_current_range'), htmlspecialchars($vehicle['current_range']) . ' km');
+            renderField(t('vehicle_field_total_kilometers'), htmlspecialchars($vehicle['total_km']) . ' km', 2);
             ?>
         </div>
     </div>

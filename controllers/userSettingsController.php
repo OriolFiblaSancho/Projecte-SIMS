@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/../config/database.php';
 require_once __DIR__ . '/../config/router.php';
+require_once __DIR__ . '/../helpers/i18n.php';
+set_locale();
 
 class userSettingsController {
     private $db;
@@ -35,11 +37,11 @@ class userSettingsController {
 
         if (!$setParts) {
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
-                header('Content-Type: application/json');
-                echo json_encode(['success' => true, 'message' => 'No hi ha canvis a desar.']);
-                return;
-            }
-            $_SESSION['success'] = 'No hi ha canvis a desar.';
+                    header('Content-Type: application/json');
+                    echo json_encode(['success' => true, 'message' => t('no_changes_to_save')]);
+                    return;
+                }
+            $_SESSION['success'] = t('no_changes_to_save');
             Router::redirect('/main?settings=1');
         }
 
@@ -53,25 +55,25 @@ class userSettingsController {
                     $fetch->execute([':id' => (int)$userId]);
                     $userRow = $fetch->fetch(PDO::FETCH_ASSOC) ?: [];
                     header('Content-Type: application/json');
-                    echo json_encode(['success' => true, 'message' => 'Ajustos desats correctament.', 'user' => $userRow]);
+                    echo json_encode(['success' => true, 'message' => t('settings_saved'), 'user' => $userRow]);
                     return;
                 }
-                $_SESSION['success'] = 'Ajustos desats correctament.';
+                $_SESSION['success'] = t('settings_saved');
             } else {
                 if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
                     header('Content-Type: application/json');
-                    echo json_encode(['success' => false, 'message' => 'No s\'ha pogut desar.']);
+                    echo json_encode(['success' => false, 'message' => t('save_failed')]);
                     return;
                 }
-                $_SESSION['error'] = 'No s\'ha pogut desar.';
+                $_SESSION['error'] = t('save_failed');
             }
         } catch (Exception $e) {
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest') {
                 header('Content-Type: application/json');
-                echo json_encode(['success' => false, 'message' => 'Error al desar.']);
+                echo json_encode(['success' => false, 'message' => t('error_saving')]);
                 return;
             }
-            $_SESSION['error'] = 'Error al desar.';
+            $_SESSION['error'] = t('error_saving');
             Router::redirect('/main?settings=1');
         }
         if (empty($_SERVER['HTTP_X_REQUESTED_WITH']) || strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) !== 'xmlhttprequest') {
