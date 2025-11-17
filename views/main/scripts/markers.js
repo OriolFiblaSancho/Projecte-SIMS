@@ -106,9 +106,6 @@ export async function createVehicleMarkers(map) {
   const markers = [];
 
   vehicles.forEach((vehicle) => {
-    if (!vehicle.latitude || !vehicle.longitude) {
-      return; // Skip vehicles without location
-    }
 
     const position = {
       lat: parseFloat(vehicle.latitude),
@@ -175,43 +172,6 @@ function updateBottomBarWithVehicleData(vehicle) {
     rangeElement.textContent = `${vehicle.current_range || 0} Km`;
   }
 
-}
-
-export function createRandomMarkers(map, center, count, radiusMeters) {
-  const markers = [];;
-  for (let i = 0; i < count; i++) {
-    const p = randomPointAround(center, radiusMeters);
-    const m = new google.maps.Marker({
-      position: p,
-      map,
-      icon: {
-        url: svg, scaledSize: new google.maps.Size(32, 32),
-        anchor: new google.maps.Point(14, 28)
-      },
-      title: `Point ${i + 1}`
-    });
-
-    //Expand
-    m.addListener('click', () => {
-      if (m == lastMarker) return;
-      BOTTOM.classList.add('sliding-down');
-
-      // Forcem la barra a 'flex' (per mostrar-la a escriptori)
-      BOTTOM.style.display = 'flex';
-
-      setTimeout(() => {
-        BOTTOM.classList.add('expanded'); // <-- Li diem que està oberta
-        SELECTED.classList.add('grid');
-        SELECTED.classList.remove('hidden');
-        BOTTOM.classList.remove('sliding-down');
-        BOTTOM.classList.remove('get-up');
-        toggleActiveMarker(m);
-      }, 200);
-    });
-
-    markers.push(m);
-  }
-  return markers;
 }
 
 export function bottomBarToggle(map) {

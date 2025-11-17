@@ -82,8 +82,7 @@ class VehicleController {
         }
     
     }
-    public function delete() {
-        $id = $_GET['id'];
+    public function delete($id) {
         
         if (!$id){
             Router::redirect('/main?admin=ViewVehicles');
