@@ -148,7 +148,6 @@ return [
     'status_suspended' => 'Suspended',
     'balance_label' => 'Balance',
     'password_label' => 'Password',
-    'password_hint_edit' => '(leave blank to keep)',
     'update_user' => 'Update User',
     'add_user' => 'Add User',
 

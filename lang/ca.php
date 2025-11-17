@@ -148,7 +148,6 @@ return [
     'status_suspended' => 'Suspès',
     'balance_label' => 'Saldo',
     'password_label' => 'Contrasenya',
-    'password_hint_edit' => '(deixa en blanc per mantenir)',
     'update_user' => 'Actualitzar usuari',
     'add_user' => 'Afegir usuari',
 
