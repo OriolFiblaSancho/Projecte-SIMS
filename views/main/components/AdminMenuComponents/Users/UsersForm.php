@@ -55,8 +55,12 @@
                 <input type="number" step="0.01" name="balance" value="<?= htmlspecialchars($user['balance'] ?? '0.00') ?>" placeholder="0.00" class="border border-gray-300 rounded-md p-2 w-full mb-2">
             </div>
             <div>
-                <label for="password" class="block text-sm font-medium text-gray-700 mb-1"><?= htmlspecialchars(t('password_label'), ENT_QUOTES) ?> <?= $isEdit ? htmlspecialchars(t('password_hint_edit'), ENT_QUOTES) : '' ?></label>
-                <input type="password" name="password" placeholder="Password" class="border border-gray-300 rounded-md p-2 w-full mb-2" <?= $isEdit ? '' : 'required' ?>>
+                <label for="password" class="block text-sm font-medium text-gray-700 mb-1">
+                    <?= htmlspecialchars(t('password_label'), ENT_QUOTES) ?>
+                    <?php if ($isEdit): ?>
+                    <?php endif; ?>
+                </label>
+                <input type="password" name="password" placeholder="<?= htmlspecialchars(t('password_label'), ENT_QUOTES) ?>" class="border border-gray-300 rounded-md p-2 w-full mb-2" <?= $isEdit ? '' : 'required' ?>>
             </div>
         </div>
 
